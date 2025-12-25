@@ -1,0 +1,49 @@
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  {% assign seo_title = page.seo_title | default: page.title | default: site.seo.default_title %}
+  {% assign seo_desc  = page.seo_description | default: page.description | default: site.seo.default_description %}
+  {% assign canonical = page.canonical_url | default: page.url | absolute_url %}
+
+  <title>{{ seo_title }}</title>
+  <meta name="description" content="{{ seo_desc | strip_newlines | escape }}" />
+  <link rel="canonical" href="{{ canonical }}" />
+  <meta name="robots" content="{{ site.seo.robots }}" />
+
+  <meta name="author" content="{{ site.brand.name }}" />
+  <meta name="publisher" content="{{ site.brand.name }}" />
+  <meta name="theme-color" content="{{ site.brand.theme_color }}" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="{{ site.brand.name }}" />
+  <meta property="og:title" content="{{ page.og_title | default: seo_title }}" />
+  <meta property="og:description" content="{{ page.og_description | default: seo_desc | strip_newlines | escape }}" />
+  <meta property="og:url" content="{{ canonical }}" />
+  <meta property="og:image" content="{{ page.og_image | default: site.brand.og_image | absolute_url }}" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ page.twitter_title | default: seo_title }}" />
+  <meta name="twitter:description" content="{{ page.twitter_description | default: seo_desc | strip_newlines | escape }}" />
+  <meta name="twitter:image" content="{{ page.og_image | default: site.brand.og_image | absolute_url }}" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/assets/css/harden.css" />
+
+  <!-- JSON-LD (AI + Google understanding) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Boltzmenn",
+    "url": "{{ '/' | absolute_url }}",
+    "description": "Boltzmenn is a business rescue and revenue-growth firm helping African SMEs fix finance, sales, operations, and visibility for predictable performance.",
+    "sameAs": [
+      "{{ site.social.linkedin }}",
+      "{{ site.social.instagram }}"
+    ]
+  }
+  </script>
+</head>
