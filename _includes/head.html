@@ -30,7 +30,8 @@
   <meta name="twitter:image" content="{{ page.og_image | default: site.brand.og_image | absolute_url }}" />
 
   <!-- Styles -->
-  <link rel="stylesheet" href="/assets/css/harden.css" />
+ <link rel="stylesheet" href="{{ '/assets/css/harden.css' | relative_url }}" />
+
 
   <!-- JSON-LD (AI + Google understanding) -->
   <script type="application/ld+json">
