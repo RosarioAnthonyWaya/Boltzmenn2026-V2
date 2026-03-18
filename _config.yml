@@ -1,21 +1,16 @@
 title: Boltzmenn
-url: "https://boltzmenn.com
+url: "https://boltzmenn.com"
 baseurl: ""
-
-
 seo:
   default_title: "Boltzmenn | Business Rescue & Revenue Growth for African SMEs"
   default_description: "Boltzmenn helps African SMEs fix revenue leaks, operations, sales, and visibility—so growth becomes predictable."
   robots: "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
-
 brand:
   name: "Boltzmenn"
   theme_color: "#0b8c88"
   og_image: "/assets/og/boltzmenn-home.jpg"
-
 social:
   linkedin: "https://www.linkedin.com/company/boltzmenn"
   instagram: "https://www.instagram.com/boltzmenn"
-
 permalink: pretty
 markdown: kramdown
