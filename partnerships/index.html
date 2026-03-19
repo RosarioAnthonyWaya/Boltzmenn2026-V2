@@ -32,10 +32,47 @@
     line-height: 1.7;
   }
 
+  /* ── PRINT STYLES ─────────────────────────────── */
   @media print {
     .no-print { display: none !important; }
+
+    /* Force backgrounds to print */
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+
+    body { margin: 0; padding: 0; }
+
+    /* Each major section starts on a new page */
+    .cover         { page-break-after: always; page-break-inside: avoid; }
+    .ls.who        { page-break-after: always; page-break-inside: avoid; }
+    .ds.philosophy { page-break-after: avoid;  page-break-inside: avoid; }
+    .ls.ecosystem  { page-break-after: always; page-break-inside: avoid; }
+    .as.audience   { page-break-after: avoid;  page-break-inside: avoid; }
+    .ls.offers     { page-break-after: always; page-break-inside: avoid; }
+    .vision-bar    { page-break-after: avoid;  page-break-inside: avoid; }
+    .as.partners   { page-break-after: always; page-break-inside: avoid; }
+    .closing       { page-break-before: always; page-break-inside: avoid; }
+    .site-footer   { page-break-inside: avoid; }
+
+    /* Never break inside these elements */
+    .cap-cell, .eco-card, .aud-card, .offer-row,
+    .partner-block, .legal-item, .contact-card,
+    .prin-item { page-break-inside: avoid; }
+
+    /* Keep grids together where possible */
+    .cap-grid, .eco-grid, .aud-grid,
+    .partner-grid, .contact-grid { page-break-inside: avoid; }
+
+    /* Section padding tightened for print */
+    .ls, .as, .ds { padding: 48px 0; }
+    .cover { min-height: 100vh; }
+    .closing { padding: 60px 0; }
   }
 
+  /* ── SCREEN LAYOUT ────────────────────────────── */
   .container { max-width: 720px; margin: 0 auto; padding: 0 44px; }
   .rule { width: 48px; height: 3px; background: linear-gradient(90deg, #0b8c88, #1eb085); border-radius: 2px; margin-bottom: 28px; }
   .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--teal-dark); margin-bottom: 10px; }
@@ -139,7 +176,6 @@
   .closing h2 { color: #fff; }
   .closing p { color: rgba(255,255,255,0.62); }
   .closing .rule { background: rgba(255,255,255,0.22); }
-
   .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 36px; }
   .contact-card { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); padding: 28px 26px; }
   .contact-card-label { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.42); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
@@ -165,6 +201,18 @@
     .offer-row { grid-template-columns: 1fr; gap: 8px; }
     .prin-item:nth-child(even) { padding-left: 0; border-left: none; }
   }
+
+  /* ── PDF RENDER MODE ───────────────────────────── */
+  /* Applied via JS before capture — locks width and removes viewport-relative sizing */
+  body.pdf-mode {
+    width: 794px !important;
+    overflow: visible !important;
+  }
+  body.pdf-mode .cover { min-height: 1123px; }
+  body.pdf-mode .cover-headline { font-size: 88px; }
+  body.pdf-mode .vision-num { font-size: 120px; }
+  body.pdf-mode .vision-stmt { font-size: 28px; }
+  body.pdf-mode h2 { font-size: 34px; }
 </style>
 </head>
 <body id="brochure-body">
@@ -187,7 +235,7 @@
 </div>
 
 <!-- WHO WE ARE -->
-<div class="ls">
+<div class="ls who">
   <div class="container">
     <div class="section-label">Who We Are</div>
     <div class="rule"></div>
@@ -199,49 +247,25 @@
 </div>
 
 <!-- WHAT WE DO -->
-<div class="as">
+<div class="as whatwedo">
   <div class="container">
     <div class="section-label">What We Do</div>
     <div class="rule"></div>
     <h2>Capabilities built for real business problems.</h2>
     <p>Boltzmenn's work spans the full growth journey — from diagnosing what is broken to implementing systems that hold. We deliver structured support across six interconnected areas.</p>
     <div class="cap-grid">
-      <div class="cap-cell">
-        <div class="cap-num">01 &nbsp;/&nbsp; Growth Strategy</div>
-        <h4>Business Growth & Rescue</h4>
-        <p>Diagnosing bottlenecks. Fixing broken business logic. Helping founders identify and address what is actually preventing their growth.</p>
-      </div>
-      <div class="cap-cell">
-        <div class="cap-num">02 &nbsp;/&nbsp; Customer Experience</div>
-        <h4>CX Development & Training</h4>
-        <p>Building systems that make customers feel valued and more likely to return. Training teams with practical frameworks like S.E.E. Them™ and the 9-Touch Rule™.</p>
-      </div>
-      <div class="cap-cell">
-        <div class="cap-num">03 &nbsp;/&nbsp; Revenue Systems</div>
-        <h4>Sales Support & Training</h4>
-        <p>Repeatable sales processes, stronger pricing logic, and revenue models that generate income independent of the founder's constant involvement.</p>
-      </div>
-      <div class="cap-cell">
-        <div class="cap-num">04 &nbsp;/&nbsp; Financial Clarity</div>
-        <h4>Finance Interpretation & Advisory</h4>
-        <p>Helping business owners understand their numbers, identify profit leaks, and make better commercial decisions — finance as insight, not just compliance.</p>
-      </div>
-      <div class="cap-cell">
-        <div class="cap-num">05 &nbsp;/&nbsp; Capital Access</div>
-        <h4>Funding Readiness & Capital Support</h4>
-        <p>Preparing businesses for investment — improving governance, financial structure, and investor readiness through Boltzmenn Capital.</p>
-      </div>
-      <div class="cap-cell">
-        <div class="cap-num">06 &nbsp;/&nbsp; Education</div>
-        <h4>Business Clinics, Training & Toolkits</h4>
-        <p>Education-led support through workshops, business clinics, and practical toolkits that founders and their teams can apply immediately.</p>
-      </div>
+      <div class="cap-cell"><div class="cap-num">01 &nbsp;/&nbsp; Growth Strategy</div><h4>Business Growth & Rescue</h4><p>Diagnosing bottlenecks. Fixing broken business logic. Helping founders identify and address what is actually preventing their growth.</p></div>
+      <div class="cap-cell"><div class="cap-num">02 &nbsp;/&nbsp; Customer Experience</div><h4>CX Development & Training</h4><p>Building systems that make customers feel valued and more likely to return. Training teams with practical frameworks like S.E.E. Them™ and the 9-Touch Rule™.</p></div>
+      <div class="cap-cell"><div class="cap-num">03 &nbsp;/&nbsp; Revenue Systems</div><h4>Sales Support & Training</h4><p>Repeatable sales processes, stronger pricing logic, and revenue models that generate income independent of the founder's constant involvement.</p></div>
+      <div class="cap-cell"><div class="cap-num">04 &nbsp;/&nbsp; Financial Clarity</div><h4>Finance Interpretation & Advisory</h4><p>Helping business owners understand their numbers, identify profit leaks, and make better commercial decisions — finance as insight, not just compliance.</p></div>
+      <div class="cap-cell"><div class="cap-num">05 &nbsp;/&nbsp; Capital Access</div><h4>Funding Readiness & Capital Support</h4><p>Preparing businesses for investment — improving governance, financial structure, and investor readiness through Boltzmenn Capital.</p></div>
+      <div class="cap-cell"><div class="cap-num">06 &nbsp;/&nbsp; Education</div><h4>Business Clinics, Training & Toolkits</h4><p>Education-led support through workshops, business clinics, and practical toolkits that founders and their teams can apply immediately.</p></div>
     </div>
   </div>
 </div>
 
 <!-- PHILOSOPHY -->
-<div class="ds">
+<div class="ds philosophy">
   <div class="container">
     <div class="section-label">Our Philosophy</div>
     <div class="rule"></div>
@@ -261,7 +285,7 @@
 </div>
 
 <!-- ECOSYSTEM -->
-<div class="ls">
+<div class="ls ecosystem">
   <div class="container">
     <div class="section-label">The Ecosystem</div>
     <div class="rule"></div>
@@ -279,7 +303,7 @@
 </div>
 
 <!-- WHO WE SERVE -->
-<div class="as">
+<div class="as audience">
   <div class="container">
     <div class="section-label">Who We Serve</div>
     <div class="rule"></div>
@@ -295,7 +319,7 @@
 </div>
 
 <!-- CORE OFFERS -->
-<div class="ls">
+<div class="ls offers">
   <div class="container">
     <div class="section-label">Core Offers</div>
     <div class="rule"></div>
@@ -322,59 +346,18 @@
 </div>
 
 <!-- PARTNERSHIP -->
-<div class="as">
+<div class="as partners">
   <div class="container">
     <div class="section-label">Working Together</div>
     <div class="rule"></div>
     <h2>The kinds of partners we build with.</h2>
     <p>Boltzmenn pursues partnerships that improve delivery capacity, expand reach, and deepen the quality of support we offer African businesses. We work across four partnership categories.</p>
     <div class="partner-grid">
-      <div class="partner-block">
-        <h4>Delivery Partners</h4>
-        <ul>
-          <li>Legal firms and solicitors</li>
-          <li>Auditors and accountants</li>
-          <li>HR and compliance providers</li>
-          <li>Business facilitators and coaches</li>
-          <li>Therapists and wellness practitioners</li>
-          <li>Software and automation firms</li>
-        </ul>
-      </div>
-      <div class="partner-block">
-        <h4>Channel Partners</h4>
-        <ul>
-          <li>Business associations and chambers</li>
-          <li>Entrepreneur community organisations</li>
-          <li>Coworking spaces and hubs</li>
-          <li>Fintechs and accounting platforms</li>
-          <li>Banks serving SME clients</li>
-          <li>Accelerators and incubators</li>
-        </ul>
-      </div>
-      <div class="partner-block">
-        <h4>Capital Partners</h4>
-        <ul>
-          <li>Angel investors</li>
-          <li>High-net-worth individuals</li>
-          <li>SME finance institutions</li>
-          <li>Diaspora and impact investors</li>
-          <li>Development finance actors</li>
-          <li>Family offices</li>
-        </ul>
-      </div>
-      <div class="partner-block">
-        <h4>Visibility Partners</h4>
-        <ul>
-          <li>Business podcasts and media brands</li>
-          <li>Radio, TV and digital press</li>
-          <li>Founder communities</li>
-          <li>Educational organisations</li>
-          <li>Community and industry events</li>
-          <li>Wellness brands for founders</li>
-        </ul>
-      </div>
+      <div class="partner-block"><h4>Delivery Partners</h4><ul><li>Legal firms and solicitors</li><li>Auditors and accountants</li><li>HR and compliance providers</li><li>Business facilitators and coaches</li><li>Therapists and wellness practitioners</li><li>Software and automation firms</li></ul></div>
+      <div class="partner-block"><h4>Channel Partners</h4><ul><li>Business associations and chambers</li><li>Entrepreneur community organisations</li><li>Coworking spaces and hubs</li><li>Fintechs and accounting platforms</li><li>Banks serving SME clients</li><li>Accelerators and incubators</li></ul></div>
+      <div class="partner-block"><h4>Capital Partners</h4><ul><li>Angel investors</li><li>High-net-worth individuals</li><li>SME finance institutions</li><li>Diaspora and impact investors</li><li>Development finance actors</li><li>Family offices</li></ul></div>
+      <div class="partner-block"><h4>Visibility Partners</h4><ul><li>Business podcasts and media brands</li><li>Radio, TV and digital press</li><li>Founder communities</li><li>Educational organisations</li><li>Community and industry events</li><li>Wellness brands for founders</li></ul></div>
     </div>
-
     <div class="legal-box">
       <h3>A note for legal professionals.</h3>
       <p>Legal services sit at the heart of what African SMEs most commonly lack — and most urgently need. As a Boltzmenn delivery partner, a legal professional contributes meaningfully across several active areas of our work.</p>
@@ -427,29 +410,74 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
-  document.getElementById('pdf-btn').addEventListener('click', function () {
-    var btn = this;
-    btn.textContent = 'Generating PDF…';
-    btn.disabled = true;
+document.getElementById('pdf-btn').addEventListener('click', async function () {
+  const btn = this;
+  btn.textContent = 'Generating PDF…';
+  btn.disabled = true;
 
-    var opt = {
-      margin:      0,
-      filename:    'Boltzmenn-Partner-Brochure-2026.pdf',
-      image:       { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true, letterRendering: true, scrollY: 0 },
-      jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak:   { mode: ['css', 'legacy'] }
-    };
+  // Lock body to fixed A4 width and resolve clamp() values for crisp output
+  document.body.classList.add('pdf-mode');
 
-    html2pdf()
-      .set(opt)
-      .from(document.getElementById('brochure-body'))
-      .save()
-      .then(function () {
-        btn.textContent = '↓  Download PDF';
-        btn.disabled = false;
-      });
-  });
+  // Let fonts/layout repaint
+  await new Promise(r => setTimeout(r, 300));
+
+  const sections = [
+    '.cover',
+    '.ls.who',
+    '.as.whatwedo',
+    '.ds.philosophy',
+    '.ls.ecosystem',
+    '.as.audience',
+    '.ls.offers',
+    '.vision-bar',
+    '.as.partners',
+    '.closing',
+    '.site-footer'
+  ];
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+  const pageW = 210;
+  const pageH = 297;
+
+  // Render each section as a full-width image, fit to A4 page width
+  for (let i = 0; i < sections.length; i++) {
+    const el = document.querySelector(sections[i]);
+    if (!el) continue;
+
+    const canvas = await html2canvas(el, {
+      scale: 2.5,
+      useCORS: true,
+      letterRendering: true,
+      backgroundColor: null,
+      scrollX: 0,
+      scrollY: -window.scrollY,
+      windowWidth: 794,
+    });
+
+    const imgData = canvas.toDataURL('image/jpeg', 0.97);
+    const imgW    = pageW;
+    const imgH    = (canvas.height / canvas.width) * pageW;
+
+    // If this section fits on the current page, add it — otherwise start a new one
+    // We use one section = one page strategy for cleanness
+    if (i > 0) pdf.addPage();
+
+    // If section is taller than A4, scale to fit; otherwise centre vertically
+    if (imgH <= pageH) {
+      const yOffset = (pageH - imgH) / 2;
+      pdf.addImage(imgData, 'JPEG', 0, yOffset, imgW, imgH);
+    } else {
+      pdf.addImage(imgData, 'JPEG', 0, 0, imgW, pageH);
+    }
+  }
+
+  pdf.save('Boltzmenn-Partner-Brochure-2026.pdf');
+
+  document.body.classList.remove('pdf-mode');
+  btn.textContent = '↓  Download PDF';
+  btn.disabled = false;
+});
 </script>
 
 </body>
