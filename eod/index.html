@@ -56,22 +56,7 @@ body::after {
   pointer-events:none; z-index:0; opacity:0.4;
 }
 
-/* ── Setup banner ── */
-#setupBanner {
-  width:100%; background: var(--teal-dark);
-  padding:10px 24px; text-align:center;
-  font-size:13px; color:#fff;
-  display:flex; align-items:center; justify-content:center; gap:10px;
-  position:relative; z-index:10;
-}
-#setupBanner a {
-  color:#fff; font-weight:600; text-decoration:underline; cursor:pointer;
-}
-.banner-close {
-  position:absolute; right:16px; top:50%; transform:translateY(-50%);
-  background:none; border:none; color:rgba(255,255,255,0.7);
-  cursor:pointer; font-size:18px; line-height:1;
-}
+
 
 /* ── Top bar ── */
 .topbar {
@@ -84,8 +69,7 @@ body::after {
 .logo {
   font-family:'Syne',sans-serif;
   font-weight:800; font-size:13px;
-  letter-spacing:0.1em; color:var(--teal-dark);
-  text-transform:uppercase;
+  letter-spacing:0.02em; color:var(--teal-dark);
   display:flex; align-items:center; gap:8px;
 }
 
@@ -145,8 +129,7 @@ body::after {
   border-radius:20px;
   font-family:'Syne',sans-serif;
   font-size:10px; font-weight:700;
-  letter-spacing:0.08em;
-  text-transform:uppercase;
+  letter-spacing:0.02em;
   border:1px solid var(--ash-border);
   color:var(--ash);
   background:transparent;
@@ -192,7 +175,7 @@ body::after {
   background:rgba(11,140,136,0.07);
   font-family:'Syne',sans-serif;
   font-size:10px; font-weight:700;
-  letter-spacing:0.1em; text-transform:uppercase;
+  letter-spacing:0.02em;
   color:var(--teal-dark);
   margin-bottom:18px;
 }
@@ -592,108 +575,7 @@ body::after {
 }
 .btn-dl-secondary:hover { border-color:var(--teal-dark); color:var(--teal-dark); }
 
-/* ── Setup modal ── */
-.modal-backdrop {
-  position:fixed; inset:0;
-  background:rgba(240,237,229,0.85);
-  backdrop-filter:blur(4px);
-  z-index:200;
-  display:flex; align-items:center; justify-content:center;
-  padding:24px;
-}
 
-.modal {
-  background:var(--surface2);
-  border:1px solid var(--ash-border);
-  border-radius:var(--radius-xl);
-  padding:32px;
-  max-width:520px; width:100%;
-  box-shadow:0 20px 60px rgba(0,0,0,0.1);
-}
-
-.modal-title {
-  font-family:'Syne',sans-serif;
-  font-size:20px; font-weight:800;
-  color:var(--text); margin-bottom:6px;
-}
-
-.modal-sub {
-  font-size:13px; color:var(--ash-dark);
-  line-height:1.55; margin-bottom:22px;
-}
-
-.step-list { display:flex; flex-direction:column; gap:16px; margin-bottom:24px; }
-
-.setup-step {
-  display:flex; gap:14px; align-items:flex-start;
-}
-
-.step-circle {
-  width:28px; height:28px; border-radius:50%;
-  background:var(--teal-dark);
-  color:#fff; flex-shrink:0;
-  font-family:'Syne',sans-serif;
-  font-size:12px; font-weight:700;
-  display:flex; align-items:center; justify-content:center;
-}
-
-.step-body { flex:1; }
-
-.step-title {
-  font-family:'Syne',sans-serif;
-  font-size:13px; font-weight:700;
-  color:var(--text); margin-bottom:3px;
-}
-
-.step-desc {
-  font-size:12px; color:var(--ash-dark);
-  line-height:1.5;
-}
-
-.step-desc a {
-  color:var(--teal-dark); font-weight:600;
-}
-
-.url-input-wrap {
-  display:flex; gap:8px; margin-top:18px;
-}
-
-.url-field {
-  flex:1;
-  background:var(--off-white2);
-  border:1px solid var(--ash-border);
-  border-radius:var(--radius);
-  padding:11px 14px;
-  color:var(--text);
-  font-family:'DM Sans',sans-serif;
-  font-size:13px; outline:none;
-  transition:border-color 0.2s;
-}
-.url-field:focus { border-color:var(--teal-dark); }
-.url-field::placeholder { color:var(--ash-light); }
-
-.btn-save-url {
-  background:var(--teal-dark); color:#fff;
-  border:none; border-radius:var(--radius);
-  padding:11px 18px;
-  font-family:'Syne',sans-serif;
-  font-size:13px; font-weight:700;
-  cursor:pointer; transition:background 0.16s;
-  white-space:nowrap;
-}
-.btn-save-url:hover { background:var(--teal-mid); }
-
-.btn-close-modal {
-  width:100%; background:none;
-  border:1px solid var(--ash-border);
-  border-radius:var(--radius);
-  padding:11px;
-  color:var(--ash-dark);
-  font-family:'DM Sans',sans-serif;
-  font-size:14px; cursor:pointer;
-  transition:all 0.16s; margin-top:10px;
-}
-.btn-close-modal:hover { border-color:var(--teal-dark); color:var(--teal-dark); }
 
 .code-block {
   background:var(--off-white2);
@@ -715,13 +597,6 @@ body::after {
 </style>
 </head>
 <body>
-
-<!-- Setup banner -->
-<div id="setupBanner">
-  <span>⚡ Connect to Google Sheets to auto-save every response — </span>
-  <a onclick="openSetupModal()">Set up now (takes 3 minutes)</a>
-  <button class="banner-close" onclick="document.getElementById('setupBanner').style.display='none'">×</button>
-</div>
 
 <!-- Top bar -->
 <div class="topbar">
@@ -750,11 +625,7 @@ body::after {
   </div>
 </div>
 
-<!-- Setup modal (hidden by default) -->
-<div class="modal-backdrop" id="setupModal" style="display:none;">
-  <div class="modal">
-    <div class="modal-title">Connect to Google Sheets</div>
-    <div class="modal-sub">Every survey submission will be automatically saved to your Google Sheet. Follow these 3 steps once — then it works forever.</div>
+<div class="modal-sub">Every survey submission will be automatically saved to your Google Sheet. Follow these 3 steps once — then it works forever.</div>
 
     <div class="step-list">
       <div class="setup-step">
@@ -978,7 +849,7 @@ const QUESTIONS = [
 // ─────────────────────────────────────────────
 let current = 0;
 let answers = {};
-let SHEETS_URL = localStorage.getItem('sme_sheets_url') || '';
+let SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzQLS_ltOUbhwKlbqjmk_FcJvQHlM5MfHHKwXl7hHViBG-tG6m7nnrGMjp_kXwAgK0x/exec';
 
 // ─────────────────────────────────────────────
 // SECTION PILLS
@@ -1205,7 +1076,7 @@ async function submitSurvey() {
       wrap.innerHTML = buildThankYou('error');
     }
   } else {
-    wrap.innerHTML = buildThankYou('no-url');
+    wrap.innerHTML = buildThankYou('saving');
   }
 
   // always make download available
@@ -1222,7 +1093,7 @@ function buildThankYou(state) {
     statusHtml = `<div class="save-status error">⚠ Could not reach Google Sheets — please download below</div>`;
   } else {
     statusHtml = `<div class="save-status error" style="background:rgba(11,140,136,0.06);color:var(--teal-dark);border-color:var(--teal-border);">
-      Google Sheets not connected yet — <a onclick="openSetupModal()" style="color:var(--teal-dark);font-weight:600;cursor:pointer;">set it up</a> or download below
+      Saving to Google Sheets...
     </div>`;
   }
 
@@ -1273,41 +1144,15 @@ function dl(blob, name) {
   URL.revokeObjectURL(a.href);
 }
 
-// ─────────────────────────────────────────────
-// SETUP MODAL
-// ─────────────────────────────────────────────
-function openSetupModal() {
-  document.getElementById('setupModal').style.display='flex';
-  const f=document.getElementById('sheetsUrlInput');
-  if(f && SHEETS_URL) f.value=SHEETS_URL;
-}
 
-function closeSetupModal() {
-  document.getElementById('setupModal').style.display='none';
-}
 
-function saveSheetUrl() {
-  const v=document.getElementById('sheetsUrlInput').value.trim();
-  if(!v.startsWith('https://script.google.com')) {
-    alert('Please paste a valid Google Apps Script URL starting with https://script.google.com');
-    return;
-  }
-  SHEETS_URL=v;
-  localStorage.setItem('sme_sheets_url', v);
-  closeSetupModal();
-  document.getElementById('setupBanner').innerHTML='<span>✓ Google Sheets connected — responses will be saved automatically.</span><button class="banner-close" onclick="document.getElementById(\'setupBanner\').style.display=\'none\'">×</button>';
-  document.getElementById('setupBanner').style.background='var(--teal-mid)';
-}
+
+
+
 
 // ─────────────────────────────────────────────
 // INIT
 // ─────────────────────────────────────────────
-if(SHEETS_URL) {
-  const b=document.getElementById('setupBanner');
-  b.innerHTML='<span>✓ Connected to Google Sheets — responses will auto-save.</span><button class="banner-close" onclick="document.getElementById(\'setupBanner\').style.display=\'none\'">×</button>';
-  b.style.background='var(--teal-mid)';
-}
-
 render();
 </script>
 </body>
