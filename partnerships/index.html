@@ -6,222 +6,112 @@
 <title>Boltzmenn — Partner Brochure 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --teal-dark:   #0b8c88;
-    --teal-light:  #1eb085;
-    --white:       #FFFFFF;
-    --ash:         #F5F5F5;
-    --ash-mid:     #EBEBEB;
-    --grey:        #6B6B6B;
-    --grey-rule:   #DEDEDE;
-    --ink:         #1C1C1C;
-    --ink-mid:     #3A3A3A;
-    --ink-soft:    #5A5A5A;
-    --teal-faint:  #e8f5f3;
-    --teal-faint2: #f0faf8;
-  }
-
-  html { font-size: 16px; }
-  body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: var(--white);
-    color: var(--ink);
-    -webkit-font-smoothing: antialiased;
-    line-height: 1.7;
-  }
-
-  /* ── PRINT STYLES ─────────────────────────────── */
-  @media print {
-    .no-print { display: none !important; }
-
-    /* Force backgrounds to print */
-    * {
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-      color-adjust: exact !important;
-    }
-
-    body { margin: 0; padding: 0; }
-
-    /* Each major section starts on a new page */
-    .cover         { page-break-after: always; page-break-inside: avoid; }
-    .ls.who        { page-break-after: always; page-break-inside: avoid; }
-    .ds.philosophy { page-break-after: avoid;  page-break-inside: avoid; }
-    .ls.ecosystem  { page-break-after: always; page-break-inside: avoid; }
-    .as.audience   { page-break-after: avoid;  page-break-inside: avoid; }
-    .ls.offers     { page-break-after: always; page-break-inside: avoid; }
-    .vision-bar    { page-break-after: avoid;  page-break-inside: avoid; }
-    .as.partners   { page-break-after: always; page-break-inside: avoid; }
-    .closing       { page-break-before: always; page-break-inside: avoid; }
-    .site-footer   { page-break-inside: avoid; }
-
-    /* Never break inside these elements */
-    .cap-cell, .eco-card, .aud-card, .offer-row,
-    .partner-block, .legal-item, .contact-card,
-    .prin-item { page-break-inside: avoid; }
-
-    /* Keep grids together where possible */
-    .cap-grid, .eco-grid, .aud-grid,
-    .partner-grid, .contact-grid { page-break-inside: avoid; }
-
-    /* Section padding tightened for print */
-    .ls, .as, .ds { padding: 48px 0; }
-    .cover { min-height: 100vh; }
-    .closing { padding: 60px 0; }
-  }
-
-  /* ── SCREEN LAYOUT ────────────────────────────── */
-  .container { max-width: 720px; margin: 0 auto; padding: 0 44px; }
-  .rule { width: 48px; height: 3px; background: linear-gradient(90deg, #0b8c88, #1eb085); border-radius: 2px; margin-bottom: 28px; }
-  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--teal-dark); margin-bottom: 10px; }
-  h2 { font-size: clamp(26px, 4vw, 38px); font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
-  h3 { font-size: 20px; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
-  p { font-size: 15px; line-height: 1.8; color: var(--ink-soft); margin-bottom: 16px; }
-  p:last-child { margin-bottom: 0; }
-
-  /* COVER */
-  .cover { background: linear-gradient(135deg, #0b8c88 0%, #1eb085 100%); min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 60px 0 52px; position: relative; overflow: hidden; }
-  .cc { position: absolute; border-radius: 50%; border: 1px solid rgba(255,255,255,0.08); pointer-events: none; }
-  .cc1 { width: 520px; height: 520px; top: -160px; right: -160px; }
-  .cc2 { width: 300px; height: 300px; top: -80px; right: -80px; }
-  .cc3 { width: 200px; height: 200px; bottom: 60px; left: -80px; background: rgba(255,255,255,0.04); border: none; }
-  .cover-wordmark { font-size: 12px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.65); position: relative; z-index: 1; }
-  .cover-divider { width: 100%; height: 1px; background: rgba(255,255,255,0.15); margin: 36px 0; position: relative; z-index: 1; }
-  .cover-headline { font-size: clamp(52px, 9vw, 96px); font-weight: 700; line-height: 0.95; letter-spacing: -0.03em; color: #fff; position: relative; z-index: 1; margin-bottom: 24px; }
-  .cover-headline span { display: block; color: rgba(255,255,255,0.42); font-weight: 300; }
-  .cover-sub { font-size: 16px; color: rgba(255,255,255,0.7); max-width: 400px; line-height: 1.65; position: relative; z-index: 1; }
-  .cover-bottom { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 1; }
-  .cover-meta { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
-  .cover-web { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.65); }
-
-  /* SECTIONS */
-  .ls { background: var(--white); padding: 72px 0; }
-  .as { background: var(--ash); padding: 72px 0; }
-  .ds { background: var(--teal-dark); padding: 72px 0; }
-  .ds .section-label { color: rgba(255,255,255,0.5); }
-  .ds h2 { color: #fff; }
-  .ds p { color: rgba(255,255,255,0.65); }
-  .ds .rule { background: rgba(255,255,255,0.25); }
-
-  .lead { font-size: 18px; line-height: 1.7; color: var(--ink-mid); padding-left: 20px; border-left: 3px solid var(--teal-light); margin-bottom: 24px; }
-
-  /* CAP GRID */
-  .cap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--grey-rule); border: 1px solid var(--grey-rule); margin-top: 40px; }
-  .cap-cell { background: var(--white); padding: 28px 26px; }
-  .cap-num { font-size: 11px; font-weight: 700; letter-spacing: 0.15em; color: var(--teal-dark); margin-bottom: 12px; }
-  .cap-cell h4 { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 8px; line-height: 1.4; }
-  .cap-cell p { font-size: 13.5px; color: var(--grey); margin: 0; line-height: 1.7; }
-
-  /* PRINCIPLES */
-  .prin-grid { display: grid; grid-template-columns: 1fr 1fr; margin-top: 36px; border-top: 1px solid rgba(255,255,255,0.15); }
-  .prin-item { padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 14.5px; color: rgba(255,255,255,0.78); display: flex; align-items: center; gap: 12px; }
-  .prin-item:nth-child(odd) { padding-right: 28px; }
-  .prin-item:nth-child(even) { padding-left: 28px; border-left: 1px solid rgba(255,255,255,0.1); }
-  .prin-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal-light); flex-shrink: 0; }
-
-  /* ECOSYSTEM */
-  .eco-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 36px; }
-  .eco-card { background: var(--white); border: 1px solid var(--grey-rule); padding: 24px 20px; position: relative; }
-  .eco-acc { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #0b8c88, #1eb085); }
-  .eco-name { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-  .eco-role { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal-dark); margin-bottom: 12px; }
-  .eco-card p { font-size: 13px; color: var(--grey); margin: 0; line-height: 1.65; }
-
-  /* AUDIENCE */
-  .aud-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 36px; }
-  .aud-card { border: 1px solid var(--grey-rule); background: var(--white); padding: 24px 22px; }
-  .aud-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--teal-dark); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-  .aud-tag::after { content: ''; display: block; flex: 1; height: 1px; background: var(--teal-faint); }
-  .aud-card h4 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
-  .aud-card p { font-size: 13.5px; color: var(--grey); margin: 0; }
-
-  /* OFFERS */
-  .offer-list { margin-top: 36px; display: flex; flex-direction: column; gap: 1px; background: var(--grey-rule); border: 1px solid var(--grey-rule); }
-  .offer-row { display: grid; grid-template-columns: 120px 1fr; background: var(--white); padding: 22px 26px; align-items: start; gap: 24px; }
-  .offer-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal-dark); background: var(--teal-faint); padding: 5px 10px; border-radius: 2px; white-space: nowrap; display: inline-block; margin-top: 3px; }
-  .offer-content h4 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
-  .offer-content p { font-size: 13.5px; color: var(--grey); margin: 0; line-height: 1.65; }
-
-  /* VISION */
-  .vision-bar { background: linear-gradient(135deg, #0b8c88 0%, #1eb085 100%); padding: 64px 0; text-align: center; }
-  .vision-num { font-size: clamp(72px, 14vw, 128px); font-weight: 700; color: rgba(255,255,255,0.2); line-height: 1; letter-spacing: -0.04em; }
-  .vision-stmt { font-size: clamp(20px, 3.5vw, 30px); font-weight: 600; color: #fff; line-height: 1.35; max-width: 480px; margin: -12px auto 0; letter-spacing: -0.01em; }
-  .vision-note { font-size: 14px; color: rgba(255,255,255,0.52); margin-top: 16px; }
-
-  /* PARTNERSHIP */
-  .partner-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 36px; }
-  .partner-block { border: 1px solid var(--grey-rule); padding: 24px 22px; background: var(--white); }
-  .partner-block h4 { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--teal-dark); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--teal-faint); }
-  .partner-block ul { list-style: none; padding: 0; }
-  .partner-block ul li { font-size: 13.5px; color: var(--ink-soft); padding: 5px 0; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--ash-mid); }
-  .partner-block ul li:last-child { border-bottom: none; }
-  .partner-block ul li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--teal-light); flex-shrink: 0; }
-
-  /* LEGAL */
-  .legal-box { margin-top: 36px; border: 1px solid var(--grey-rule); border-top: 3px solid var(--teal-dark); background: var(--teal-faint2); padding: 32px; }
-  .legal-box h3 { font-size: 17px; color: var(--ink); margin-bottom: 10px; }
-  .legal-box > p { font-size: 14px; color: var(--ink-soft); margin-bottom: 20px; }
-  .legal-items { border-top: 1px solid var(--grey-rule); }
-  .legal-item { display: grid; grid-template-columns: 36px 1fr; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--grey-rule); align-items: start; }
-  .legal-item:last-child { border-bottom: none; }
-  .legal-num { font-size: 13px; font-weight: 700; color: var(--teal-dark); padding-top: 2px; }
-  .legal-item p { font-size: 14px; color: var(--ink-soft); margin: 0; line-height: 1.65; }
-  .legal-item strong { color: var(--ink); }
-
-  /* CLOSING */
-  .closing { background: var(--teal-dark); padding: 80px 0; }
-  .closing .section-label { color: rgba(255,255,255,0.48); }
-  .closing h2 { color: #fff; }
-  .closing p { color: rgba(255,255,255,0.62); }
-  .closing .rule { background: rgba(255,255,255,0.22); }
-  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 36px; }
-  .contact-card { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); padding: 28px 26px; }
-  .contact-card-label { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.42); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-  .contact-card-title { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.9); margin-bottom: 16px; }
-  .contact-line { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
-  .contact-line:last-child { margin-bottom: 0; }
-  .ct { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal-light); min-width: 48px; padding-top: 2px; }
-  .cv { font-size: 13.5px; color: rgba(255,255,255,0.7); line-height: 1.5; }
-
-  /* FOOTER */
-  .site-footer { background: #074e4b; padding: 20px 0; }
-  .site-footer p { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.28); text-align: center; margin: 0; }
-
-  /* FAB */
-  .fab { position: fixed; bottom: 24px; right: 24px; z-index: 100; }
-  .fab-btn { background: linear-gradient(135deg, #0b8c88, #1eb085); color: #fff; border: none; padding: 13px 26px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border-radius: 2px; box-shadow: 0 4px 20px rgba(11,140,136,0.35); transition: opacity 0.2s; }
-  .fab-btn:hover { opacity: 0.88; }
-  .fab-btn:disabled { opacity: 0.6; cursor: wait; }
-
-  @media (max-width: 600px) {
-    .cap-grid, .aud-grid, .partner-grid, .prin-grid, .contact-grid { grid-template-columns: 1fr; }
-    .eco-grid { grid-template-columns: 1fr 1fr; }
-    .offer-row { grid-template-columns: 1fr; gap: 8px; }
-    .prin-item:nth-child(even) { padding-left: 0; border-left: none; }
-  }
-
-  /* ── PDF RENDER MODE ───────────────────────────── */
-  /* Applied via JS before capture — locks width and removes viewport-relative sizing */
-  body.pdf-mode {
-    width: 794px !important;
-    overflow: visible !important;
-  }
-  body.pdf-mode .cover { min-height: 1123px; }
-  body.pdf-mode .cover-headline { font-size: 88px; }
-  body.pdf-mode .vision-num { font-size: 120px; }
-  body.pdf-mode .vision-stmt { font-size: 28px; }
-  body.pdf-mode h2 { font-size: 34px; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--td:#0b8c88;--tl:#1eb085;--wh:#FFFFFF;--ash:#F5F5F5;--am:#EBEBEB;--gr:#6B6B6B;--ru:#DEDEDE;--ink:#1C1C1C;--im:#3A3A3A;--is:#5A5A5A;--tf:#e8f5f3;--tf2:#f0faf8}
+html{font-size:16px}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#fff;color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.7}
+@media print{.no-print{display:none!important}*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}}
+.container{max-width:720px;margin:0 auto;padding:0 44px}
+.rule{width:48px;height:3px;background:linear-gradient(90deg,#0b8c88,#1eb085);border-radius:2px;margin-bottom:28px}
+.section-label{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--td);margin-bottom:10px}
+h2{font-size:clamp(26px,4vw,38px);font-weight:700;line-height:1.2;letter-spacing:-.02em;color:var(--ink);margin-bottom:20px}
+h3{font-size:20px;font-weight:600;color:var(--ink);margin-bottom:12px}
+p{font-size:15px;line-height:1.8;color:var(--is);margin-bottom:16px}
+p:last-child{margin-bottom:0}
+.cover{background:linear-gradient(135deg,#0b8c88 0%,#1eb085 100%);min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;padding:60px 0 52px;position:relative;overflow:hidden}
+.cc{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.08);pointer-events:none}
+.cc1{width:520px;height:520px;top:-160px;right:-160px}
+.cc2{width:300px;height:300px;top:-80px;right:-80px}
+.cc3{width:200px;height:200px;bottom:60px;left:-80px;background:rgba(255,255,255,.04);border:none}
+.cover-wordmark{font-size:12px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.65);position:relative;z-index:1}
+.cover-divider{width:100%;height:1px;background:rgba(255,255,255,.15);margin:36px 0;position:relative;z-index:1}
+.cover-headline{font-size:clamp(52px,9vw,96px);font-weight:700;line-height:.95;letter-spacing:-.03em;color:#fff;position:relative;z-index:1;margin-bottom:24px}
+.cover-headline span{display:block;color:rgba(255,255,255,.42);font-weight:300}
+.cover-sub{font-size:16px;color:rgba(255,255,255,.7);max-width:400px;line-height:1.65;position:relative;z-index:1}
+.cover-bottom{display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:1}
+.cover-meta{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.cover-web{font-size:13px;font-weight:600;color:rgba(255,255,255,.65)}
+.ls{background:#fff;padding:72px 0}
+.as{background:#F5F5F5;padding:72px 0}
+.ds{background:#0b8c88;padding:72px 0}
+.ds .section-label{color:rgba(255,255,255,.5)}
+.ds h2{color:#fff}
+.ds p{color:rgba(255,255,255,.65)}
+.ds .rule{background:rgba(255,255,255,.25)}
+.lead{font-size:18px;line-height:1.7;color:var(--im);padding-left:20px;border-left:3px solid var(--tl);margin-bottom:24px}
+.cap-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--ru);border:1px solid var(--ru);margin-top:40px}
+.cap-cell{background:#fff;padding:28px 26px}
+.cap-num{font-size:11px;font-weight:700;letter-spacing:.15em;color:var(--td);margin-bottom:12px}
+.cap-cell h4{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:8px;line-height:1.4}
+.cap-cell p{font-size:13.5px;color:var(--gr);margin:0;line-height:1.7}
+.prin-grid{display:grid;grid-template-columns:1fr 1fr;margin-top:36px;border-top:1px solid rgba(255,255,255,.15)}
+.prin-item{padding:16px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:14.5px;color:rgba(255,255,255,.78);display:flex;align-items:center;gap:12px}
+.prin-item:nth-child(odd){padding-right:28px}
+.prin-item:nth-child(even){padding-left:28px;border-left:1px solid rgba(255,255,255,.1)}
+.prin-dot{width:6px;height:6px;border-radius:50%;background:#1eb085;flex-shrink:0}
+.eco-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px}
+.eco-card{background:#fff;border:1px solid var(--ru);padding:24px 20px;position:relative}
+.eco-acc{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#0b8c88,#1eb085)}
+.eco-name{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.eco-role{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--td);margin-bottom:12px}
+.eco-card p{font-size:13px;color:var(--gr);margin:0;line-height:1.65}
+.aud-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:36px}
+.aud-card{border:1px solid var(--ru);background:#fff;padding:24px 22px}
+.aud-tag{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--td);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.aud-tag::after{content:'';display:block;flex:1;height:1px;background:var(--tf)}
+.aud-card h4{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px}
+.aud-card p{font-size:13.5px;color:var(--gr);margin:0}
+.offer-list{margin-top:36px;display:flex;flex-direction:column;gap:1px;background:var(--ru);border:1px solid var(--ru)}
+.offer-row{display:grid;grid-template-columns:120px 1fr;background:#fff;padding:22px 26px;align-items:start;gap:24px}
+.offer-tag{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--td);background:var(--tf);padding:5px 10px;border-radius:2px;white-space:nowrap;display:inline-block;margin-top:3px}
+.offer-content h4{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.offer-content p{font-size:13.5px;color:var(--gr);margin:0;line-height:1.65}
+.vision-bar{background:linear-gradient(135deg,#0b8c88 0%,#1eb085 100%);padding:64px 0;text-align:center}
+.vision-num{font-size:clamp(72px,14vw,128px);font-weight:700;color:rgba(255,255,255,.2);line-height:1;letter-spacing:-.04em}
+.vision-stmt{font-size:clamp(20px,3.5vw,30px);font-weight:600;color:#fff;line-height:1.35;max-width:480px;margin:-12px auto 0;letter-spacing:-.01em}
+.vision-note{font-size:14px;color:rgba(255,255,255,.52);margin-top:16px}
+.partner-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:36px}
+.partner-block{border:1px solid var(--ru);padding:24px 22px;background:#fff}
+.partner-block h4{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--td);margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--tf)}
+.partner-block ul{list-style:none;padding:0}
+.partner-block ul li{font-size:13.5px;color:var(--is);padding:5px 0;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--am)}
+.partner-block ul li:last-child{border-bottom:none}
+.partner-block ul li::before{content:'';width:5px;height:5px;border-radius:50%;background:#1eb085;flex-shrink:0}
+.legal-box{margin-top:36px;border:1px solid var(--ru);border-top:3px solid var(--td);background:var(--tf2);padding:32px}
+.legal-box h3{font-size:17px;color:var(--ink);margin-bottom:10px}
+.legal-box>p{font-size:14px;color:var(--is);margin-bottom:20px}
+.legal-items{border-top:1px solid var(--ru)}
+.legal-item{display:grid;grid-template-columns:36px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--ru);align-items:start}
+.legal-item:last-child{border-bottom:none}
+.legal-num{font-size:13px;font-weight:700;color:var(--td);padding-top:2px}
+.legal-item p{font-size:14px;color:var(--is);margin:0;line-height:1.65}
+.legal-item strong{color:var(--ink)}
+.closing{background:#0b8c88;padding:80px 0}
+.closing .section-label{color:rgba(255,255,255,.48)}
+.closing h2{color:#fff}
+.closing p{color:rgba(255,255,255,.62)}
+.closing .rule{background:rgba(255,255,255,.22)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:36px}
+.contact-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);padding:28px 26px}
+.contact-card-label{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.42);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.1)}
+.contact-card-title{font-size:14px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:16px}
+.contact-line{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
+.contact-line:last-child{margin-bottom:0}
+.ct{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#1eb085;min-width:48px;padding-top:2px}
+.cv{font-size:13.5px;color:rgba(255,255,255,.7);line-height:1.5}
+.site-footer{background:#074e4b;padding:20px 0}
+.site-footer p{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.28);text-align:center;margin:0}
+.fab{position:fixed;bottom:24px;right:24px;z-index:100}
+.fab-btn{background:linear-gradient(135deg,#0b8c88,#1eb085);color:#fff;border:none;padding:13px 26px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:2px;box-shadow:0 4px 20px rgba(11,140,136,.35);transition:opacity .2s}
+.fab-btn:hover{opacity:.88}
+.fab-btn:disabled{opacity:.6;cursor:wait}
+@media(max-width:600px){.cap-grid,.aud-grid,.partner-grid,.prin-grid,.contact-grid{grid-template-columns:1fr}.eco-grid{grid-template-columns:1fr 1fr}.offer-row{grid-template-columns:1fr;gap:8px}.prin-item:nth-child(even){padding-left:0;border-left:none}}
 </style>
 </head>
 <body id="brochure-body">
 
-<!-- COVER -->
 <div class="cover">
-  <div class="cc cc1"></div>
-  <div class="cc cc2"></div>
-  <div class="cc cc3"></div>
+  <div class="cc cc1"></div><div class="cc cc2"></div><div class="cc cc3"></div>
   <div class="container">
     <div class="cover-wordmark">Boltzmenn &nbsp;·&nbsp; Partner Brochure 2026</div>
     <div class="cover-divider"></div>
@@ -234,8 +124,7 @@
   </div>
 </div>
 
-<!-- WHO WE ARE -->
-<div class="ls who">
+<div class="ls">
   <div class="container">
     <div class="section-label">Who We Are</div>
     <div class="rule"></div>
@@ -246,31 +135,29 @@
   </div>
 </div>
 
-<!-- WHAT WE DO -->
-<div class="as whatwedo">
+<div class="as">
   <div class="container">
     <div class="section-label">What We Do</div>
     <div class="rule"></div>
     <h2>Capabilities built for real business problems.</h2>
     <p>Boltzmenn's work spans the full growth journey — from diagnosing what is broken to implementing systems that hold. We deliver structured support across six interconnected areas.</p>
     <div class="cap-grid">
-      <div class="cap-cell"><div class="cap-num">01 &nbsp;/&nbsp; Growth Strategy</div><h4>Business Growth & Rescue</h4><p>Diagnosing bottlenecks. Fixing broken business logic. Helping founders identify and address what is actually preventing their growth.</p></div>
-      <div class="cap-cell"><div class="cap-num">02 &nbsp;/&nbsp; Customer Experience</div><h4>CX Development & Training</h4><p>Building systems that make customers feel valued and more likely to return. Training teams with practical frameworks like S.E.E. Them™ and the 9-Touch Rule™.</p></div>
-      <div class="cap-cell"><div class="cap-num">03 &nbsp;/&nbsp; Revenue Systems</div><h4>Sales Support & Training</h4><p>Repeatable sales processes, stronger pricing logic, and revenue models that generate income independent of the founder's constant involvement.</p></div>
-      <div class="cap-cell"><div class="cap-num">04 &nbsp;/&nbsp; Financial Clarity</div><h4>Finance Interpretation & Advisory</h4><p>Helping business owners understand their numbers, identify profit leaks, and make better commercial decisions — finance as insight, not just compliance.</p></div>
-      <div class="cap-cell"><div class="cap-num">05 &nbsp;/&nbsp; Capital Access</div><h4>Funding Readiness & Capital Support</h4><p>Preparing businesses for investment — improving governance, financial structure, and investor readiness through Boltzmenn Capital.</p></div>
-      <div class="cap-cell"><div class="cap-num">06 &nbsp;/&nbsp; Education</div><h4>Business Clinics, Training & Toolkits</h4><p>Education-led support through workshops, business clinics, and practical toolkits that founders and their teams can apply immediately.</p></div>
+      <div class="cap-cell"><div class="cap-num">01 &nbsp;/&nbsp; Growth Strategy</div><h4>Business Growth &amp; Rescue</h4><p>Diagnosing bottlenecks. Fixing broken business logic. Helping founders identify and address what is actually preventing their growth.</p></div>
+      <div class="cap-cell"><div class="cap-num">02 &nbsp;/&nbsp; Customer Experience</div><h4>CX Development &amp; Training</h4><p>Building systems that make customers feel valued and more likely to return. Training teams with practical frameworks like S.E.E. Them&#8482; and the 9-Touch Rule&#8482;.</p></div>
+      <div class="cap-cell"><div class="cap-num">03 &nbsp;/&nbsp; Revenue Systems</div><h4>Sales Support &amp; Training</h4><p>Repeatable sales processes, stronger pricing logic, and revenue models that generate income independent of the founder's constant involvement.</p></div>
+      <div class="cap-cell"><div class="cap-num">04 &nbsp;/&nbsp; Financial Clarity</div><h4>Finance Interpretation &amp; Advisory</h4><p>Helping business owners understand their numbers, identify profit leaks, and make better commercial decisions — finance as insight, not just compliance.</p></div>
+      <div class="cap-cell"><div class="cap-num">05 &nbsp;/&nbsp; Capital Access</div><h4>Funding Readiness &amp; Capital Support</h4><p>Preparing businesses for investment — improving governance, financial structure, and investor readiness through Boltzmenn Capital.</p></div>
+      <div class="cap-cell"><div class="cap-num">06 &nbsp;/&nbsp; Education</div><h4>Business Clinics, Training &amp; Toolkits</h4><p>Education-led support through workshops, business clinics, and practical toolkits that founders and their teams can apply immediately.</p></div>
     </div>
   </div>
 </div>
 
-<!-- PHILOSOPHY -->
-<div class="ds philosophy">
+<div class="ds">
   <div class="container">
     <div class="section-label">Our Philosophy</div>
     <div class="rule"></div>
     <h2>How we think about business.</h2>
-    <p style="max-width:500px;">These are not slogans. They are the operating principles that shape every engagement, every recommendation, and every partnership we enter.</p>
+    <p style="max-width:500px">These are not slogans. They are the operating principles that shape every engagement, every recommendation, and every partnership we enter.</p>
     <div class="prin-grid">
       <div class="prin-item"><span class="prin-dot"></span>Systems over vibes</div>
       <div class="prin-item"><span class="prin-dot"></span>Revenue over vanity</div>
@@ -284,8 +171,7 @@
   </div>
 </div>
 
-<!-- ECOSYSTEM -->
-<div class="ls ecosystem">
+<div class="ls">
   <div class="container">
     <div class="section-label">The Ecosystem</div>
     <div class="rule"></div>
@@ -296,14 +182,13 @@
       <div class="eco-card"><div class="eco-acc"></div><div class="eco-name">Boltzmenn Capital</div><div class="eco-role">Funding Arm</div><p>Micro-funding, investor readiness, and early-stage support for African SMEs.</p></div>
       <div class="eco-card"><div class="eco-acc"></div><div class="eco-name">Sturgeon</div><div class="eco-role">Financial Services</div><p>Finance advisory, bookkeeping support, credit guidance, and business growth finance.</p></div>
       <div class="eco-card"><div class="eco-acc"></div><div class="eco-name">Outhbox</div><div class="eco-role">Technology Arm</div><p>Cybersecurity, digital transformation, and technology services for business.</p></div>
-      <div class="eco-card"><div class="eco-acc"></div><div class="eco-name">Redenhaus</div><div class="eco-role">Creative & Brand</div><p>Brand support, creative services, and specialised business skill development.</p></div>
+      <div class="eco-card"><div class="eco-acc"></div><div class="eco-name">Redenhaus</div><div class="eco-role">Creative &amp; Brand</div><p>Brand support, creative services, and specialised business skill development.</p></div>
       <div class="eco-card"><div class="eco-acc"></div><div class="eco-name">Startup Kopa</div><div class="eco-role">Training Platform</div><p>Future-of-work readiness for graduates and young professionals.</p></div>
     </div>
   </div>
 </div>
 
-<!-- WHO WE SERVE -->
-<div class="as audience">
+<div class="as">
   <div class="container">
     <div class="section-label">Who We Serve</div>
     <div class="rule"></div>
@@ -318,8 +203,7 @@
   </div>
 </div>
 
-<!-- CORE OFFERS -->
-<div class="ls offers">
+<div class="ls">
   <div class="container">
     <div class="section-label">Core Offers</div>
     <div class="rule"></div>
@@ -336,7 +220,6 @@
   </div>
 </div>
 
-<!-- VISION -->
 <div class="vision-bar">
   <div class="container">
     <div class="vision-num">1M</div>
@@ -345,8 +228,7 @@
   </div>
 </div>
 
-<!-- PARTNERSHIP -->
-<div class="as partners">
+<div class="as">
   <div class="container">
     <div class="section-label">Working Together</div>
     <div class="rule"></div>
@@ -372,13 +254,12 @@
   </div>
 </div>
 
-<!-- CLOSING -->
 <div class="closing">
   <div class="container">
     <div class="section-label">Get In Touch</div>
     <div class="rule"></div>
     <h2>The conversation starts here.</h2>
-    <p style="max-width:480px;">If you see alignment between what you do and where Boltzmenn is going, we would like to explore what working together looks like. Reach out through any of the channels below and our team will respond promptly.</p>
+    <p style="max-width:480px">If you see alignment between what you do and where Boltzmenn is going, we would like to explore what working together looks like. Reach out through any of the channels below and our team will respond promptly.</p>
     <div class="contact-grid">
       <div class="contact-card">
         <div class="contact-card-label">General Enquiries</div>
@@ -403,82 +284,32 @@
   <p>Boltzmenn &nbsp;·&nbsp; 2026 Partner Brochure &nbsp;·&nbsp; www.boltzmenn.com</p>
 </div>
 
-<!-- DOWNLOAD BUTTON -->
 <div class="fab no-print">
   <button class="fab-btn" id="pdf-btn">&#8595;&nbsp; Download PDF</button>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
-document.getElementById('pdf-btn').addEventListener('click', async function () {
-  const btn = this;
-  btn.textContent = 'Generating PDF…';
+document.getElementById('pdf-btn').addEventListener('click', function() {
+  var btn = this;
+  btn.textContent = 'Saving…';
   btn.disabled = true;
-
-  // Lock body to fixed A4 width and resolve clamp() values for crisp output
-  document.body.classList.add('pdf-mode');
-
-  // Let fonts/layout repaint
-  await new Promise(r => setTimeout(r, 300));
-
-  const sections = [
-    '.cover',
-    '.ls.who',
-    '.as.whatwedo',
-    '.ds.philosophy',
-    '.ls.ecosystem',
-    '.as.audience',
-    '.ls.offers',
-    '.vision-bar',
-    '.as.partners',
-    '.closing',
-    '.site-footer'
-  ];
-
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
-  const pageW = 210;
-  const pageH = 297;
-
-  // Render each section as a full-width image, fit to A4 page width
-  for (let i = 0; i < sections.length; i++) {
-    const el = document.querySelector(sections[i]);
-    if (!el) continue;
-
-    const canvas = await html2canvas(el, {
-      scale: 2.5,
-      useCORS: true,
-      letterRendering: true,
-      backgroundColor: null,
-      scrollX: 0,
-      scrollY: -window.scrollY,
-      windowWidth: 794,
+  html2pdf()
+    .from(document.getElementById('brochure-body'))
+    .set({
+      margin: 0,
+      filename: 'Boltzmenn-Partner-Brochure-2026.pdf',
+      image: { type: 'jpeg', quality: 0.92 },
+      html2canvas: { scale: 2, useCORS: true, scrollY: 0, windowWidth: 900 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: 'avoid-all' }
+    })
+    .save()
+    .then(function() {
+      btn.textContent = '↓  Download PDF';
+      btn.disabled = false;
     });
-
-    const imgData = canvas.toDataURL('image/jpeg', 0.97);
-    const imgW    = pageW;
-    const imgH    = (canvas.height / canvas.width) * pageW;
-
-    // If this section fits on the current page, add it — otherwise start a new one
-    // We use one section = one page strategy for cleanness
-    if (i > 0) pdf.addPage();
-
-    // If section is taller than A4, scale to fit; otherwise centre vertically
-    if (imgH <= pageH) {
-      const yOffset = (pageH - imgH) / 2;
-      pdf.addImage(imgData, 'JPEG', 0, yOffset, imgW, imgH);
-    } else {
-      pdf.addImage(imgData, 'JPEG', 0, 0, imgW, pageH);
-    }
-  }
-
-  pdf.save('Boltzmenn-Partner-Brochure-2026.pdf');
-
-  document.body.classList.remove('pdf-mode');
-  btn.textContent = '↓  Download PDF';
-  btn.disabled = false;
 });
 </script>
-
 </body>
 </html>
