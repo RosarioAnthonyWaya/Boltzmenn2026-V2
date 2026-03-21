@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Boltzmenn Employee Hub</title>
+<title>Boltzmenn Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
     --g1: #0b8c88;
@@ -1317,7 +1318,7 @@
           <circle cx="11" cy="11" r="2" fill="white"/>
         </svg>
       </div>
-      <span class="login-logo-text">Boltzmenn<span> Employee</span> Hub</span>
+      <span class="login-logo-text">Boltz<span>menn</span> Hub</span>
     </div>
 
     <!-- Login form -->
@@ -1889,6 +1890,11 @@
 </div><!-- /app-screen -->
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ═══════════════════ SUPABASE INIT ═══════════════════
+const SUPABASE_URL = 'https://dyoijbitjztqcgyocezd.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_2ZcqCTssBMtj-4-VhDNjaw_ljwvPaD4';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 // ═══════════════════ DATA ═══════════════════
 const DOCS = {
   sales: [
@@ -1987,7 +1993,7 @@ let currentUser = null;
 let currentPage = 'dashboard';
 
 // ═══════════════════ AUTH ═══════════════════
-function sendMagicLink() {
+async function sendMagicLink() {
   const email = document.getElementById('email-input').value.trim();
   if (!email || !email.includes('@')) {
     showToast('Please enter a valid email address');
@@ -1997,13 +2003,21 @@ function sendMagicLink() {
   btn.disabled = true;
   btn.innerHTML = '<span class="loading-dot"></span><span class="loading-dot"></span><span class="loading-dot"></span>';
 
-  setTimeout(() => {
-    document.getElementById('login-form-wrap').style.display = 'none';
-    const sentWrap = document.getElementById('magic-sent-wrap');
-    sentWrap.style.display = 'block';
-    document.getElementById('magic-sent-desc').textContent =
-      `A secure access link has been sent to ${email}. Click the link in your email to enter the hub.`;
-  }, 1400);
+  const { error } = await sb.auth.signInWithOtp({
+    email,
+    options: { shouldCreateUser: false }
+  });
+
+  if (error) {
+    // shouldCreateUser:false returns error for unknown emails — show sent anyway for security
+    console.log('OTP note:', error.message);
+  }
+
+  document.getElementById('login-form-wrap').style.display = 'none';
+  const sentWrap = document.getElementById('magic-sent-wrap');
+  sentWrap.style.display = 'block';
+  document.getElementById('magic-sent-desc').textContent =
+    `A secure access link has been sent to ${email}. Click the link in your email to enter the hub.`;
 }
 
 function resetLogin() {
@@ -2016,12 +2030,55 @@ function resetLogin() {
 }
 
 function loginAs(role) {
+  // DEMO mode — used when clicking demo buttons
   if (role === 'admin') {
     currentUser = { name: 'Anthony Waya', email: 'anthony@boltzmenn.com', role: 'Admin', initials: 'AW', isAdmin: true };
   } else {
     currentUser = { name: 'Amaka Obi', email: 'amaka@boltzmenn.com', role: 'Client Manager', initials: 'AO', isAdmin: false };
   }
+  enterApp();
+}
 
+async function loadRealSession(session) {
+  // Called when a real Supabase magic link session is detected
+  try {
+    const { data: profile, error } = await sb
+      .from('profiles')
+      .select('*')
+      .eq('id', session.user.id)
+      .single();
+
+    if (error || !profile) {
+      showToast('Your account is not set up yet. Ask Anthony to add you.');
+      await sb.auth.signOut();
+      return;
+    }
+
+    currentUser = {
+      id: session.user.id,
+      name: profile.full_name,
+      email: session.user.email,
+      role: profile.role,
+      initials: profile.initials,
+      isAdmin: profile.is_admin,
+      streak: profile.streak
+    };
+
+    // Log the login event
+    await sb.from('activity_log').insert({
+      user_id: currentUser.id,
+      action: 'login',
+      document_title: null
+    });
+
+    enterApp();
+  } catch(e) {
+    console.error('Session load error:', e);
+    showToast('Something went wrong. Please try again.');
+  }
+}
+
+function enterApp() {
   document.getElementById('user-avatar').textContent = currentUser.initials;
   document.getElementById('user-name').textContent = currentUser.name;
   document.getElementById('user-role').textContent = currentUser.role;
@@ -2035,7 +2092,7 @@ function loginAs(role) {
     document.getElementById('admin-nav-section').style.display = 'block';
   }
 
-  buildAllDocLists();
+  loadDocumentsFromDB();
   initCheckin();
   buildStreaksBoard();
   buildTeamReports();
@@ -2046,7 +2103,8 @@ function loginAs(role) {
   document.getElementById('app-screen').classList.add('active');
 }
 
-function logout() {
+async function logout() {
+  await sb.auth.signOut();
   currentUser = null;
   document.getElementById('app-screen').classList.remove('active');
   document.getElementById('login-screen').classList.add('active');
@@ -2089,6 +2147,49 @@ function navigate(page, navEl) {
 }
 
 // ═══════════════════ DOCUMENT LISTS ═══════════════════
+async function loadDocumentsFromDB() {
+  try {
+    const { data, error } = await sb.from('documents').select('*').order('title');
+    if (error || !data || data.length === 0) {
+      buildAllDocLists(); // fallback to local data
+      return;
+    }
+    // Group by category and render
+    const categories = ['sales','contracts','onboarding','delivery','retention','comms','finance','brand'];
+    categories.forEach(cat => {
+      const container = document.getElementById('doc-list-' + cat);
+      if (!container) return;
+      container.innerHTML = '';
+      const catDocs = data.filter(d => d.category === cat);
+      if (catDocs.length === 0) {
+        buildDocListFromLocal(cat);
+        return;
+      }
+      catDocs.forEach(doc => {
+        const item = buildDocItem({
+          title: doc.title,
+          desc: doc.description,
+          status: doc.status,
+          icon: doc.icon || '📄',
+          file_path: doc.file_path,
+          id: doc.id
+        }, cat);
+        container.appendChild(item);
+      });
+    });
+  } catch(e) {
+    console.warn('DB load failed, using local data:', e);
+    buildAllDocLists();
+  }
+}
+
+function buildDocListFromLocal(cat) {
+  const container = document.getElementById('doc-list-' + cat);
+  if (!container || !DOCS[cat]) return;
+  container.innerHTML = '';
+  DOCS[cat].forEach(doc => container.appendChild(buildDocItem(doc, cat)));
+}
+
 function buildAllDocLists() {
   Object.keys(DOCS).forEach(cat => {
     const container = document.getElementById('doc-list-' + cat);
@@ -2125,9 +2226,39 @@ function buildDocItem(doc, cat) {
 }
 
 // ═══════════════════ ACTIONS ═══════════════════
-function downloadDoc(title) {
-  showToast(`Downloading: ${title}`);
-  // In production: trigger real file download from Supabase storage
+async function downloadDoc(title, filePath, docId) {
+  if (!filePath) {
+    showToast('PDF not uploaded yet — coming soon');
+    return;
+  }
+  try {
+    const { data, error } = await sb.storage
+      .from('documents')
+      .download(filePath);
+    if (error) throw error;
+
+    // Trigger browser download
+    const url = URL.createObjectURL(data);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = title + '.pdf';
+    a.click();
+    URL.revokeObjectURL(url);
+
+    // Log the download
+    if (currentUser && currentUser.id) {
+      await sb.from('activity_log').insert({
+        user_id: currentUser.id,
+        action: 'download',
+        document_id: docId || null,
+        document_title: title
+      });
+    }
+    showToast('Downloading: ' + title);
+  } catch(e) {
+    showToast('Could not download file. Try again.');
+    console.error(e);
+  }
 }
 
 function searchDocs(query) {
@@ -2151,14 +2282,308 @@ function searchDocs(query) {
   });
 }
 
-function sendInvite() {
+async function sendInvite() {
   const name = document.getElementById('invite-name').value.trim();
   const email = document.getElementById('invite-email').value.trim();
   if (!name || !email) { showToast('Please fill in name and email'); return; }
-  showToast(`Invite sent to ${email} ✓`);
-  document.getElementById('invite-name').value = '';
-  document.getElementById('invite-email').value = '';
+
+  try {
+    // Send magic link to new team member
+    const { error } = await sb.auth.signInWithOtp({
+      email,
+      options: { shouldCreateUser: true }
+    });
+    if (error) throw error;
+    showToast('Invite sent to ' + email + ' ✓');
+    document.getElementById('invite-name').value = '';
+    document.getElementById('invite-email').value = '';
+  } catch(e) {
+    showToast('Could not send invite: ' + (e.message || 'check email address'));
+  }
 }
 
-function uploadDoc() {
-  const name = document.getElementById('upload-na
+async function uploadDoc() {
+  const name = document.getElementById('upload-name').value.trim();
+  const category = document.getElementById('upload-category').value;
+  const desc = document.getElementById('upload-desc').value.trim();
+  const file = document.getElementById('upload-file').files[0];
+  if (!name || !file) { showToast('Please fill in document name and select a PDF'); return; }
+  showToast('Uploading...');
+  try {
+    const filePath = category + '/' + name.replace(/[^a-z0-9]/gi,'_').toLowerCase() + '_' + Date.now() + '.pdf';
+    const { error: uploadError } = await sb.storage.from('documents').upload(filePath, file, { contentType: 'application/pdf', upsert: false });
+    if (uploadError) throw uploadError;
+    const { error: dbError } = await sb.from('documents').insert({
+      title: name, description: desc, category, file_path: filePath, status: 'ready',
+      uploaded_by: currentUser && currentUser.id ? currentUser.id : null
+    });
+    if (dbError) throw dbError;
+    showToast('"' + name + '" uploaded successfully \u2713');
+    document.getElementById('upload-name').value = '';
+    document.getElementById('upload-file').value = '';
+    document.getElementById('upload-desc').value = '';
+    loadDocumentsFromDB();
+  } catch(e) {
+    console.error('Upload error:', e);
+    showToast('Upload failed: ' + (e.message || 'unknown error'));
+  }
+}
+
+// ═══════════════════ CHECK-IN SYSTEM ═══════════════════
+
+const TEAM = [
+  { name: 'Amaka Obi',    initials: 'AO', role: 'Client Manager', streak: 12, submittedToday: true  },
+  { name: 'Tunde Cole',   initials: 'TC', role: 'Client Manager', streak: 8,  submittedToday: true  },
+  { name: 'Ngozi Eze',    initials: 'NE', role: 'Client Manager', streak: 3,  submittedToday: false },
+  { name: 'Anthony Waya', initials: 'AW', role: 'Admin',          streak: 21, submittedToday: true  },
+];
+
+const SAMPLE_REPORTS = [
+  { user:'Amaka Obi', initials:'AO', date:'Today', tasks:'Sent proposal to Crest Foods. Followed up with 3 leads. Updated onboarding tracker.', clients:'Crest Foods, Landmark Hotels, TechBridge Logistics', blockers:'Waiting on signed NDA from Landmark before kickoff.', tomorrow:'Discovery call with Nexus Retail at 10am. Finalise QBR deck for TechBridge.', mood:'😊' },
+  { user:'Tunde Cole', initials:'TC', date:'Today', tasks:'Delivered monthly performance report to GreenMart. Onboarding call with Apex Solutions.', clients:'GreenMart, Apex Solutions', blockers:'None.', tomorrow:'Internal review of Apex onboarding checklist. Send Week 2 update to GreenMart.', mood:'🔥' },
+  { user:'Anthony Waya', initials:'AW', date:'Today', tasks:'Strategy session with the team. Reviewed 3 proposals. Meeting with potential HNI partner.', clients:'Internal / Business Development', blockers:'None.', tomorrow:'Finalize retainer pricing update. Review Q2 pipeline.', mood:'💪' },
+];
+
+const MY_HISTORY = [
+  { date:'Friday, March 21', tasks:'Sent proposal to Crest Foods. 3 lead follow-ups. Updated onboarding tracker.', clients:'Crest Foods, Landmark Hotels', blockers:'Waiting on NDA from Landmark.', tomorrow:'Discovery call — Nexus Retail. QBR deck for TechBridge.', mood:'😊' },
+  { date:'Thursday, March 20', tasks:'Discovery call with Nexus Retail. Submitted MOM within 1 hour. Reviewed contract template.', clients:'Nexus Retail, TechBridge', blockers:'None.', tomorrow:'Proposal to Crest Foods.', mood:'💪' },
+  { date:'Wednesday, March 19', tasks:'Monthly check-in with TechBridge. Updated CRM notes. Cold outreach to 5 new leads.', clients:'TechBridge Logistics', blockers:'Needs updated case study from brand team.', tomorrow:'Discovery call prep for Nexus.', mood:'😊' },
+  { date:'Tuesday, March 18', tasks:'Sent Week 4 status report to GreenMart. Internal check-in with Anthony.', clients:'GreenMart, Apex Solutions', blockers:'None.', tomorrow:'TechBridge monthly call.', mood:'😐' },
+  { date:'Monday, March 17', tasks:'Kickoff meeting with Apex Solutions. Onboarding form review. Asset collection sent.', clients:'Apex Solutions', blockers:'Waiting on Apex logo files.', tomorrow:'Follow-up status report for GreenMart.', mood:'🔥' },
+];
+
+let todaySubmitted = false;
+let selectedMood = '';
+
+function initCheckin() {
+  todaySubmitted = false;
+  selectedMood = '';
+  const alert = document.getElementById('checkin-alert');
+  if (alert) alert.style.display = 'inline-block';
+  const streak = currentUser && currentUser.isAdmin ? 21 : (currentUser && currentUser.streak ? currentUser.streak : 12);
+  const bannerStreak = document.getElementById('banner-streak');
+  if (bannerStreak) bannerStreak.textContent = '\uD83D\uDD25 ' + streak + ' day streak';
+}
+
+function updateDashboardCheckinBanner() {
+  const existing = document.getElementById('dash-checkin-banner');
+  if (existing) existing.remove();
+  const dash = document.getElementById('page-dashboard');
+  if (!dash) return;
+  const banner = document.createElement('div');
+  banner.id = 'dash-checkin-banner';
+  if (!todaySubmitted) {
+    banner.className = 'checkin-banner';
+    banner.style.marginBottom = '24px';
+    banner.onclick = openCheckinModal;
+    banner.innerHTML = '<div class="checkin-banner-left"><div class="checkin-banner-label">Action needed</div><h3>Submit today\'s check-in</h3><p>Takes 3 minutes. Keeps Anthony in the loop.</p></div><div class="checkin-banner-right"><button class="btn-checkin">Start check-in</button></div>';
+  } else {
+    banner.style.cssText = 'background:rgba(11,140,136,0.07);border:1px solid rgba(11,140,136,0.15);border-radius:var(--radius);padding:14px 20px;margin-bottom:24px;display:flex;align-items:center;gap:12px;';
+    banner.innerHTML = '<span style="font-size:20px;">\u2705</span><span style="font-size:14px;color:var(--g1);font-weight:500;">Today\'s check-in submitted. See you tomorrow.</span>';
+  }
+  const welcomeBanner = dash.querySelector('.welcome-banner');
+  if (welcomeBanner) dash.insertBefore(banner, welcomeBanner.nextSibling);
+}
+
+function openCheckinModal() {
+  if (todaySubmitted) return;
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'checkin-modal';
+  const today = new Date().toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long'});
+  overlay.innerHTML = `
+    <div class="modal-box">
+      <div class="modal-header">
+        <div><h3>Daily check-in</h3><p>${today}</p></div>
+        <button class="btn-modal-close" onclick="closeCheckinModal()">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 4l10 10M14 4L4 14"/></svg>
+        </button>
+      </div>
+      <div class="checkin-field">
+        <label><div class="field-icon" style="background:rgba(11,140,136,0.1);">\u2705</div> Tasks completed today</label>
+        <textarea class="checkin-textarea" id="ci-tasks" placeholder="What did you actually get done today? List the key ones."></textarea>
+      </div>
+      <div class="checkin-field">
+        <label><div class="field-icon" style="background:rgba(59,139,212,0.1);">\uD83D\uDC65</div> Clients worked on</label>
+        <textarea class="checkin-textarea" id="ci-clients" placeholder="Which clients did you work on or communicate with today?" style="min-height:60px;"></textarea>
+      </div>
+      <div class="checkin-field">
+        <label><div class="field-icon" style="background:rgba(239,159,39,0.1);">\uD83D\uDEA7</div> Blockers or help needed</label>
+        <textarea class="checkin-textarea" id="ci-blockers" placeholder="Anything blocking your progress? Write 'None' if clear." style="min-height:60px;"></textarea>
+      </div>
+      <div class="checkin-field">
+        <label><div class="field-icon" style="background:rgba(138,92,230,0.1);">\uD83D\uDCC5</div> Plans for tomorrow</label>
+        <textarea class="checkin-textarea" id="ci-tomorrow" placeholder="What are your top 2-3 priorities for tomorrow?" style="min-height:60px;"></textarea>
+      </div>
+      <div class="checkin-field">
+        <label><div class="field-icon" style="background:rgba(210,84,126,0.1);">\u26A1</div> How are you feeling?</label>
+        <div class="mood-row">
+          <button class="mood-btn" onclick="selectMood(this,'\uD83D\uDD25')">\uD83D\uDD25<span class="mood-label">On fire</span></button>
+          <button class="mood-btn" onclick="selectMood(this,'\uD83D\uDCAA')">\uD83D\uDCAA<span class="mood-label">Strong</span></button>
+          <button class="mood-btn" onclick="selectMood(this,'\uD83D\uDE0A')">\uD83D\uDE0A<span class="mood-label">Good</span></button>
+          <button class="mood-btn" onclick="selectMood(this,'\uD83D\uDE10')">\uD83D\uDE10<span class="mood-label">Okay</span></button>
+          <button class="mood-btn" onclick="selectMood(this,'\uD83D\uDE13')">\uD83D\uDE13<span class="mood-label">Tough day</span></button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeCheckinModal()">Cancel</button>
+        <button class="btn-primary" style="width:auto;padding:0 28px;" onclick="submitCheckin()">Submit check-in</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function selectMood(btn, mood) {
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedMood = mood;
+}
+
+function closeCheckinModal() {
+  const m = document.getElementById('checkin-modal');
+  if (m) m.remove();
+}
+
+async function submitCheckin() {
+  const tasks    = document.getElementById('ci-tasks').value.trim();
+  const clients  = document.getElementById('ci-clients').value.trim();
+  const blockers = document.getElementById('ci-blockers').value.trim();
+  const tomorrow = document.getElementById('ci-tomorrow').value.trim();
+  if (!tasks || !clients || !blockers || !tomorrow) {
+    showToast('Please fill in all four fields before submitting');
+    return;
+  }
+  closeCheckinModal();
+  todaySubmitted = true;
+
+  if (currentUser && currentUser.id) {
+    try {
+      await sb.from('daily_checkins').upsert({
+        user_id: currentUser.id,
+        checkin_date: new Date().toISOString().split('T')[0],
+        tasks_completed: tasks,
+        clients_worked_on: clients,
+        blockers: blockers,
+        plans_tomorrow: tomorrow,
+        mood: selectedMood || '\uD83D\uDE0A'
+      }, { onConflict: 'user_id,checkin_date' });
+    } catch(e) { console.error('Check-in save failed:', e); }
+  }
+
+  const pending   = document.getElementById('checkin-pending-banner');
+  const submitted = document.getElementById('checkin-submitted-banner');
+  if (pending)   pending.style.display   = 'none';
+  if (submitted) submitted.style.display = 'flex';
+  const alertDot = document.getElementById('checkin-alert');
+  if (alertDot) alertDot.style.display = 'none';
+
+  const newReport = { user: currentUser.name, initials: currentUser.initials, date: 'Today', tasks, clients, blockers, tomorrow, mood: selectedMood || '\uD83D\uDE0A' };
+  SAMPLE_REPORTS.unshift(newReport);
+  MY_HISTORY.unshift({ date: new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}), tasks, clients, blockers, tomorrow, mood: selectedMood || '\uD83D\uDE0A' });
+
+  buildTeamReports();
+  buildMyReports();
+  updateDashboardCheckinBanner();
+  TEAM.forEach(m => { if (m.initials === currentUser.initials) m.submittedToday = true; });
+  buildStreaksBoard();
+  showToast('Check-in submitted. Great work today.');
+}
+
+function buildStreaksBoard() {
+  const grid = document.getElementById('streaks-grid');
+  if (!grid) return;
+  const isYouInitials = currentUser ? currentUser.initials : '';
+  grid.innerHTML = TEAM.map(m => {
+    const didToday = m.submittedToday || (m.initials === isYouInitials && todaySubmitted);
+    const isYou = m.initials === isYouInitials;
+    const displayStreak = isYou && currentUser.streak ? currentUser.streak : m.streak;
+    return `<div class="streak-card ${isYou ? 'is-you' : ''}">
+      <div class="streak-avatar">${m.initials}</div>
+      <div class="streak-name">${m.name}${isYou ? ' <span style="font-size:10px;color:var(--g1);">(you)</span>' : ''}</div>
+      <div class="streak-role">${m.role}</div>
+      <span class="streak-fire">${displayStreak >= 10 ? '\uD83D\uDD25' : displayStreak >= 5 ? '\u26A1' : '\uD83D\uDCA7'}</span>
+      <div class="streak-count">${displayStreak}</div>
+      <div class="streak-label">day streak</div>
+      <div class="streak-today ${didToday ? 'today-yes' : 'today-no'}">${didToday ? 'Submitted today' : 'Not yet today'}</div>
+    </div>`;
+  }).join('');
+  const total = TEAM.filter(m => m.submittedToday).length;
+  const countEl = document.getElementById('submitted-count');
+  if (countEl) countEl.textContent = total + ' of ' + TEAM.length + ' submitted today';
+}
+
+function buildTeamReports() {
+  const container = document.getElementById('team-reports-list');
+  if (!container) return;
+  const toShow = currentUser && currentUser.isAdmin ? SAMPLE_REPORTS : SAMPLE_REPORTS.filter(r => r.initials !== 'AW');
+  container.innerHTML = toShow.map((r, i) => `
+    <div class="report-card">
+      <div class="report-card-header" onclick="toggleReport(this,'trb-${i}')">
+        <div class="log-avatar">${r.initials}</div>
+        <div style="flex:1;"><div style="font-size:14px;font-weight:500;">${r.user}</div><div style="font-size:12px;color:var(--grey-light);">${r.date}</div></div>
+        <span class="report-mood">${r.mood}</span>
+        <svg style="color:var(--grey-light);transition:transform 0.2s;" class="report-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg>
+      </div>
+      <div class="report-card-body" id="trb-${i}">
+        <div class="report-field-label">Tasks completed</div><div class="report-field-value">${r.tasks}</div>
+        <div class="report-field-label">Clients worked on</div><div class="report-field-value">${r.clients}</div>
+        <div class="report-field-label">Blockers</div><div class="report-field-value">${r.blockers}</div>
+        <div class="report-field-label">Plans for tomorrow</div><div class="report-field-value">${r.tomorrow}</div>
+      </div>
+    </div>`).join('');
+}
+
+function buildMyReports() {
+  const container = document.getElementById('my-reports-list');
+  if (!container) return;
+  container.innerHTML = MY_HISTORY.map((r, i) => `
+    <div class="report-card">
+      <div class="report-card-header" onclick="toggleReport(this,'mrb-${i}')">
+        <div style="font-size:18px;">${r.mood}</div>
+        <div style="flex:1;"><div style="font-size:14px;font-weight:500;">${r.date}</div><div style="font-size:12px;color:var(--grey-light);">${r.clients}</div></div>
+        <svg style="color:var(--grey-light);transition:transform 0.2s;" class="report-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg>
+      </div>
+      <div class="report-card-body" id="mrb-${i}">
+        <div class="report-field-label">Tasks completed</div><div class="report-field-value">${r.tasks}</div>
+        <div class="report-field-label">Clients worked on</div><div class="report-field-value">${r.clients}</div>
+        <div class="report-field-label">Blockers</div><div class="report-field-value">${r.blockers}</div>
+        <div class="report-field-label">Plans for tomorrow</div><div class="report-field-value">${r.tomorrow}</div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleReport(header, bodyId) {
+  header.classList.toggle('open');
+  const body = document.getElementById(bodyId);
+  if (body) body.classList.toggle('open');
+  const chevron = header.querySelector('.report-chevron');
+  if (chevron) chevron.style.transform = body && body.classList.contains('open') ? 'rotate(180deg)' : '';
+}
+
+// ═══════════════════ INIT ═══════════════════
+
+// Check for existing Supabase session on load (handles magic link redirect)
+(async () => {
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) await loadRealSession(session);
+  } catch(e) { console.warn('Session check failed:', e); }
+})();
+
+// Listen for auth state changes
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (event === 'SIGNED_IN' && session && !currentUser) {
+    await loadRealSession(session);
+  }
+  if (event === 'SIGNED_OUT') { currentUser = null; }
+});
+
+// Enter key on login
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('login-screen').classList.contains('active')) {
+    sendMagicLink();
+  }
+});
+</script>
+</body>
+</html>
