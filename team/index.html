@@ -2562,18 +2562,39 @@ function toggleReport(header, bodyId) {
 
 // ═══════════════════ INIT ═══════════════════
 
-// Check for existing Supabase session on load (handles magic link redirect)
+// Check for existing session OR handle token in URL hash (magic link / invite redirect)
 (async () => {
   try {
-    const { data: { session } } = await sb.auth.getSession();
-    if (session) await loadRealSession(session);
+    // First let Supabase process any tokens in the URL hash automatically
+    const { data: { session }, error } = await sb.auth.getSession();
+    if (session) {
+      await loadRealSession(session);
+      // Clean the token out of the URL so it doesn't show in the address bar
+      if (window.location.hash.includes('access_token')) {
+        history.replaceState(null, '', window.location.pathname);
+      }
+      return;
+    }
+    // If no session yet, check if there's a token in the hash manually
+    const hash = window.location.hash;
+    if (hash && hash.includes('access_token')) {
+      // Supabase JS v2 handles this automatically via onAuthStateChange below
+      // Just wait for it — show a loading state
+      document.getElementById('login-screen').style.display = 'flex';
+      const loadingMsg = document.querySelector('.login-sub');
+      if (loadingMsg) loadingMsg.textContent = 'Verifying your access link...';
+    }
   } catch(e) { console.warn('Session check failed:', e); }
 })();
 
-// Listen for auth state changes
+// Listen for auth state changes — this fires when Supabase processes the URL hash token
 sb.auth.onAuthStateChange(async (event, session) => {
-  if (event === 'SIGNED_IN' && session && !currentUser) {
+  if ((event === 'SIGNED_IN' || event === 'USER_UPDATED') && session && !currentUser) {
     await loadRealSession(session);
+    // Clean token from URL
+    if (window.location.hash.includes('access_token')) {
+      history.replaceState(null, '', window.location.pathname);
+    }
   }
   if (event === 'SIGNED_OUT') { currentUser = null; }
 });
