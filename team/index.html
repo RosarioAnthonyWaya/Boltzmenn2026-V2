@@ -953,12 +953,50 @@
     .stats-row { grid-template-columns: 1fr 1fr; }
     .recent-grid { grid-template-columns: 1fr; }
     .admin-grid { grid-template-columns: 1fr; }
+    .streaks-grid { grid-template-columns: 1fr 1fr; }
   }
 
   @media (max-width: 700px) {
     #app-screen { flex-direction: column; }
-    .sidebar { width: 100%; min-height: auto; position: static; }
-    .main-content { padding: 20px; }
+    .sidebar { width: 100%; min-height: auto; position: static; height: auto; }
+    .sidebar-nav { display: flex; flex-wrap: wrap; gap: 4px; padding: 10px; }
+    .nav-section-label { display: none; }
+    .nav-item { flex: 0 0 auto; padding: 8px 12px; font-size: 13px; }
+    .nav-item-icon { width: 24px; height: 24px; font-size: 13px; }
+    .nav-count { display: none; }
+    .main-header { padding: 14px 16px; }
+    .main-header h2 { font-size: 16px; }
+    .search-bar { display: none; }
+    .main-content { padding: 16px; }
+    .welcome-banner { padding: 20px; }
+    .welcome-banner h1 { font-size: 18px; }
+    .stats-row { grid-template-columns: 1fr; gap: 10px; }
+    .stat-value { font-size: 22px; }
+    .recent-grid { grid-template-columns: 1fr; }
+    .admin-grid { grid-template-columns: 1fr; }
+    .streaks-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .streak-card { padding: 14px; }
+    .streak-count { font-size: 22px; }
+    .category-header { padding: 16px; flex-direction: column; align-items: flex-start; gap: 12px; }
+    .category-icon-large { width: 44px; height: 44px; font-size: 22px; }
+    .doc-list-item { flex-wrap: wrap; gap: 10px; }
+    .doc-list-actions { width: 100%; justify-content: flex-end; }
+    .log-table-header { display: none; }
+    .log-row { grid-template-columns: 1fr 1fr; gap: 6px; font-size: 12px; padding: 10px 14px; }
+    .modal-box { padding: 20px; margin: 10px; }
+    .checkin-banner { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .checkin-banner-right { width: 100%; }
+    .btn-checkin { width: 100%; text-align: center; }
+    .mood-btn { padding: 8px 4px; font-size: 16px; }
+    .sidebar-user { padding: 12px; }
+    .invite-form { flex-direction: column; }
+    .admin-card { padding: 16px; }
+    [style*="grid-template-columns:repeat(4"] { grid-template-columns: repeat(2, 1fr) !important; }
+  }
+
+  @media (max-width: 400px) {
+    .streaks-grid { grid-template-columns: 1fr; }
+    .nav-item span:not(.nav-item-icon):not(.nav-alert) { display: none; }
   }
 
   /* Divider */
@@ -2093,10 +2131,10 @@ function enterApp() {
   }
 
   loadDocumentsFromDB();
+  loadTeamFromDB();
+  loadTodaysReports();
+  loadMyHistory();
   initCheckin();
-  buildStreaksBoard();
-  buildTeamReports();
-  buildMyReports();
   updateDashboardCheckinBanner();
 
   document.getElementById('login-screen').classList.remove('active');
@@ -2331,26 +2369,81 @@ async function uploadDoc() {
 
 // ═══════════════════ CHECK-IN SYSTEM ═══════════════════
 
-const TEAM = [
-  { name: 'Amaka Obi',    initials: 'AO', role: 'Client Manager', streak: 12, submittedToday: true  },
-  { name: 'Tunde Cole',   initials: 'TC', role: 'Client Manager', streak: 8,  submittedToday: true  },
-  { name: 'Ngozi Eze',    initials: 'NE', role: 'Client Manager', streak: 3,  submittedToday: false },
-  { name: 'Anthony Waya', initials: 'AW', role: 'Admin',          streak: 21, submittedToday: true  },
-];
+// Team and reports loaded from Supabase — no hardcoded names
+let TEAM = [];
+let SAMPLE_REPORTS = [];
+let MY_HISTORY = [];
 
-const SAMPLE_REPORTS = [
-  { user:'Amaka Obi', initials:'AO', date:'Today', tasks:'Sent proposal to Crest Foods. Followed up with 3 leads. Updated onboarding tracker.', clients:'Crest Foods, Landmark Hotels, TechBridge Logistics', blockers:'Waiting on signed NDA from Landmark before kickoff.', tomorrow:'Discovery call with Nexus Retail at 10am. Finalise QBR deck for TechBridge.', mood:'😊' },
-  { user:'Tunde Cole', initials:'TC', date:'Today', tasks:'Delivered monthly performance report to GreenMart. Onboarding call with Apex Solutions.', clients:'GreenMart, Apex Solutions', blockers:'None.', tomorrow:'Internal review of Apex onboarding checklist. Send Week 2 update to GreenMart.', mood:'🔥' },
-  { user:'Anthony Waya', initials:'AW', date:'Today', tasks:'Strategy session with the team. Reviewed 3 proposals. Meeting with potential HNI partner.', clients:'Internal / Business Development', blockers:'None.', tomorrow:'Finalize retainer pricing update. Review Q2 pipeline.', mood:'💪' },
-];
+async function loadTeamFromDB() {
+  try {
+    const { data, error } = await sb.from('profiles').select('*').order('full_name');
+    if (error || !data) return;
+    TEAM = data.map(p => ({
+      id: p.id,
+      name: p.full_name,
+      initials: p.initials,
+      role: p.role,
+      streak: p.streak || 0,
+      submittedToday: false
+    }));
+    // Check who submitted today
+    const today = new Date().toISOString().split('T')[0];
+    const { data: checkins } = await sb.from('daily_checkins')
+      .select('user_id')
+      .eq('checkin_date', today);
+    if (checkins) {
+      const submittedIds = checkins.map(c => c.user_id);
+      TEAM.forEach(m => { m.submittedToday = submittedIds.includes(m.id); });
+    }
+    buildStreaksBoard();
+  } catch(e) { console.warn('Team load failed:', e); }
+}
 
-const MY_HISTORY = [
-  { date:'Friday, March 21', tasks:'Sent proposal to Crest Foods. 3 lead follow-ups. Updated onboarding tracker.', clients:'Crest Foods, Landmark Hotels', blockers:'Waiting on NDA from Landmark.', tomorrow:'Discovery call — Nexus Retail. QBR deck for TechBridge.', mood:'😊' },
-  { date:'Thursday, March 20', tasks:'Discovery call with Nexus Retail. Submitted MOM within 1 hour. Reviewed contract template.', clients:'Nexus Retail, TechBridge', blockers:'None.', tomorrow:'Proposal to Crest Foods.', mood:'💪' },
-  { date:'Wednesday, March 19', tasks:'Monthly check-in with TechBridge. Updated CRM notes. Cold outreach to 5 new leads.', clients:'TechBridge Logistics', blockers:'Needs updated case study from brand team.', tomorrow:'Discovery call prep for Nexus.', mood:'😊' },
-  { date:'Tuesday, March 18', tasks:'Sent Week 4 status report to GreenMart. Internal check-in with Anthony.', clients:'GreenMart, Apex Solutions', blockers:'None.', tomorrow:'TechBridge monthly call.', mood:'😐' },
-  { date:'Monday, March 17', tasks:'Kickoff meeting with Apex Solutions. Onboarding form review. Asset collection sent.', clients:'Apex Solutions', blockers:'Waiting on Apex logo files.', tomorrow:'Follow-up status report for GreenMart.', mood:'🔥' },
-];
+async function loadTodaysReports() {
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    const { data, error } = await sb
+      .from('daily_checkins')
+      .select('*, profiles(full_name, initials, is_admin)')
+      .eq('checkin_date', today)
+      .order('created_at', { ascending: false });
+    if (error || !data) return;
+    SAMPLE_REPORTS = data.map(r => ({
+      user: r.profiles.full_name,
+      initials: r.profiles.initials,
+      isAdmin: r.profiles.is_admin,
+      date: 'Today',
+      tasks: r.tasks_completed,
+      clients: r.clients_worked_on,
+      blockers: r.blockers,
+      tomorrow: r.plans_tomorrow,
+      mood: r.mood || '😊'
+    }));
+    buildTeamReports();
+  } catch(e) { console.warn('Reports load failed:', e); }
+}
+
+async function loadMyHistory() {
+  if (!currentUser || !currentUser.id) return;
+  try {
+    const { data, error } = await sb
+      .from('daily_checkins')
+      .select('*')
+      .eq('user_id', currentUser.id)
+      .order('checkin_date', { ascending: false })
+      .limit(14);
+    if (error || !data) return;
+    MY_HISTORY = data.map(r => ({
+      date: new Date(r.checkin_date).toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long'}),
+      tasks: r.tasks_completed,
+      clients: r.clients_worked_on,
+      blockers: r.blockers,
+      tomorrow: r.plans_tomorrow,
+      mood: r.mood || '😊'
+    }));
+    buildMyReports();
+  } catch(e) { console.warn('History load failed:', e); }
+}
 
 let todaySubmitted = false;
 let selectedMood = '';
