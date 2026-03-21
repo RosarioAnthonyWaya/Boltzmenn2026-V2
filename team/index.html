@@ -974,6 +974,332 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+
+  /* ─── DAILY CHECK-IN ─── */
+  .checkin-banner {
+    background: linear-gradient(135deg, #0b8c88 0%, #1eb085 100%);
+    border-radius: var(--radius-lg);
+    padding: 24px 28px;
+    color: white;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .checkin-banner:hover { opacity: 0.95; }
+  .checkin-banner::after {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 140px; height: 140px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .checkin-banner.done {
+    background: linear-gradient(135deg, #1a7a50 0%, #1d9e75 100%);
+    cursor: default;
+  }
+  .checkin-banner-left { position: relative; z-index: 1; }
+  .checkin-banner-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    opacity: 0.75;
+    margin-bottom: 4px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .checkin-banner h3 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 2px;
+  }
+  .checkin-banner p {
+    font-size: 13px;
+    opacity: 0.8;
+    font-weight: 300;
+  }
+  .checkin-banner-right {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .btn-checkin {
+    background: rgba(255,255,255,0.2);
+    border: 1.5px solid rgba(255,255,255,0.35);
+    border-radius: var(--radius-sm);
+    padding: 10px 20px;
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .btn-checkin:hover { background: rgba(255,255,255,0.28); }
+
+  /* Streak badge */
+  .streak-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    white-space: nowrap;
+  }
+
+  /* Check-in modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.2s ease both;
+  }
+  .modal-box {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: fadeUp 0.25s ease both;
+    position: relative;
+  }
+  .modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  .modal-header h3 {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+  }
+  .modal-header p {
+    font-size: 13px;
+    color: var(--grey);
+    margin-top: 3px;
+  }
+  .btn-modal-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--grey-light);
+    padding: 4px;
+    border-radius: 6px;
+    transition: color 0.15s;
+    flex-shrink: 0;
+  }
+  .btn-modal-close:hover { color: var(--dark); }
+
+  .checkin-field { margin-bottom: 20px; }
+  .checkin-field label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 8px;
+    letter-spacing: 0.1px;
+  }
+  .checkin-field label .field-icon {
+    width: 26px; height: 26px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+  }
+  .checkin-textarea {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--dark);
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+    transition: border-color 0.2s;
+    background: var(--ash);
+    line-height: 1.5;
+  }
+  .checkin-textarea:focus { border-color: var(--g1); background: var(--white); }
+  .checkin-textarea::placeholder { color: var(--grey-light); }
+
+  .mood-row {
+    display: flex;
+    gap: 8px;
+  }
+  .mood-btn {
+    flex: 1;
+    padding: 10px 6px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--ash);
+    cursor: pointer;
+    font-size: 20px;
+    text-align: center;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  }
+  .mood-btn:hover { border-color: var(--g1); transform: scale(1.05); }
+  .mood-btn.selected {
+    border-color: var(--g1);
+    background: rgba(11,140,136,0.08);
+    transform: scale(1.08);
+  }
+  .mood-label {
+    display: block;
+    font-size: 10px;
+    color: var(--grey-light);
+    margin-top: 4px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ─── TEAM STREAKS BOARD ─── */
+  .streaks-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .streak-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .streak-card:hover { border-color: var(--border2); box-shadow: var(--shadow); }
+  .streak-card.is-you { border-color: var(--border2); background: rgba(11,140,136,0.02); }
+  .streak-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--g1), var(--g2));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    margin: 0 auto 10px;
+  }
+  .streak-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--dark);
+    margin-bottom: 2px;
+  }
+  .streak-role {
+    font-size: 11px;
+    color: var(--grey-light);
+    margin-bottom: 12px;
+  }
+  .streak-fire {
+    font-size: 24px;
+    margin-bottom: 2px;
+    display: block;
+  }
+  .streak-count {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--dark);
+    line-height: 1;
+  }
+  .streak-label {
+    font-size: 11px;
+    color: var(--grey-light);
+    margin-top: 2px;
+  }
+  .streak-today {
+    margin-top: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .today-yes { background: rgba(11,140,136,0.1); color: var(--g1); }
+  .today-no  { background: rgba(230,80,80,0.1); color: #a03030; }
+
+  /* ─── DAILY REPORTS TABLE ─── */
+  .report-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .report-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-bottom: 1px solid transparent;
+  }
+  .report-card-header:hover { background: var(--ash); }
+  .report-card-header.open { border-bottom-color: var(--border); }
+  .report-card-body {
+    display: none;
+    padding: 16px 20px;
+    background: var(--ash);
+  }
+  .report-card-body.open { display: block; }
+  .report-field-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--grey-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    margin-top: 12px;
+  }
+  .report-field-label:first-child { margin-top: 0; }
+  .report-field-value {
+    font-size: 13px;
+    color: var(--dark);
+    line-height: 1.6;
+  }
+  .report-mood { font-size: 18px; }
+
+  /* Notification dot on nav */
+  .nav-alert {
+    width: 7px; height: 7px;
+    background: #e05050;
+    border-radius: 50%;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
 </style>
 </head>
 <body>
@@ -991,7 +1317,7 @@
           <circle cx="11" cy="11" r="2" fill="white"/>
         </svg>
       </div>
-      <span class="login-logo-text">Boltz<span>menn</span> Hub</span>
+      <span class="login-logo-text">Boltzmenn<span> Employee</span> Hub</span>
     </div>
 
     <!-- Login form -->
@@ -1066,6 +1392,17 @@
       <div class="nav-item active" onclick="navigate('dashboard', this)">
         <div class="nav-item-icon">🏠</div>
         Dashboard
+      </div>
+
+      <div class="nav-item" id="nav-checkin" onclick="navigate('checkin', this)">
+        <div class="nav-item-icon">✅</div>
+        Daily Check-in
+        <span class="nav-alert" id="checkin-alert" style="display:none;"></span>
+      </div>
+
+      <div class="nav-item" onclick="navigate('teamboard', this)">
+        <div class="nav-item-icon">🔥</div>
+        Team Board
       </div>
 
       <div class="nav-section-label" style="margin-top:8px;">Resources</div>
@@ -1362,7 +1699,7 @@
               <div class="log-avatar">AO</div>
               <div>
                 <div style="font-size:13px;font-weight:500;">Amaka Obi</div>
-                <div style="font-size:12px;color:var(--grey-light);">amaka@boltzmenn.com</div>
+                <div style="font-size:12px;color:var(--grey-light);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4a2b272b212b0a2825263e30272f242464292527">[email&#160;protected]</a></div>
               </div>
             </div>
             <div style="font-size:13px;color:var(--grey);">Company Profile Deck</div>
@@ -1374,7 +1711,7 @@
               <div class="log-avatar">TC</div>
               <div>
                 <div style="font-size:13px;font-weight:500;">Tunde Cole</div>
-                <div style="font-size:12px;color:var(--grey-light);">tunde@boltzmenn.com</div>
+                <div style="font-size:12px;color:var(--grey-light);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e195948f8584a1838e8d959b8c848f8fcf828e8c">[email&#160;protected]</a></div>
               </div>
             </div>
             <div style="font-size:13px;color:var(--grey);">Master Service Agreement</div>
@@ -1386,7 +1723,7 @@
               <div class="log-avatar">NE</div>
               <div>
                 <div style="font-size:13px;font-weight:500;">Ngozi Eze</div>
-                <div style="font-size:12px;color:var(--grey-light);">ngozi@boltzmenn.com</div>
+                <div style="font-size:12px;color:var(--grey-light);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c5aba2aabfac85a7aaa9b1bfa8a0ababeba6aaa8">[email&#160;protected]</a></div>
               </div>
             </div>
             <div style="font-size:13px;color:var(--grey);">—</div>
@@ -1398,7 +1735,7 @@
               <div class="log-avatar">AO</div>
               <div>
                 <div style="font-size:13px;font-weight:500;">Amaka Obi</div>
-                <div style="font-size:12px;color:var(--grey-light);">amaka@boltzmenn.com</div>
+                <div style="font-size:12px;color:var(--grey-light);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4a2b272b212b0a2825263e30272f242464292527">[email&#160;protected]</a></div>
               </div>
             </div>
             <div style="font-size:13px;color:var(--grey);">Client Welcome Pack</div>
@@ -1410,7 +1747,7 @@
               <div class="log-avatar">TC</div>
               <div>
                 <div style="font-size:13px;font-weight:500;">Tunde Cole</div>
-                <div style="font-size:12px;color:var(--grey-light);">tunde@boltzmenn.com</div>
+                <div style="font-size:12px;color:var(--grey-light);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fd8988939998bd9f9291898790989393d39e9290">[email&#160;protected]</a></div>
               </div>
             </div>
             <div style="font-size:13px;color:var(--grey);">Proposal Template</div>
@@ -1429,7 +1766,7 @@
               <div class="user-avatar" style="width:34px;height:34px;font-size:11px;">AW</div>
               <div class="member-info">
                 <div class="member-name">Anthony Waya</div>
-                <div class="member-email">anthony@boltzmenn.com</div>
+                <div class="member-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a0c1ced4c8cfced9e0c2cfccd4dacdc5cece8ec3cfcd">[email&#160;protected]</a></div>
               </div>
               <span class="member-status status-active">Admin</span>
             </div>
@@ -1437,7 +1774,7 @@
               <div class="user-avatar" style="width:34px;height:34px;font-size:11px;">AO</div>
               <div class="member-info">
                 <div class="member-name">Amaka Obi</div>
-                <div class="member-email">amaka@boltzmenn.com</div>
+                <div class="member-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="16777b777d775674797a626c7b7378783875797b">[email&#160;protected]</a></div>
               </div>
               <span class="member-status status-active">Active</span>
             </div>
@@ -1445,7 +1782,7 @@
               <div class="user-avatar" style="width:34px;height:34px;font-size:11px;">TC</div>
               <div class="member-info">
                 <div class="member-name">Tunde Cole</div>
-                <div class="member-email">tunde@boltzmenn.com</div>
+                <div class="member-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9eeaebf0fafbdefcf1f2eae4f3fbf0f0b0fdf1f3">[email&#160;protected]</a></div>
               </div>
               <span class="member-status status-active">Active</span>
             </div>
@@ -1453,7 +1790,7 @@
               <div class="user-avatar" style="width:34px;height:34px;font-size:11px;">NE</div>
               <div class="member-info">
                 <div class="member-name">Ngozi Eze</div>
-                <div class="member-email">ngozi@boltzmenn.com</div>
+                <div class="member-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cfa1a8a0b5a68fada0a3bbb5a2aaa1a1e1aca0a2">[email&#160;protected]</a></div>
               </div>
               <span class="member-status status-invited">Invited</span>
             </div>
@@ -1506,12 +1843,52 @@
         </div>
       </div>
 
-    </div><!-- /main-content -->
+    
+      <!-- CHECK-IN PAGE -->
+      <div class="page-view" id="page-checkin">
+        <div id="checkin-submitted-banner" style="display:none;background:linear-gradient(135deg,#1a7a50,#1d9e75);border-radius:var(--radius-lg);padding:24px 28px;color:white;margin-bottom:24px;align-items:center;gap:16px;">
+          <div style="font-size:32px;">✅</div>
+          <div>
+            <div style="font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;opacity:0.75;margin-bottom:2px;font-family:'DM Sans',sans-serif;">Submitted</div>
+            <div style="font-size:18px;font-weight:700;letter-spacing:-0.3px;">Today's check-in is done.</div>
+            <div style="font-size:13px;opacity:0.8;font-weight:300;">See you tomorrow. Keep the streak going.</div>
+          </div>
+        </div>
+        <div id="checkin-pending-banner" class="checkin-banner" onclick="openCheckinModal()">
+          <div class="checkin-banner-left">
+            <div class="checkin-banner-label">Daily check-in</div>
+            <h3>Submit today's report</h3>
+            <p>Takes 3 minutes. Keeps the team aligned.</p>
+          </div>
+          <div class="checkin-banner-right">
+            <div class="streak-badge" id="banner-streak">🔥 5 day streak</div>
+            <button class="btn-checkin">Start check-in</button>
+          </div>
+        </div>
+        <div class="section-title">Your previous reports</div>
+        <div id="my-reports-list"></div>
+      </div>
+
+      <!-- TEAM BOARD PAGE -->
+      <div class="page-view" id="page-teamboard">
+        <div style="margin-bottom:24px;">
+          <h3 style="font-size:18px;font-weight:800;letter-spacing:-0.4px;margin-bottom:4px;">Team streaks</h3>
+          <p style="font-size:14px;color:var(--grey);font-weight:300;">Who shows up every day. Streaks reset if you miss a weekday.</p>
+        </div>
+        <div class="streaks-grid" id="streaks-grid"></div>
+        <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;">
+          <div class="section-title" style="margin-bottom:0;">Today's reports</div>
+          <span id="submitted-count" style="font-size:13px;color:var(--grey-light);">3 of 4 submitted</span>
+        </div>
+        <div id="team-reports-list"></div>
+      </div>
+
+</div><!-- /main-content -->
   </main>
 
 </div><!-- /app-screen -->
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ═══════════════════ DATA ═══════════════════
 const DOCS = {
   sales: [
@@ -1659,6 +2036,11 @@ function loginAs(role) {
   }
 
   buildAllDocLists();
+  initCheckin();
+  buildStreaksBoard();
+  buildTeamReports();
+  buildMyReports();
+  updateDashboardCheckinBanner();
 
   document.getElementById('login-screen').classList.remove('active');
   document.getElementById('app-screen').classList.add('active');
@@ -1699,6 +2081,8 @@ function navigate(page, navEl) {
     brand: 'Brand & Assets',
     activity: 'Activity Log',
     team: 'Team Access',
+    checkin: 'Daily Check-in',
+    teamboard: 'Team Board',
   };
   document.getElementById('page-title').textContent = titles[page] || page;
   currentPage = page;
@@ -1777,33 +2161,4 @@ function sendInvite() {
 }
 
 function uploadDoc() {
-  const name = document.getElementById('upload-name').value.trim();
-  const file = document.getElementById('upload-file').files[0];
-  if (!name || !file) { showToast('Please fill in document name and select a PDF'); return; }
-  showToast(`"${name}" uploaded successfully ✓`);
-  document.getElementById('upload-name').value = '';
-  document.getElementById('upload-file').value = '';
-  document.getElementById('upload-desc').value = '';
-}
-
-// ═══════════════════ TOAST ═══════════════════
-function showToast(msg) {
-  const existing = document.querySelector('.toast');
-  if (existing) existing.remove();
-  const toast = document.createElement('div');
-  toast.className = 'toast success';
-  toast.innerHTML = `<div class="toast-dot"></div>${msg}`;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
-}
-
-// ═══════════════════ INIT ═══════════════════
-// Handle email input enter key
-document.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && document.getElementById('login-screen').classList.contains('active')) {
-    sendMagicLink();
-  }
-});
-</script>
-</body>
-</html>
+  const name = document.getElementById('upload-na
