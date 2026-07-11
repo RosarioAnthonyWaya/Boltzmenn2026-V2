@@ -1,16 +1,42 @@
-title: Boltzmenn
-url: "https://boltzmenn.com"
-baseurl: ""
-seo:
-  default_title: "Boltzmenn | Business Rescue & Revenue Growth for African SMEs"
-  default_description: "Boltzmenn helps African SMEs fix revenue leaks, operations, sales, and visibility—so growth becomes predictable."
-  robots: "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
-brand:
-  name: "Boltzmenn"
-  theme_color: "#0b8c88"
-  og_image: "/assets/og/boltzmenn-home.jpg"
+# =====================================================================
+# Boltzmenn — Jekyll site config
+# =====================================================================
+title: "Boltzmenn"
+tagline: "Business Rescue & Growth for African SMEs"
+description: "Boltzmenn diagnoses what's broken in African founder-led businesses, then builds what's missing. We fix revenue, operations, financial clarity, customer experience, funding readiness, and founder dependency. Start with The Scan."
+url: "https://boltzmenn.com"        # no trailing slash -- used to build absolute URLs for SEO tags
+baseurl: ""                          # set to "/repo-name" only if deployed to a project subpath (e.g. GitHub Pages project sites)
+lang: "en"
+author: "Boltzmenn"
+logo: "/assets/images/boltzmenn-logo.png"
+default_og_image: "/assets/images/og-default.jpg"   # 1200x630 recommended -- placeholder, replace with a real designed image
+
+# Social -- used in the JSON-LD Organization schema (sameAs) and footer icons.
+# Fill in the real handles/URLs before launch; leave blank to omit that entry from schema.
 social:
-  linkedin: "https://www.linkedin.com/company/boltzmenn"
-  instagram: "https://www.instagram.com/boltzmenn"
-permalink: pretty
+  linkedin: "https://linkedin.com/company/boltzmenn"
+  instagram: "https://instagram.com/boltzmenn"
+  facebook: "https://facebook.com/boltzmenn"
+  whatsapp: "https://wa.me/2340000000000"   # replace with the real number
+
+# Contact -- used in schema + footer
+contact:
+  email: "info@boltzmenn.com"
+  partnerships_email: "blessed.osunde@boltzmenn.com"
+  city: "Lagos"
+  country: "Nigeria"
+
+# Search Console / analytics verification -- fill in when you have real IDs, leave blank otherwise
+google_site_verification: ""
+google_analytics_id: ""
+
+# Jekyll build settings
 markdown: kramdown
+permalink: pretty
+plugins:
+  - jekyll-sitemap
+  - jekyll-feed
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
