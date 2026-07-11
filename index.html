@@ -1,1602 +1,527 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Boltzmenn | Business Rescue &amp; Revenue Growth for African SMEs</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
-<style>
-/* ═══════════════════════════════════════
-   TOKENS
-═══════════════════════════════════════ */
-:root{
-  --teal:#0b8c88; --teal-e:#1eb085; --teal-d:#076e6b; --teal-dd:#054f4d;
-  --nb:#1A1A1A; --ash:#F5F5F5; --grey:#6B6B6B; --mid:#999;
-  --border:#E4EEEE; --white:#fff;
-  --g:linear-gradient(160deg,#054f4d 0%,#076e6b 35%,#0b8c88 70%,#1eb085 100%);
-  --gs:linear-gradient(135deg,#0b8c88,#1eb085);
-  --ease:cubic-bezier(0.22,1,0.36,1);
-  --ease2:cubic-bezier(0.65,0,0.35,1);
-}
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}
-}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{font-size:16px;}
-body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--nb);overflow-x:hidden;cursor:none;}
+---
+layout: default
+title: "Boltzmenn | Business Rescue & Growth for African SMEs"
+description: "Boltzmenn diagnoses what's broken in African founder-led businesses, then builds what's missing. We fix revenue, operations, financial clarity, customer experience, funding readiness, and founder dependency. Start with The Scan."
+permalink: /
+og_image: /assets/images/og-home.jpg
+---
 
-/* ── LOADER ── */
-#loader{
-  position:fixed;inset:0;z-index:9000;
-  background:var(--teal-dd);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
-  transition:opacity .4s ease;
-  opacity:1;
-}
-#loader.out{opacity:0;pointer-events:none;}
-#loader::before{
-  content:'';position:absolute;inset:0;
-  background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
-  background-size:52px 52px;
-}
-.ld-logo{height:34px;opacity:0;transform:translateY(10px);transition:all .5s var(--ease) .1s;}
-.ld-logo.in{opacity:1;transform:none;}
-.ld-track{width:180px;height:2px;background:rgba(255,255,255,.12);overflow:hidden;
-  border-radius:4px;opacity:0;transition:opacity .3s ease .3s;}
-.ld-track.in{opacity:1;}
-.ld-bar{height:100%;width:0;background:var(--gs);border-radius:4px;transition:width .06s linear;}
-.ld-n{font-size:10px;font-weight:700;letter-spacing:.18em;color:rgba(255,255,255,.35);
-  opacity:0;transition:opacity .3s ease .4s;}
-.ld-n.in{opacity:1;}
 
-/* ── CURSOR ── */
-#cur{
-  width:8px;height:8px;border-radius:50%;background:var(--teal);
-  position:fixed;top:0;left:0;z-index:8000;pointer-events:none;
-  mix-blend-mode:multiply;
-  transition:width .3s var(--ease),height .3s var(--ease),background .3s;
-}
-#cur.large{width:44px;height:44px;background:rgba(11,140,136,.1);mix-blend-mode:normal;}
-#cur-r{
-  width:30px;height:30px;border-radius:50%;border:1px solid rgba(11,140,136,.3);
-  position:fixed;top:0;left:0;z-index:7999;pointer-events:none;transition:border-color .25s;
-}
-#cur.large~#cur-r{border-color:var(--teal);}
-@media(hover:none){#cur,#cur-r{display:none;}}
-
-/* ── NAV ── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:500;
-  height:68px;padding:0 56px;
-  display:flex;align-items:center;justify-content:space-between;
-  transition:background .4s,box-shadow .4s;
-}
-nav.solid{background:rgba(255,255,255,.96);backdrop-filter:blur(16px);box-shadow:0 1px 0 var(--border);}
-.n-logo img{height:26px;display:block;}
-.n-links{display:flex;gap:28px;list-style:none;}
-.n-links a{
-  font-size:12.5px;font-weight:500;color:rgba(255,255,255,.65);
-  text-decoration:none;letter-spacing:.01em;position:relative;transition:color .2s;
-}
-.n-links a::after{content:'';position:absolute;left:0;bottom:-2px;width:0;height:1px;background:var(--teal);transition:width .3s var(--ease);}
-.n-links a:hover::after{width:100%;}
-nav.solid .n-links a{color:var(--grey);}
-.n-links a:hover{color:white!important;}
-nav.solid .n-links a:hover{color:var(--nb)!important;}
-.n-cta{
-  background:var(--gs);color:white;border:none;
-  padding:9px 22px;border-radius:20px;cursor:none;
-  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:.06em;
-  transition:transform .25s var(--ease),box-shadow .25s;position:relative;overflow:hidden;
-}
-.n-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(11,140,136,.35);}
-
-/* ── HERO ── */
-#hero{
-  position:relative;width:100vw;height:100svh;
-  overflow:hidden;
-  display:grid;grid-template-rows:68px 1fr auto;
-}
-.bg{
-  position:absolute;inset:0;z-index:0;
-  background:url('https://i.ibb.co/fzvGnBH1/3N7D9868.jpg')
-    center 40%/cover no-repeat;
-  animation:kb 22s ease-in-out infinite alternate;
-  will-change:transform;
-}
-@keyframes kb{from{transform:scale(1);}to{transform:scale(1.05) translateX(-0.5%);}}
-.ov{position:absolute;inset:0;z-index:1;pointer-events:none;}
-.ov-main{
-  background:
-    linear-gradient(to bottom,rgba(18,16,14,.6) 0%,transparent 30%),
-    linear-gradient(to top,rgba(18,16,14,.85) 0%,transparent 45%),
-    linear-gradient(to right,rgba(18,16,14,.92) 0%,rgba(18,16,14,.80) 38%,rgba(18,16,14,.55) 65%,rgba(18,16,14,.30) 100%);
-}
-.ov-vig{
-  background:radial-gradient(ellipse 80% 100% at 40% 60%,transparent 20%,rgba(10,9,8,.4) 100%);
-}
-.hero-nav-spacer{grid-row:1;}
-.hero-body{
-  grid-row:2;position:relative;z-index:10;
-  display:grid;grid-template-columns:58% 42%;align-items:flex-end;
-  padding:0 52px;gap:0;
-}
-.hero-bottom{
-  grid-row:3;position:relative;z-index:10;
-  display:grid;grid-template-columns:58% 42%;
-  border-top:1px solid rgba(240,237,232,.08);
-  padding:0 52px;
-}
-
-/* ── LEFT COLUMN ── */
-.hero-left{display:flex;flex-direction:column;padding-bottom:0;}
-.eyebrow{
-  display:inline-flex;align-items:center;gap:10px;margin-bottom:18px;
-  opacity:0;transform:translateY(14px);
-  transition:opacity .8s var(--ease),transform .8s var(--ease);
-}
-.eyebrow.vis{opacity:1;transform:none;}
-.ey-line{width:24px;height:1px;background:#1eb085;}
-.ey-txt{font-size:9.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#1eb085;}
-.headline{
-  font-family:'DM Serif Display',serif;font-weight:400;
-  font-size:clamp(36px,4.2vw,64px);
-  line-height:1.08;letter-spacing:-.022em;color:#F0EDE8;margin-bottom:20px;
-}
-.hw-wrap{display:inline-block;overflow:hidden;vertical-align:bottom;margin-right:.16em;}
-.hw{
-  display:inline-block;transform:translateY(110%);
-  transition:transform .85s var(--ease);
-}
-.hw.vis{transform:translateY(0);}
-.hw.it{font-style:italic;color:rgba(240,237,232,.42);}
-.sub{
-  font-size:14px;font-weight:300;line-height:1.8;
-  color:rgba(240,237,232,.52);max-width:380px;margin-bottom:32px;
-  opacity:0;transform:translateY(12px);
-  transition:opacity .9s var(--ease),transform .9s var(--ease);
-}
-.sub.vis{opacity:1;transform:none;}
-.ctas{
-  display:flex;align-items:center;gap:16px;
-  opacity:0;transform:translateY(10px);
-  transition:opacity .9s var(--ease),transform .9s var(--ease);
-}
-.ctas.vis{opacity:1;transform:none;}
-.btn-hero-p{
-  display:inline-flex;align-items:center;gap:9px;
-  padding:11px 24px;background:#F0EDE8;color:#12100E;
-  font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;
-  letter-spacing:.05em;text-decoration:none;border-radius:20px;cursor:none;
-  position:relative;overflow:hidden;
-  transition:transform .3s var(--ease),box-shadow .3s;
-}
-.btn-hero-p::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.07);transform:translateX(-101%);transition:transform .4s var(--ease);}
-.btn-hero-p:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.35);}
-.btn-hero-p:hover::after{transform:translateX(0);}
-.b-arr{display:inline-block;transition:transform .3s var(--ease);}
-.btn-hero-p:hover .b-arr{transform:translateX(4px);}
-.btn-hero-g{
-  font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:500;
-  letter-spacing:.03em;color:rgba(240,237,232,.55);
-  text-decoration:none;cursor:none;position:relative;padding-bottom:2px;transition:color .2s;
-}
-.btn-hero-g::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:#1eb085;transition:width .35s var(--ease);}
-.btn-hero-g:hover{color:rgba(240,237,232,.85);}
-.btn-hero-g:hover::after{width:100%;}
-
-/* ── RIGHT COLUMN ── */
-.hero-right{
-  display:flex;flex-direction:column;justify-content:flex-end;
-  padding-left:52px;border-left:1px solid rgba(240,237,232,.08);
-}
-.hero-list{
-  display:flex;flex-direction:column;gap:0;
-  opacity:0;transition:opacity .9s var(--ease) .3s;
-}
-.hero-list.vis{opacity:1;}
-.hl-item{
-  position:relative;padding:13px 0;
-  border-top:1px solid rgba(240,237,232,.09);
-  cursor:none;overflow:hidden;
-}
-.hl-item:last-child{border-bottom:1px solid rgba(240,237,232,.09);}
-.hl-text{
-  font-family:'DM Serif Display',serif;font-weight:400;
-  font-size:clamp(15px,1.6vw,24px);line-height:1.18;letter-spacing:-.010em;
-  color:rgba(240,237,232,.2);
-  display:flex;align-items:center;gap:12px;
-  transition:color .45s var(--ease),transform .45s var(--ease);
-}
-.hl-item.active .hl-text{color:#F0EDE8;transform:translateX(6px);}
-.hl-ind{
-  width:0;height:0;flex-shrink:0;
-  border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:9px solid #1eb085;
-  opacity:0;transform:scale(.5) translateX(-6px);
-  transition:opacity .35s var(--ease),transform .35s var(--ease);
-}
-.hl-item.active .hl-ind{opacity:1;transform:scale(1) translateX(0);}
-.hl-sub{
-  font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:300;
-  color:rgba(240,237,232,.4);max-height:0;overflow:hidden;opacity:0;
-  transform:translateY(-6px);
-  transition:max-height .45s var(--ease),opacity .35s var(--ease) .08s,transform .35s var(--ease) .08s;
-}
-.hl-item.active .hl-sub{max-height:28px;opacity:1;transform:none;margin-top:4px;padding-left:21px;}
-.hl-prog{
-  position:absolute;bottom:-1px;left:0;height:1px;width:0;
-  background:linear-gradient(90deg,#0b8c88,#1eb085);transition:width linear;
-}
-
-/* ── BOTTOM STRIP ── */
-.stats{
-  display:flex;align-items:center;padding:16px 0;
-  opacity:0;transform:translateY(8px);
-  transition:opacity .9s var(--ease),transform .9s var(--ease);
-}
-.stats.vis{opacity:1;transform:none;}
-.st{padding-right:24px;margin-right:24px;border-right:1px solid rgba(240,237,232,.09);}
-.st:last-child{border-right:none;margin-right:0;padding-right:0;}
-.st-n{font-family:'DM Serif Display',serif;font-weight:400;font-size:20px;color:#F0EDE8;line-height:1;margin-bottom:2px;}
-.st-n em{color:#1eb085;font-style:normal;}
-.st-l{font-size:9.5px;font-weight:400;color:rgba(240,237,232,.35);letter-spacing:.03em;}
-.scroll-hint{
-  display:flex;align-items:center;justify-content:flex-end;gap:12px;
-  padding:16px 0 16px 52px;border-left:1px solid rgba(240,237,232,.08);
-  opacity:0;transition:opacity 1s ease .9s;
-}
-.scroll-hint.vis{opacity:1;}
-.sh-txt{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,237,232,.25);}
-.sh-line{width:32px;height:1px;background:linear-gradient(to right,rgba(240,237,232,.25),transparent);animation:shPulse 2.5s ease-in-out infinite;}
-@keyframes shPulse{0%,100%{opacity:.4;}50%{opacity:1;}}
-
-/* ── MAGNETIC BUTTON ── */
-.mag{display:inline-block;position:relative;cursor:none;}
-.mag-inner{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:14px 32px;border-radius:6px;
-  font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;letter-spacing:.05em;
-  text-decoration:none;position:relative;overflow:hidden;transition:box-shadow .3s;
-}
-.mag-inner::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.1);transform:translateX(-100%);transition:transform .4s var(--ease);}
-.mag:hover .mag-inner::before{transform:translateX(0);}
-.mag-w .mag-inner{background:white;color:var(--teal-d);}
-.mag-w:hover .mag-inner{box-shadow:0 12px 36px rgba(0,0,0,.18);}
-.mag-g .mag-inner{background:transparent;color:rgba(255,255,255,.7);padding-left:0;}
-.mag-g:hover .mag-inner{color:white;}
-.mag-g .arr{transition:transform .3s var(--ease);}
-.mag-g:hover .arr{transform:translateX(6px);}
-
-/* ── LOGOS TICKER ── */
-#logos{background:#fff;padding:40px 0;border-bottom:1px solid var(--border);overflow:hidden;}
-.l-label{text-align:center;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:26px;}
-.l-track{display:flex;animation:lTick 28s linear infinite;}
-.l-inner{display:flex;flex-shrink:0;}
-.l-item{display:inline-flex;align-items:center;justify-content:center;padding:0 48px;min-width:170px;border-right:1px solid var(--border);}
-.l-item img{height:25px;opacity:.33;filter:grayscale(1);transition:opacity .3s,filter .3s;}
-.l-item:hover img{opacity:.6;filter:grayscale(.5);}
-@keyframes lTick{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-
-/* ═══════════════════════════════════════
-   ADDITION 1 — WHAT WE FIX GRID
-═══════════════════════════════════════ */
-#what-we-fix{
-  background:var(--ash);
-  padding:80px 0;
-  position:relative;
-}
-.wwf-con{
-  max-width:1200px;margin:0 auto;padding:0 56px;
-}
-.wwf-eyebrow{
-  font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--teal);margin-bottom:14px;
-  display:flex;align-items:center;gap:8px;
-}
-.wwf-eyebrow::after{content:'';display:inline-block;width:22px;height:1px;background:var(--teal);opacity:.4;}
-.wwf-title{
-  font-family:'DM Serif Display',serif;font-weight:400;
-  font-size:clamp(30px,3.5vw,48px);
-  color:var(--nb);line-height:1.08;margin-bottom:52px;max-width:520px;
-}
-.wwf-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:2px;
-}
-.wwf-card{
-  background:#fff;
-  padding:32px 28px;
-  border-left:2px solid transparent;
-  transition:border-color .3s,background .3s,transform .35s var(--ease);
-  cursor:default;
-}
-.wwf-card:hover{
-  border-left-color:var(--teal);
-  background:#f8fffe;
-  transform:translateX(4px);
-}
-.wwf-card h4{
-  font-family:'DM Serif Display',serif;
-  font-size:19px;color:var(--nb);margin-bottom:10px;
-}
-.wwf-card p{
-  font-size:13px;font-weight:300;line-height:1.72;color:var(--grey);
-}
-@media(max-width:900px){
-  .wwf-grid{grid-template-columns:1fr 1fr!important;}
-  .wwf-con{padding:0 28px!important;}
-}
-@media(max-width:480px){
-  .wwf-grid{grid-template-columns:1fr!important;}
-  .wwf-con{padding:0 20px!important;}
-}
-
-/* ── SIX FEELINGS ── */
-.svc-chapter{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:100px 0;}
-.svc-inner{max-width:1200px;margin:0 auto;padding:0 56px;width:100%;position:relative;z-index:2;}
-.svc-layout{display:grid;gap:80px;align-items:center;}
-.svc-layout.left{grid-template-columns:1fr 1fr;}
-.svc-layout.right{grid-template-columns:1fr 1fr;}
-.svc-layout.right .svc-text{order:2;}.svc-layout.right .svc-vis{order:1;}
-.svc-track{font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--teal);margin-bottom:10px;}
-.svc-num-big{font-family:'DM Serif Display',serif;font-size:clamp(80px,12vw,160px);line-height:.9;color:rgba(11,140,136,.06);position:absolute;top:-10px;left:42px;pointer-events:none;font-weight:400;transition:color .6s;}
-.svc-chapter:hover .svc-num-big{color:rgba(11,140,136,.1);}
-.svc-title{font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(36px,4.5vw,60px);line-height:1.05;margin-bottom:18px;}
-.svc-sub{font-size:15px;font-weight:300;line-height:1.85;color:var(--grey);margin-bottom:32px;max-width:440px;}
-.svc-price{font-size:12px;font-weight:600;color:var(--teal);letter-spacing:.04em;padding-top:18px;border-top:1px solid var(--border);display:inline-block;}
-.svc-bar{width:28px;height:2px;background:var(--gs);margin-bottom:22px;transition:width .4s var(--ease);}
-.svc-chapter:hover .svc-bar{width:52px;}
-#scan{background:#fff;}
-#scan .svc-title{color:var(--nb);}
-.scan-visual{position:relative;display:flex;align-items:center;justify-content:center;height:420px;}
-.scan-circle-outer{width:320px;height:320px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;animation:scanRotate 32s linear infinite;}
-.scan-circle-inner{width:220px;height:220px;border-radius:50%;border:1px solid rgba(11,140,136,.15);display:flex;align-items:center;justify-content:center;animation:scanRotate 24s linear infinite reverse;}
-.scan-core{width:120px;height:120px;border-radius:50%;background:rgba(11,140,136,.06);border:1px solid rgba(11,140,136,.2);display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-style:italic;font-size:13px;color:var(--teal);}
-@keyframes scanRotate{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-.scan-dot{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--teal-e);}
-.scan-dot:nth-child(1){top:50%;right:0;transform:translateY(-50%);}
-.scan-dot:nth-child(2){top:0;left:50%;transform:translateX(-50%);}
-.scan-tags{position:absolute;display:flex;flex-direction:column;gap:8px;right:-60px;top:50%;transform:translateY(-50%);}
-.scan-tag{font-size:11px;font-weight:600;color:var(--teal);padding:5px 12px;border:1px solid rgba(11,140,136,.2);border-radius:20px;background:rgba(11,140,136,.04);white-space:nowrap;animation:tagPulse 4s ease-in-out infinite;}
-.scan-tag:nth-child(2){animation-delay:-1.3s;}.scan-tag:nth-child(3){animation-delay:-2.6s;}
-@keyframes tagPulse{0%,100%{opacity:.4;}50%{opacity:.85;}}
-#lift{background:var(--nb);border-top:1px solid rgba(255,255,255,.04);}
-#lift .svc-title{color:white;}#lift .svc-track{color:var(--teal-e);}#lift .svc-sub{color:rgba(255,255,255,.48);}#lift .svc-price{color:var(--teal-e);border-top-color:rgba(255,255,255,.1);}
-#lift::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 80% 50%,rgba(11,140,136,.1) 0%,transparent 55%);}
-.lift-visual{height:420px;position:relative;display:flex;align-items:center;justify-content:center;}
-.lift-blocks{display:flex;flex-direction:column;gap:8px;width:260px;}
-.lb{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;transition:background .3s,border-color .3s,transform .3s;}
-.lb:hover{background:rgba(255,255,255,.07);border-color:rgba(11,140,136,.25);transform:translateX(4px);}
-.lb-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.lb-dot.red{background:#ef4444;}.lb-dot.amber{background:#f59e0b;}.lb-dot.green{background:var(--teal-e);}
-.lb-label{font-size:12px;font-weight:500;color:rgba(255,255,255,.65);}
-.lb-sub{font-size:10.5px;color:rgba(255,255,255,.3);margin-left:auto;}
-.lift-tag{position:absolute;top:20px;right:0;background:var(--gs);color:white;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:5px 12px;border-radius:20px;}
-#scale{background:var(--ash);}
-.scale-visual{height:420px;position:relative;display:flex;align-items:center;justify-content:center;}
-.scale-bars{display:flex;align-items:flex-end;gap:8px;height:200px;}
-.sbar{background:var(--gs);border-radius:4px 4px 0 0;width:28px;animation:barGrow 2s var(--ease) forwards;transform-origin:bottom;}
-.sbar:nth-child(1){height:30%;animation-delay:.1s;}.sbar:nth-child(2){height:50%;animation-delay:.2s;}.sbar:nth-child(3){height:65%;animation-delay:.3s;}.sbar:nth-child(4){height:80%;animation-delay:.4s;}.sbar:nth-child(5){height:95%;animation-delay:.5s;}.sbar:nth-child(6){height:100%;animation-delay:.6s;}
-@keyframes barGrow{from{transform:scaleY(0);}to{transform:scaleY(1);}}
-.scale-arrow{position:absolute;top:20px;right:20px;font-size:48px;color:rgba(11,140,136,.12);animation:arrowUp 3s ease-in-out infinite;}
-@keyframes arrowUp{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
-#fin{background:#fff;border-top:1px solid var(--border);}
-.fin-visual{height:420px;position:relative;display:flex;align-items:center;justify-content:center;}
-.fin-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:24px 26px;width:280px;box-shadow:0 4px 32px rgba(0,0,0,.06);position:relative;}
-.fin-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gs);border-radius:8px 0 0 8px;}
-.fc-head{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin-bottom:16px;}
-.fc-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);}
-.fc-row:last-child{border-bottom:none;}
-.fc-rn{font-size:13px;color:var(--grey);}
-.fc-rv{font-family:'DM Serif Display',serif;font-size:16px;color:var(--nb);}
-.fc-rv.pos{color:var(--teal);}.fc-rv.neg{color:#ef4444;}
-.fin-tiers{position:absolute;right:-80px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;}
-.fin-tier{background:var(--ash);border:1px solid var(--border);padding:10px 16px;border-radius:8px;display:flex;align-items:center;justify-content:space-between;gap:24px;transition:border-color .25s,background .25s;}
-.fin-tier:hover{border-color:var(--teal);background:#f0faf8;}
-.ftn{font-size:12px;font-weight:600;color:var(--nb);}.ftp{font-size:12px;font-weight:600;color:var(--teal);}
-.launch-pill{display:inline-flex;align-items:center;gap:7px;background:rgba(11,140,136,.07);border:1px solid rgba(11,140,136,.18);padding:6px 14px;border-radius:40px;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin-top:18px;animation:bop 2.5s ease-in-out infinite;}
-.l-dot{width:5px;height:5px;background:var(--teal-e);border-radius:50%;animation:blink 1.5s ease infinite;}
-@keyframes bop{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
-@keyframes blink{0%,100%{opacity:1;}50%{opacity:.25;}}
-#circle{background:var(--teal-dd);}
-#circle .svc-title{color:white;}#circle .svc-track{color:rgba(255,255,255,.45);}#circle .svc-sub{color:rgba(255,255,255,.48);}#circle .svc-price{color:rgba(255,255,255,.7);border-top-color:rgba(255,255,255,.12);}
-#circle::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:52px 52px;}
-.circle-visual{height:420px;position:relative;display:flex;align-items:center;justify-content:center;}
-.c-rings{position:relative;display:flex;align-items:center;justify-content:center;}
-.c-ring{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.08);animation:cPulse 5s ease-in-out infinite;}
-.c-ring:nth-child(1){width:300px;height:300px;}.c-ring:nth-child(2){width:220px;height:220px;animation-delay:-1.5s;}.c-ring:nth-child(3){width:140px;height:140px;animation-delay:-3s;}
-.c-core{width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-style:italic;font-size:11px;color:rgba(255,255,255,.5);}
-@keyframes cPulse{0%,100%{transform:scale(1);opacity:.4;}50%{transform:scale(1.02);opacity:.7;}}
-
-/* ── PROCESS ── */
-#process{padding:100px 0;background:var(--ash);position:relative;overflow:hidden;}
-.proc-con{max-width:1200px;margin:0 auto;padding:0 56px;}
-.proc-title{font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(30px,3.5vw,48px);color:var(--nb);max-width:480px;margin-bottom:72px;line-height:1.1;}
-.proc-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;}
-.proc-row::before{content:'';position:absolute;top:39px;left:calc(12.5% + 20px);right:calc(12.5% + 20px);height:1px;background:linear-gradient(90deg,var(--teal),var(--teal-e));opacity:.3;}
-.pstep{text-align:center;position:relative;z-index:1;padding:0 16px;}
-.pcirc{width:80px;height:80px;border-radius:50%;background:var(--gs);display:flex;align-items:center;justify-content:center;margin:0 auto 26px;font-family:'DM Serif Display',serif;font-size:25px;color:white;box-shadow:0 8px 28px rgba(11,140,136,.28);position:relative;overflow:hidden;transition:transform .4s var(--ease),box-shadow .4s;}
-.pcirc::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.1);transform:translateY(100%);transition:transform .4s var(--ease);}
-.pstep:hover .pcirc{transform:translateY(-6px) scale(1.06);box-shadow:0 16px 40px rgba(11,140,136,.35);}
-.pstep:hover .pcirc::after{transform:translateY(0);}
-.pstep h4{font-family:'DM Serif Display',serif;font-size:19px;color:var(--nb);margin-bottom:10px;}
-.pstep p{font-size:13px;font-weight:300;line-height:1.72;color:var(--grey);}
-
-/* ── FRAMEWORKS ── */
-#frameworks{padding:120px 0;background:#fff;}
-.fw-con{max-width:1200px;margin:0 auto;padding:0 56px;}
-.fw-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
-.fw-eyebrow{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:18px;display:flex;align-items:center;gap:8px;}
-.fw-eyebrow::after{content:'';width:22px;height:1px;background:var(--teal);opacity:.4;}
-.fw-title{font-family:'DM Serif Display',serif;font-size:clamp(30px,3.5vw,48px);color:var(--nb);margin-bottom:16px;line-height:1.08;}
-.fw-sub{font-size:15px;font-weight:300;line-height:1.85;color:var(--grey);margin-bottom:34px;}
-.fw-pills{display:flex;flex-wrap:wrap;gap:8px;}
-.fwp{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:40px;padding:7px 15px;font-size:12px;color:var(--grey);cursor:none;transition:border-color .25s,color .25s,background .25s,transform .25s var(--ease);}
-.fwp:hover{border-color:var(--teal);color:var(--teal);background:rgba(11,140,136,.05);transform:translateY(-2px);}
-.fp-d{width:5px;height:5px;border-radius:50%;background:var(--teal-e);}
-.fw-stack{display:flex;flex-direction:column;gap:2px;}
-.fwcard{background:var(--ash);padding:24px 26px;border-left:2px solid transparent;transition:border-color .3s,background .3s,transform .35s var(--ease);cursor:none;}
-.fwcard:hover{border-left-color:var(--teal);background:#f8fffe;transform:translateX(5px);}
-.fwcard h4{font-family:'DM Serif Display',serif;font-size:17px;color:var(--nb);margin-bottom:6px;}
-.fwcard p{font-size:13px;font-weight:300;line-height:1.72;color:var(--grey);}
-
-/* ── PROOF ── */
-#proof{padding:120px 0;background:var(--ash);}
-.proof-con{max-width:1200px;margin:0 auto;padding:0 56px;}
-.proof-eyebrow{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:18px;display:flex;align-items:center;gap:8px;}
-.proof-eyebrow::after{content:'';width:22px;height:1px;background:var(--teal);opacity:.4;}
-.proof-title{font-family:'DM Serif Display',serif;font-size:clamp(30px,3.5vw,48px);color:var(--nb);max-width:480px;margin-bottom:60px;line-height:1.08;}
-.trow{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:2px;}
-.tc{padding:38px 34px;transition:transform .35s var(--ease);}
-.tc:hover{transform:translateY(-3px);}
-.tc.lt{background:#fff;}.tc.dk{background:#2C2C2C;}
-.tst{display:flex;gap:3px;margin-bottom:16px;}.tst span{color:var(--teal-e);font-size:13px;}
-.tq{font-family:'DM Serif Display',serif;font-style:italic;font-size:18px;line-height:1.55;color:var(--nb);margin-bottom:24px;}
-.tc.dk .tq{color:rgba(255,255,255,.88);}
-.tp{display:flex;align-items:center;gap:11px;border-top:1px solid var(--border);padding-top:18px;}
-.tc.dk .tp{border-top-color:rgba(255,255,255,.07);}
-.tav{width:38px;height:38px;border-radius:50%;object-fit:cover;transition:transform .3s var(--ease);}
-.tc:hover .tav{transform:scale(1.06);}
-.tn{font-size:13px;font-weight:600;color:var(--nb);}.tc.dk .tn{color:rgba(255,255,255,.88);}
-.tr{font-size:11.5px;color:var(--mid);}.tc.dk .tr{color:rgba(255,255,255,.38);}
-.proof-pull{background:var(--g);padding:56px;display:flex;align-items:center;justify-content:space-between;gap:40px;margin-bottom:2px;position:relative;overflow:hidden;}
-.proof-pull::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:52px 52px;}
-.pq{font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(18px,2.2vw,28px);color:white;line-height:1.45;max-width:620px;position:relative;z-index:1;}
-.pm{flex-shrink:0;text-align:right;position:relative;z-index:1;}
-.pmn{font-size:14px;font-weight:600;color:white;margin-bottom:4px;}.pmt{font-size:12px;color:rgba(255,255,255,.48);}
-.pstats{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
-.psc{background:#fff;padding:36px 38px;position:relative;overflow:hidden;transition:background .3s;}
-.psc::before{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--gs);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease);}
-.psc:hover{background:#f8fffe;}.psc:hover::before{transform:scaleX(1);}
-.psn{font-family:'DM Serif Display',serif;font-size:46px;color:var(--teal);line-height:1;margin-bottom:8px;}
-.psl{font-size:13px;font-weight:300;color:var(--grey);}
-
-/* ── CTA ── */
-#cta{padding:130px 0;background:var(--nb);text-align:center;position:relative;overflow:hidden;}
-#cta::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:52px 52px;}
-#cta::after{content:'';position:absolute;bottom:-80px;left:50%;transform:translateX(-50%);width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(11,140,136,.12) 0%,transparent 65%);pointer-events:none;animation:breathe 9s ease-in-out infinite;}
-@keyframes breathe{0%,100%{transform:translateX(-50%) scale(1);opacity:.6;}50%{transform:translateX(-50%) scale(1.08);opacity:.35;}}
-.cta-con{max-width:1200px;margin:0 auto;padding:0 56px;position:relative;z-index:2;}
-.cta-eyebrow{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:8px;}
-.cta-eyebrow::after{content:'';width:22px;height:1px;background:rgba(255,255,255,.2);}
-.cta-title{font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(36px,4.5vw,64px);color:white;line-height:1.05;max-width:620px;margin:0 auto 18px;}
-.cta-sub{font-size:15.5px;font-weight:300;line-height:1.85;color:rgba(255,255,255,.45);max-width:420px;margin:0 auto 48px;}
-.cta-btns{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
-.btn-p{background:var(--gs);color:white;padding:15px 34px;border-radius:20px;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;letter-spacing:.05em;text-decoration:none;display:inline-block;cursor:none;position:relative;overflow:hidden;transition:transform .3s var(--ease),box-shadow .3s;}
-.btn-p::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.1);transform:translateX(-101%);transition:transform .4s var(--ease);}
-.btn-p:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(11,140,136,.4);}.btn-p:hover::after{transform:translateX(0);}
-.btn-o{border:1.5px solid rgba(255,255,255,.18);color:rgba(255,255,255,.7);padding:15px 34px;border-radius:20px;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:600;letter-spacing:.05em;text-decoration:none;display:inline-block;cursor:none;transition:border-color .25s,color .25s,transform .3s var(--ease);}
-.btn-o:hover{border-color:rgba(255,255,255,.5);color:white;transform:translateY(-2px);}
-.sc-strip{max-width:1000px;margin:64px auto 0;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:34px 42px;display:flex;align-items:center;justify-content:space-between;gap:24px;position:relative;overflow:hidden;transition:background .3s,border-color .3s,transform .35s var(--ease);}
-.sc-strip::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gs);}
-.sc-strip:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14);transform:translateY(-2px);}
-.sc-txt h4{font-family:'DM Serif Display',serif;font-size:21px;color:white;margin-bottom:6px;}
-.sc-txt p{font-size:13.5px;font-weight:300;line-height:1.72;color:rgba(255,255,255,.42);}
-.sc-btn{background:white;color:var(--teal-d);padding:12px 26px;border-radius:20px;font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;letter-spacing:.06em;text-decoration:none;white-space:nowrap;flex-shrink:0;cursor:none;transition:transform .25s var(--ease),box-shadow .25s;}
-.sc-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,.15);}
-
-/* ── FOOTER ── */
-footer{background:#111;padding:72px 0 36px;border-top:1px solid rgba(255,255,255,.04);}
-.ft-con{max-width:1200px;margin:0 auto;padding:0 56px;}
-.ft-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:56px;}
-.fb p{font-size:13px;font-weight:300;line-height:1.78;color:rgba(255,255,255,.36);margin-top:16px;max-width:270px;}
-.fcol h5{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:18px;}
-.fcol ul{list-style:none;display:flex;flex-direction:column;gap:11px;}
-.fcol a{font-size:13.5px;color:rgba(255,255,255,.46);text-decoration:none;transition:color .22s;}
-.fcol a:hover{color:rgba(255,255,255,.88);}
-.ft-bot{display:flex;align-items:center;justify-content:space-between;padding-top:28px;border-top:1px solid rgba(255,255,255,.04);}
-.fcp{font-size:12px;color:rgba(255,255,255,.26);}
-.fct{font-size:13px;color:rgba(255,255,255,.36);}.fct a{color:var(--teal-e);text-decoration:none;}
-.fd{font-size:11px;font-weight:300;line-height:1.72;color:rgba(255,255,255,.2);margin-top:22px;padding-top:22px;border-top:1px solid rgba(255,255,255,.04);}
-
-/* ── FEELINGS PANELS ── */
-.feelings-pin{position:sticky;top:0;height:100vh;overflow:hidden;}
-.feelings-track{display:flex;height:100vh;width:600vw;will-change:transform;}
-.feeling-panel{
-  width:100vw;min-width:100vw;height:100vh;flex-shrink:0;
-  display:flex;align-items:center;padding:0 56px;position:relative;overflow:hidden;
-}
-.fp-left{max-width:560px;position:relative;z-index:2;}
-.fp-1{background:#0d1612;}.fp-2{background:#0f1118;}.fp-3{background:#0a0f0d;}
-.fp-4{background:#100d08;}.fp-5{background:#0b0b0b;}.fp-6{background:var(--teal-dd);}
-.fp-count{font-size:9px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:22px;}
-.fp-label{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal-e);margin-bottom:18px;}
-.fp-headline{font-family:'DM Serif Display',serif;font-weight:400;font-style:italic;font-size:clamp(34px,4.5vw,62px);line-height:1.1;color:white;margin-bottom:20px;}
-.fp-body{font-size:15px;font-weight:300;line-height:1.85;color:rgba(255,255,255,.52);margin-bottom:32px;max-width:420px;}
-.fp-cta{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-e);text-decoration:none;cursor:none;transition:gap .3s var(--ease);}
-.fp-cta:hover{gap:14px;}
-.fp-right{position:absolute;right:0;top:0;bottom:0;width:50%;z-index:1;overflow:hidden;}
-.feel-nav{position:absolute;right:32px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:10;}
-.feel-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.25);cursor:none;transition:background .3s,transform .3s;}
-.feel-dot.act{background:var(--teal-e);transform:scale(1.4);}
-.fp-1 .fp-right::before{content:'';position:absolute;width:320px;height:320px;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(11,140,136,.08) 0%,transparent 70%);animation:stuckGlow 9s ease-in-out infinite;}
-@keyframes stuckGlow{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-52%) scale(1.06);}}
-.stuck-lines{position:absolute;inset:0;overflow:hidden;}
-.stuck-line{position:absolute;left:20%;right:20%;height:1px;background:rgba(255,255,255,.04);animation:lineDrift 14s ease-in-out infinite;}
-.stuck-line:nth-child(1){top:30%;}.stuck-line:nth-child(2){top:45%;animation-delay:-3s;}.stuck-line:nth-child(3){top:60%;animation-delay:-6s;}.stuck-line:nth-child(4){top:72%;animation-delay:-9s;}
-@keyframes lineDrift{0%,100%{opacity:.04;transform:scaleX(1);}50%{opacity:.12;transform:scaleX(.7);}}
-.fin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;opacity:.12;animation:finFloat 9s ease-in-out infinite;width:260px;}
-@keyframes finFloat{0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-12px) rotate(2deg);}}
-.fin-cell{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);padding:10px 8px;border-radius:4px;text-align:center;}
-.fin-cell span{font-family:'DM Serif Display',serif;font-size:11px;color:rgba(255,255,255,.5);}
-.doc-stack{position:relative;width:240px;height:300px;}
-.doc{position:absolute;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:4px;width:200px;height:260px;}
-.doc:nth-child(1){top:20px;left:20px;transform:rotate(-6deg);opacity:.15;animation:docFloat1 7s ease-in-out infinite;}
-.doc:nth-child(2){top:10px;left:10px;transform:rotate(-3deg);opacity:.2;animation:docFloat2 7s ease-in-out infinite;}
-.doc:nth-child(3){top:0;left:0;opacity:.3;animation:docFloat3 7s ease-in-out infinite;}
-@keyframes docFloat1{0%,100%{transform:rotate(-6deg) translateY(0);}50%{transform:rotate(-5.5deg) translateY(-3px);}}
-@keyframes docFloat2{0%,100%{transform:rotate(-3deg) translateY(0);}50%{transform:rotate(-2deg) translateY(-8px);}}
-@keyframes docFloat3{0%,100%{transform:rotate(0deg) translateY(0);}50%{transform:rotate(.5deg) translateY(-4px);}}
-.doc-line{width:80%;height:1px;background:rgba(255,255,255,.1);margin:16px auto;}
-.doc:nth-child(3) .doc-line{background:rgba(11,140,136,.25);}
-.org-wrap{position:relative;width:280px;height:280px;opacity:.15;animation:orgPulse 12s ease-in-out infinite;}
-@keyframes orgPulse{0%,100%{opacity:.25;}50%{opacity:.4;}}
-.org-node{position:absolute;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);}
-.org-node:nth-child(1){top:0;left:50%;transform:translateX(-50%);}
-.org-node:nth-child(2){top:90px;left:20%;}.org-node:nth-child(3){top:90px;right:20%;}
-.org-node:nth-child(4){top:180px;left:5%;}.org-node:nth-child(5){top:180px;left:35%;}.org-node:nth-child(6){top:180px;right:5%;}
-.pipeline{display:flex;flex-direction:column;gap:8px;opacity:.14;width:240px;animation:pipeDrift 10s ease-in-out infinite;}
-@keyframes pipeDrift{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
-.pipe-row{display:flex;gap:6px;}
-.pipe-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:4px;padding:8px 10px;flex:1;}
-.pc-dot{width:6px;height:6px;border-radius:50%;background:var(--teal-e);margin-bottom:5px;}
-.pc-bar{height:1px;background:rgba(255,255,255,.15);margin-bottom:3px;}.pc-bar.short{width:60%;}
-.fp-6 .fp-right::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 60% 50%,rgba(30,176,133,.2) 0%,transparent 65%);animation:breathe2 7s ease-in-out infinite;}
-@keyframes breathe2{0%,100%{transform:scale(1);opacity:.6;}50%{transform:scale(1.08);opacity:.35;}}
-
-@media(max-width:900px){
-  #boltzroom{flex-direction:column!important;}
-  #boltzroom>div:first-child{min-height:280px!important;flex:none!important;}
-  #boltzroom>div:last-child{padding:48px 28px!important;}
-  #boltzroom [style*="right:-40px"]{display:none!important;}
-}
-.rv{opacity:0;transform:translateY(34px);transition:opacity .8s var(--ease),transform .8s var(--ease);}
-.rv.in{opacity:1;transform:none;}
-.rl{opacity:0;transform:translateX(-30px);transition:opacity .8s var(--ease),transform .8s var(--ease);}
-.rl.in{opacity:1;transform:none;}
-.rr{opacity:0;transform:translateX(30px);transition:opacity .8s var(--ease),transform .8s var(--ease);}
-.rr.in{opacity:1;transform:none;}
-.stg>*{opacity:0;transform:translateY(24px);transition:opacity .65s var(--ease),transform .65s var(--ease);}
-.stg.in>*:nth-child(1){opacity:1;transform:none;transition-delay:0s;}
-.stg.in>*:nth-child(2){opacity:1;transform:none;transition-delay:.1s;}
-.stg.in>*:nth-child(3){opacity:1;transform:none;transition-delay:.2s;}
-.stg.in>*:nth-child(4){opacity:1;transform:none;transition-delay:.3s;}
-.stg.in>*:nth-child(5){opacity:1;transform:none;transition-delay:.4s;}
-.stg.in>*:nth-child(6){opacity:1;transform:none;transition-delay:.5s;}
-
-/* ── RESPONSIVE ── */
-@media(max-width:1100px){.scan-tags,.fin-tiers{display:none;}}
-@media(max-width:900px){
-  nav{padding:0 24px;}.n-links,.n-cta{display:none;}
-  #hero{height:auto;min-height:100svh;grid-template-rows:68px 1fr auto;}
-  .hero-body{grid-template-columns:1fr;padding:36px 28px 28px;gap:36px;align-items:start;}
-  .hero-right{border-left:none;border-top:1px solid rgba(240,237,232,.09);padding-left:0;padding-top:28px;}
-  .hero-bottom{grid-template-columns:1fr;padding:0 28px;}
-  .scroll-hint{display:none;}
-  .stats{padding:16px 0;gap:0;}
-  .st{padding-right:20px;margin-right:20px;}
-  .st-n{font-size:18px;}
-  .headline{font-size:clamp(34px,8.5vw,52px);}
-  .sub{font-size:14px;max-width:100%;margin-bottom:28px;}
-  .ctas{flex-direction:column;align-items:flex-start;gap:14px;}
-  .btn-hero-p{padding:14px 28px;font-size:14px;width:100%;justify-content:center;}
-  .btn-hero-g{font-size:14px;padding:10px 0;}
-  .hl-text{font-size:clamp(14px,4vw,20px);}
-  .hl-item{padding:12px 0;}
-  .hl-item.active .hl-text{transform:translateX(4px);}
-  .hl-item.active .hl-sub{max-height:36px;font-size:11.5px;}
-  #feelings-wrap{height:420vh!important;}
-  .feeling-panel{padding:0 28px!important;}
-  .fp-headline{font-size:clamp(26px,6.5vw,40px)!important;}
-  .fp-body{font-size:14px!important;line-height:1.8!important;margin-bottom:24px!important;}
-  .fp-right{display:none!important;}
-  .feel-nav{right:14px!important;}
-  .svc-chapter{padding:72px 0!important;min-height:auto!important;}
-  .svc-inner{padding:0 28px!important;}
-  .svc-layout.left,.svc-layout.right{grid-template-columns:1fr!important;gap:40px!important;}
-  .svc-layout.right .svc-text,.svc-layout.right .svc-vis{order:unset!important;}
-  .svc-num-big{display:none!important;}
-  .svc-title{font-size:clamp(28px,7vw,42px)!important;}
-  .svc-sub{font-size:14px!important;line-height:1.8!important;}
-  .scan-visual,.lift-visual,.scale-visual,.fin-visual,.circle-visual{height:220px!important;}
-  .scan-circle-outer{width:180px!important;height:180px!important;}
-  .scan-circle-inner{width:120px!important;height:120px!important;}
-  .scan-core{width:70px!important;height:70px!important;font-size:10px!important;}
-  .lift-blocks{width:100%!important;}
-  .scale-bars{height:130px!important;}
-  .fin-tiers{position:static!important;transform:none!important;margin-top:16px!important;}
-  .proc-con{padding:0 28px!important;}
-  .proc-row{grid-template-columns:1fr 1fr!important;}
-  .proc-row::before{display:none!important;}
-  .pcirc{width:64px!important;height:64px!important;font-size:20px!important;}
-  .pstep h4{font-size:16px!important;}
-  .pstep p{font-size:13px!important;}
-  .fw-con{padding:0 28px!important;}
-  .fw-layout{grid-template-columns:1fr!important;gap:40px!important;}
-  .proof-con{padding:0 28px!important;}
-  .trow{grid-template-columns:1fr!important;}
-  .proof-pull{flex-direction:column!important;padding:40px 28px!important;}
-  .pstats{grid-template-columns:1fr!important;}
-  .cta-con{padding:0 28px!important;}
-  .cta-title{font-size:clamp(28px,7vw,44px)!important;}
-  .cta-btns{flex-direction:column;align-items:center;}
-  .btn-p,.btn-o{width:100%;max-width:340px;text-align:center;}
-  .sc-strip{flex-direction:column!important;padding:28px!important;}
-  .sc-btn{width:100%;text-align:center;}
-  .ft-con{padding:0 28px!important;}
-  .ft-top{grid-template-columns:1fr 1fr!important;}
-  .ft-bot{flex-direction:column!important;gap:10px!important;text-align:center!important;}
-}
-@media(max-width:480px){
-  .headline{font-size:clamp(30px,9vw,44px);}
-  .proc-con,.fw-con,.proof-con,.cta-con,.ft-con{padding:0 20px!important;}
-  .svc-inner{padding:0 20px!important;}
-  .ft-top{grid-template-columns:1fr!important;}
-  .proc-row{grid-template-columns:1fr!important;}
-}
-</style>
-</head>
-<body>
-
-<!-- ════ LOADER ════ -->
-<div id="loader">
-  <img class="ld-logo" id="ldLogo" src="https://i.ibb.co/vxs0DQ6k/boltz2.png" alt="Boltzmenn">
-  <div class="ld-track" id="ldTrack"><div class="ld-bar" id="ldBar"></div></div>
-  <span class="ld-n" id="ldN">0%</span>
-</div>
-
-<!-- ════ CURSOR ════ -->
-<div id="cur"></div>
-<div id="cur-r"></div>
-
-<!-- ════ NAV ════ -->
-<nav id="nav">
-  <a href="#" class="n-logo"><img src="https://i.ibb.co/vxs0DQ6k/boltz2.png" alt="Boltzmenn" id="nLogo"></a>
-  <ul class="n-links">
-    <li><a href="#scan">Services</a></li>
-    <li><a href="#feelings-wrap">Six Feelings</a></li>
-    <li><a href="#frameworks">Frameworks</a></li>
-    <li><a href="#proof">Results</a></li>
-  </ul>
-  <button class="n-cta" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Start With The Scan →</button>
-</nav>
-
-<!-- ════ HERO ════ -->
-<section id="hero">
-  <div class="bg" id="bgEl"></div>
-  <div class="ov ov-main"></div>
-  <div class="ov ov-vig"></div>
-
-  <nav>
-    <a href="#" class="n-logo"><img src="https://i.ibb.co/vxs0DQ6k/boltz2.png" alt="Boltzmenn"></a>
-    <div class="n-links">
-      <a href="#" class="n-link">Services</a>
-      <a href="#" class="n-link">Frameworks</a>
-      <a href="#" class="n-link">Results</a>
-      <button class="n-cta">Start With The Scan →</button>
-    </div>
-  </nav>
-
-  <div class="hero-body">
-    <div class="hero-left">
-      <div class="eyebrow" id="hEye">
-        <div class="ey-line"></div>
-        <span class="ey-txt">Built around the realities of founder-led businesses across Africa</span>
-      </div>
-      <h1 class="headline" id="hHead"></h1>
-      <p class="sub" id="hSub">
-        Boltzmenn diagnoses what is broken, builds what is missing, and stays until it works.
-      </p>
-      <div class="ctas" id="hCtas">
-        <a href="#scan" class="btn-hero-p">Start With The Scan <span class="b-arr">→</span></a>
-        <a href="#process" class="btn-hero-g">See How We Work →</a>
-      </div>
-    </div>
-
-    <div class="hero-right">
-      <div class="hero-list" id="hList">
-        <div class="hl-item" data-i="0">
-          <div class="hl-text"><span class="hl-ind"></span>Diagnose what is slowing the business down</div>
-          <div class="hl-sub">The Scan — understand what is actually getting in the way</div>
-          <div class="hl-prog" id="p0"></div>
-        </div>
-        <div class="hl-item" data-i="1">
-          <div class="hl-text"><span class="hl-ind"></span>Build systems that support growth</div>
-          <div class="hl-sub">LIFT — stabilise, strengthen, rebuild properly</div>
-          <div class="hl-prog" id="p1"></div>
-        </div>
-        <div class="hl-item" data-i="2">
-          <div class="hl-text"><span class="hl-ind"></span>Reduce founder dependency</div>
-          <div class="hl-sub">Scale — structure that works without the founder holding it together</div>
-          <div class="hl-prog" id="p2"></div>
-        </div>
-        <div class="hl-item" data-i="3">
-          <div class="hl-text"><span class="hl-ind"></span>Turn numbers into clearer decisions</div>
-          <div class="hl-sub">Financial Clarity — understand what your numbers are actually saying</div>
-          <div class="hl-prog" id="p3"></div>
-        </div>
-        <div class="hl-item" data-i="4">
-          <div class="hl-text"><span class="hl-ind"></span>Strengthen operations across the business</div>
-          <div class="hl-sub">Circle — experienced support in the room as the business grows</div>
-          <div class="hl-prog" id="p4"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ADDITION 2 — UPDATED STATS -->
-  <div class="hero-bottom">
-    <div class="stats" id="hStats">
-      <div class="st"><div class="st-n">50<em>+</em></div><div class="st-l">Businesses supported</div></div>
-      <div class="st"><div class="st-n">₦500<em>M+</em></div><div class="st-l">In revenue impact delivered</div></div>
-      <div class="st"><div class="st-n">71<em>%</em></div><div class="st-l">Average profit improvement</div></div>
-      <div class="st"><div class="st-n">2035</div><div class="st-l">Target: 1M businesses</div></div>
-    </div>
-    <div class="scroll-hint" id="hScroll">
-      <span class="sh-txt">Scroll to explore</span>
-      <div class="sh-line"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ════ LOGOS ════ -->
-<section id="logos">
-  <p class="l-label">Brands we've worked with</p>
-  <div class="l-track">
-    <div class="l-inner">
-      <div class="l-item"><img src="https://i.ibb.co/fYDVSH3/official-blue-Logo.png" alt=""></div>
-      <div class="l-item"><img src="https://i.ibb.co/njKYpMG/GMB.png" alt="GMB"></div>
-      <div class="l-item"><img src="https://i.ibb.co/VLJJRSy/black-logo.png" alt=""></div>
-      <div class="l-item"><img src="https://i.ibb.co/swPMyxr/TCN-ccg.png" alt="TCN"></div>
-      <div class="l-item"><img src="https://i.ibb.co/rkCtsYN/Qates-kitchen-gold.png" alt="Qates"></div>
-      <div class="l-item"><img src="https://i.ibb.co/brR3Zwr/name-and-acronym.png" alt="SLA"></div>
-      <div class="l-item"><img src="https://i.ibb.co/X7qP3s7/full-logo-primary-ccb8065049c42f74cc02027f53409957.png" alt=""></div>
-    </div>
-    <div class="l-inner" aria-hidden="true">
-      <div class="l-item"><img src="https://i.ibb.co/fYDVSH3/official-blue-Logo.png" alt=""></div>
-      <div class="l-item"><img src="https://i.ibb.co/njKYpMG/GMB.png" alt="GMB"></div>
-      <div class="l-item"><img src="https://i.ibb.co/VLJJRSy/black-logo.png" alt=""></div>
-      <div class="l-item"><img src="https://i.ibb.co/swPMyxr/TCN-ccg.png" alt="TCN"></div>
-      <div class="l-item"><img src="https://i.ibb.co/rkCtsYN/Qates-kitchen-gold.png" alt="Qates"></div>
-      <div class="l-item"><img src="https://i.ibb.co/brR3Zwr/name-and-acronym.png" alt="SLA"></div>
-      <div class="l-item"><img src="https://i.ibb.co/X7qP3s7/full-logo-primary-ccb8065049c42f74cc02027f53409957.png" alt=""></div>
-    </div>
-  </div>
-</section>
-
-<!-- ════ SERVICES INTRO ════ -->
-<section style="background:var(--white);padding:80px 0 0;">
-  <div style="max-width:1200px;margin:0 auto;padding:0 56px;">
-    <div class="rv" style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-      <span style="font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);">We follow a process. Not a catalogue.</span>
-      <span style="display:inline-block;width:22px;height:1px;background:var(--teal);opacity:.4;"></span>
-    </div>
-    <p class="rv" style="font-size:15px;font-weight:300;line-height:1.8;color:var(--grey);max-width:520px;">Every engagement begins with a diagnosis. What comes after depends on what we find.</p>
-  </div>
-</section>
-
-<!-- THE SCAN -->
-<section class="svc-chapter" id="scan">
-  <div class="svc-num-big">01</div>
-  <div class="svc-inner">
-    <div class="svc-layout left">
-      <div class="svc-text rl">
-        <div class="svc-bar"></div>
-        <div class="svc-track">01 — Diagnostic</div>
-        <h2 class="svc-title" style="color:var(--nb);">The Scan</h2>
-        <p class="svc-sub" style="color:var(--grey);">We start by understanding the business — its revenue, operations, systems, team structure, customer experience, and financial health. Before we recommend anything, we first understand what is actually getting in the way.</p>
-        <div class="svc-price">₦75,000 – ₦150,000 · One-time engagement</div>
-      </div>
-      <div class="svc-vis rr">
-        <div class="scan-visual">
-          <div class="scan-circle-outer">
-            <div class="scan-circle-inner">
-              <div class="scan-core">Diagnosing</div>
+<!-- =====================================================================
+     1. HERO — copy replaced, animated word-cycle removed (was showing
+     "Service Design / Brand Messaging / Pricing Strategy" — template filler)
+===================================================================== -->
+<section class="section hero-home-a-section">
+  <div class="w-layout-blockcontainer main-container w-container">
+    <div class="master-home-a">
+      <div class="left-home-a">
+        <div class="headline-home-a">
+          <div class="label-master"><div class="label-small">Business Rescue &amp; Growth for African SMEs</div></div>
+          <div class="text-wrap-hero-home-a">
+            <div class="heading-column">
+              <h1>We fix African businesses.<br><em>Then we scale them.</em></h1>
             </div>
+            <div>No guesswork. We diagnose what's broken, then build what's missing.</div>
           </div>
-          <div class="scan-tags">
-            <span class="scan-tag">Revenue leaks</span>
-            <span class="scan-tag">System gaps</span>
-            <span class="scan-tag">CX failures</span>
-            <span class="scan-tag">Structure</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- LIFT -->
-<section class="svc-chapter" id="lift">
-  <div class="svc-num-big" style="color:rgba(30,176,133,.04);">02</div>
-  <div class="svc-inner">
-    <div class="svc-layout right">
-      <div class="svc-text rr">
-        <div class="svc-bar"></div>
-        <div class="svc-track">02 — Stabilise</div>
-        <h2 class="svc-title" style="color:white;">LIFT</h2>
-        <p class="svc-sub">For businesses under pressure — losing consistency, struggling operationally, or too dependent on the founder. We stabilise the business, strengthen weak areas, and rebuild the foundations properly.</p>
-        <div class="svc-price">₦450,000 – ₦850,000 · Project-based</div>
-        <div style="margin-top:14px;display:inline-flex;align-items:center;gap:6px;font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.25);background:rgba(255,255,255,.06);padding:5px 12px;border-radius:2px;">⚡ Flagship Service</div>
-      </div>
-      <div class="svc-vis rl">
-        <div class="lift-visual">
-          <div class="lift-tag">Flagship</div>
-          <div class="lift-blocks">
-            <div class="lb"><div class="lb-dot red"></div><span class="lb-label">Revenue leak detected</span><span class="lb-sub">Critical</span></div>
-            <div class="lb"><div class="lb-dot amber"></div><span class="lb-label">Operations gap</span><span class="lb-sub">High</span></div>
-            <div class="lb"><div class="lb-dot amber"></div><span class="lb-label">CX failure points</span><span class="lb-sub">Medium</span></div>
-            <div class="lb"><div class="lb-dot green"></div><span class="lb-label">Structure rebuild</span><span class="lb-sub">In progress</span></div>
-            <div class="lb"><div class="lb-dot green"></div><span class="lb-label">Revenue systems</span><span class="lb-sub">Active</span></div>
+          <div class="button-wrap-centered">
+            <a href="/diagnose/" class="cta-main w-inline-block">
+              <div class="button-text-mask"><div class="button-text"><div class="text-medium">Start With The Scan</div></div></div>
+              <div class="button-icon-wrap right"><div class="icon-button w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 16 16" fill="none"><path d="M3.33337 8.00016H12.6667M12.6667 8.00016L8.00004 3.3335M12.6667 8.00016L8.00004 12.6668" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div>
+              <div class="button-bg"></div>
+            </a>
+            <a href="#process" class="cta-main w-variant-c69fc54f-c8c7-ba16-cab1-d159723763a9 w-inline-block">
+              <div class="button-text-mask"><div class="button-text w-variant-c69fc54f-c8c7-ba16-cab1-d159723763a9"><div class="text-medium">See How We Work</div></div></div>
+              <div class="button-bg w-variant-c69fc54f-c8c7-ba16-cab1-d159723763a9"></div>
+            </a>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SCALE -->
-<section class="svc-chapter" id="scale">
-  <div class="svc-num-big">03</div>
-  <div class="svc-inner">
-    <div class="svc-layout left">
-      <div class="svc-text rl">
-        <div class="svc-bar"></div>
-        <div class="svc-track">03 — Growth</div>
-        <h2 class="svc-title" style="color:var(--nb);">Scale</h2>
-        <p class="svc-sub" style="color:var(--grey);">For businesses ready to grow with more structure behind the growth. We build the systems, processes, and operational support needed to make expansion more sustainable and less dependent on constant founder intervention.</p>
-        <div class="svc-price">₦650,000 – ₦1,200,000 · Project-based</div>
-      </div>
-      <div class="svc-vis rr">
-        <div class="scale-visual">
-          <div class="scale-arrow">↗</div>
-          <div class="scale-bars">
-            <div class="sbar"></div><div class="sbar"></div><div class="sbar"></div>
-            <div class="sbar"></div><div class="sbar"></div><div class="sbar"></div>
+        <div class="home-a-avatars">
+          <div class="cta-avatars">
+            <div class="avatar-contact"><img src="https://cdn.prod.website-files.com/68d7c06dc68ea0c551b91d3d/68d98827f988838a0f2b109e_Contact%20Avatar.webp" loading="lazy" alt="" class="image-cover"></div>
+            <div class="avatar-contact inward"><img src="https://cdn.prod.website-files.com/68d7c06dc68ea0c551b91d3d/68d988271bee4131dca08195_Contact%20Avatar-1.webp" loading="lazy" alt="" class="image-cover"></div>
+            <div class="avatar-contact inward"><img src="https://cdn.prod.website-files.com/68d7c06dc68ea0c551b91d3d/68d98827cd0f6f327904f566_Contact%20Avatar-2.webp" loading="lazy" alt="" class="image-cover"></div>
           </div>
+          <div class="text-small">50+ businesses supported across Africa</div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- FINANCIAL CLARITY -->
-<section class="svc-chapter" id="fin">
-  <div class="svc-num-big">04</div>
-  <div class="svc-inner">
-    <div class="svc-layout right">
-      <div class="svc-text rr">
-        <div class="svc-bar"></div>
-        <div class="svc-track">04 — Financial Clarity</div>
-        <h2 class="svc-title" style="color:var(--nb);">Financial Clarity</h2>
-        <p class="svc-sub" style="color:var(--grey);">Most businesses have numbers. Very few truly understand them. Financial Clarity helps founders understand what their numbers are saying, where money is leaking, and what decisions need to happen next.</p>
-        <div class="launch-pill"><div class="l-dot"></div>Launching June 1, 2026</div>
-        <div style="margin-top:24px;display:flex;flex-direction:column;gap:8px;">
-          <div class="fin-tier" style="max-width:280px;"><span class="ftn">Starter</span><span class="ftp">₦65,000/mo</span></div>
-          <div class="fin-tier" style="max-width:280px;"><span class="ftn">Growth</span><span class="ftp">₦115,000/mo</span></div>
-          <div class="fin-tier" style="max-width:280px;"><span class="ftn">Partner</span><span class="ftp">₦195,000/mo</span></div>
-          <div style="font-size:11px;color:var(--mid);margin-top:2px;">3-month minimum commitment</div>
-        </div>
-      </div>
-      <div class="svc-vis rl">
-        <div class="fin-visual">
-          <div class="fin-card">
-            <div class="fc-head">Monthly Financial Report</div>
-            <div class="fc-row"><span class="fc-rn">Revenue</span><span class="fc-rv pos">₦2,840,000</span></div>
-            <div class="fc-row"><span class="fc-rn">Expenses</span><span class="fc-rv neg">₦1,120,000</span></div>
-            <div class="fc-row"><span class="fc-rn">Net Profit</span><span class="fc-rv pos">₦1,720,000</span></div>
-            <div class="fc-row"><span class="fc-rn">Profit Margin</span><span class="fc-rv">60.6%</span></div>
-            <div class="fc-row"><span class="fc-rn">Cash Position</span><span class="fc-rv pos">Healthy</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CIRCLE -->
-<section class="svc-chapter" id="circle">
-  <div class="svc-num-big">05</div>
-  <div class="svc-inner">
-    <div class="svc-layout left">
-      <div class="svc-text rl">
-        <div class="svc-bar"></div>
-        <div class="svc-track">05 — Retainer</div>
-        <h2 class="svc-title" style="color:white;">Circle</h2>
-        <p class="svc-sub">For businesses that want Boltzmenn involved long-term. Circle gives founders ongoing strategic support, operational oversight, accountability, and a trusted team in the room as the business grows.</p>
-        <div class="svc-price">₦200,000 – ₦650,000/mo · Scope-based</div>
-      </div>
-      <div class="svc-vis rr">
-        <div class="circle-visual">
-          <div class="c-rings">
-            <div class="c-ring"></div>
-            <div class="c-ring"></div>
-            <div class="c-ring"></div>
-            <div class="c-core">Circle</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════ PROCESS ══════ -->
-<section id="process">
-  <div class="proc-con">
-    <div class="rv"><div style="font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:8px;">Our Process<span style="display:inline-block;width:22px;height:1px;background:var(--teal);opacity:.4;"></span></div></div>
-    <h2 class="proc-title rv">Better businesses are built deliberately.</h2>
-    <p class="rv" style="font-size:15px;font-weight:300;line-height:1.8;color:var(--grey);max-width:560px;margin-bottom:56px;">Strong businesses rarely happen by accident. Behind every business that grows well is a structure that supports the growth.</p>
-    <div class="proc-row stg">
-      <div class="pstep"><div class="pcirc">1</div><h4>Understand</h4><p>We take a closer look at how the business currently operates before recommending anything.</p></div>
-      <div class="pstep"><div class="pcirc">2</div><h4>Strengthen</h4><p>We identify weak areas affecting growth, operations, team performance, or financial stability.</p></div>
-      <div class="pstep"><div class="pcirc">3</div><h4>Build</h4><p>We improve the systems, structure, and operational flow needed for the business to perform better.</p></div>
-      <div class="pstep"><div class="pcirc">4</div><h4>Support</h4><p>We stay involved where needed to help the business maintain clarity, accountability, and momentum.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ════ WHAT WE FIX — after process, before Six Feelings ════ -->
-<section id="what-we-fix">
-  <div class="wwf-con">
-    <div class="wwf-eyebrow rv">What we fix</div>
-    <h2 class="wwf-title rv">Six areas where we do the work.</h2>
-    <div class="wwf-grid stg">
-      <div class="wwf-card">
-        <h4>Revenue &amp; Sales</h4>
-        <p>Inconsistent revenue, weak pipelines, and sales that stop when the founder stops selling.</p>
-      </div>
-      <div class="wwf-card">
-        <h4>Operations &amp; Team</h4>
-        <p>Businesses running on the founder's memory instead of systems. Staff without clear direction.</p>
-      </div>
-      <div class="wwf-card">
-        <h4>Financial Clarity</h4>
-        <p>Revenue coming in but no real understanding of where it goes or what the numbers mean.</p>
-      </div>
-      <div class="wwf-card">
-        <h4>Customer Experience</h4>
-        <p>Customers leaving quietly. Service that loses trust before it has a chance to build it.</p>
-      </div>
-      <div class="wwf-card">
-        <h4>Funding Readiness</h4>
-        <p>Businesses that need capital but are not structurally ready to receive it responsibly.</p>
-      </div>
-      <div class="wwf-card">
-        <h4>Founder Dependency</h4>
-        <p>Businesses that only work because the founder is holding everything together.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ════ SIX FEELINGS INTRO ════ -->
-<section style="
-  position:relative;
-  min-height:56vh;
-  display:flex;align-items:center;
-  overflow:hidden;
-  background:#12100E;
-">
-  <div style="
-    position:absolute;inset:0;
-    background:url('https://i.ibb.co/fzjnL479/3N7D9969.jpg') center 40%/cover no-repeat;
-    opacity:.32;
-    animation:kb 24s ease-in-out infinite alternate;
-  "></div>
-  <div style="
-    position:absolute;inset:0;
-    background:linear-gradient(to right,
-      rgba(18,16,14,.95) 0%,
-      rgba(18,16,14,.80) 50%,
-      rgba(18,16,14,.55) 100%);
-  "></div>
-  <div class="rv" style="
-    position:relative;z-index:2;
-    max-width:1200px;margin:0 auto;
-    padding:80px 56px;
-    width:100%;
-  ">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
-      <span style="width:24px;height:1px;background:#1eb085;display:inline-block;flex-shrink:0;"></span>
-      <span style="font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#1eb085;">Different businesses. Different pressures.</span>
-    </div>
-    <h2 style="
-      font-family:'DM Serif Display',serif;font-weight:400;
-      font-size:clamp(32px,4vw,58px);
-      line-height:1.08;letter-spacing:-.022em;
-      color:#F0EDE8;
-      max-width:640px;margin-bottom:20px;
-    ">Different businesses.<br>Different pressures.</h2>
-    <p style="
-      font-size:15px;font-weight:300;line-height:1.82;
-      color:rgba(240,237,232,.55);
-      max-width:500px;
-    ">Some businesses are stuck. Some are growing too fast for their systems. Some need funding. Some need clarity. Others simply need experienced people in the room. Boltzmenn was built for all of them.</p>
-  </div>
-</section>
-
-<!-- ════ SIX FEELINGS — DESKTOP PINNED ════ -->
-<div id="feelings-wrap" style="height:700vh;position:relative;">
-  <div class="feelings-pin" id="feelPin">
-    <div class="feelings-track" id="feelTrack">
-
-      <div class="feeling-panel fp-1">
-        <div class="fp-left" id="fp-content-0">
-          <div class="fp-count">01 / 06</div>
-          <div class="fp-label">Stuck</div>
-          <h2 class="fp-headline">"The business isn't moving the way it should be."</h2>
-          <p class="fp-body">Revenue is coming in, effort is going out, and the needle is barely moving. Usually that means something structural is getting in the way — something worth finding before trying anything else.</p>
-          <a href="https://www.boltzmenn.com/diagnose/" class="fp-cta">See How We Fix This <span class="arr">→</span></a>
-        </div>
-        <div class="fp-right" style="background:url('https://i.ibb.co/fzvGnBH1/3N7D9868.jpg') center/cover no-repeat;">
-          <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(13,22,18,.95) 0%,rgba(13,22,18,.4) 100%);"></div>
-          <div class="stuck-lines">
-            <div class="stuck-line"></div><div class="stuck-line"></div>
-            <div class="stuck-line"></div><div class="stuck-line"></div>
-          </div>
-        </div>
-        <div class="feel-nav" id="feelNav">
-          <div class="feel-dot act" data-i="0"></div>
-          <div class="feel-dot" data-i="1"></div>
-          <div class="feel-dot" data-i="2"></div>
-          <div class="feel-dot" data-i="3"></div>
-          <div class="feel-dot" data-i="4"></div>
-          <div class="feel-dot" data-i="5"></div>
-        </div>
-      </div>
-
-      <div class="feeling-panel fp-2">
-        <div class="fp-left" id="fp-content-1">
-          <div class="fp-count">02 / 06</div>
-          <div class="fp-label">Financial Clarity</div>
-          <h2 class="fp-headline">"Revenue comes in but I never really know where it goes."</h2>
-          <p class="fp-body">Numbers without interpretation are just noise. When founders cannot see clearly where money is moving, every decision becomes a guess. That needs to change before anything else can.</p>
-          <a href="https://www.boltzmenn.com/diagnose/" class="fp-cta">Clean Up My Numbers <span class="arr">→</span></a>
-        </div>
-        <div class="fp-right" style="background:url('https://i.ibb.co/h19pZnS1/LEM0410.jpg') center/cover no-repeat;">
-          <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(15,17,24,.95) 0%,rgba(15,17,24,.35) 100%);"></div>
-          <div class="fin-grid" style="position:absolute;bottom:80px;right:60px;">
-            <div class="fin-cell"><span>₦12k</span></div><div class="fin-cell"><span>+8%</span></div>
-            <div class="fin-cell"><span>-3%</span></div><div class="fin-cell"><span>₦44k</span></div>
-            <div class="fin-cell"><span>₦7k</span></div><div class="fin-cell"><span>+21%</span></div>
-            <div class="fin-cell"><span>₦90k</span></div><div class="fin-cell"><span>-1%</span></div>
-            <div class="fin-cell"><span>+5%</span></div><div class="fin-cell"><span>₦3k</span></div>
-            <div class="fin-cell"><span>₦55k</span></div><div class="fin-cell"><span>+14%</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="feeling-panel fp-3">
-        <div class="fp-left" id="fp-content-2">
-          <div class="fp-count">03 / 06</div>
-          <div class="fp-label">Funding Readiness</div>
-          <h2 class="fp-headline">"I need funding, but I am not sure the business is ready for it."</h2>
-          <p class="fp-body">Capital does not fix a structurally weak business — it amplifies it. If the foundation is not ready, funding makes the cracks wider. We build the readiness that makes lenders and investors take the business seriously.</p>
-          <a href="https://www.boltzmenn.com/diagnose/" class="fp-cta">Prepare Me for Capital <span class="arr">→</span></a>
-        </div>
-        <div class="fp-right" style="background:url('https://i.ibb.co/XfG5mvQ9/3N7D0015.jpg') center/cover no-repeat;">
-          <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(10,15,13,.95) 0%,rgba(10,15,13,.35) 100%);"></div>
-          <div class="doc-stack" style="position:absolute;bottom:80px;right:60px;">
-            <div class="doc"><div class="doc-line"></div><div class="doc-line"></div><div class="doc-line"></div></div>
-            <div class="doc"><div class="doc-line"></div><div class="doc-line"></div><div class="doc-line"></div></div>
-            <div class="doc"><div class="doc-line"></div><div class="doc-line"></div><div class="doc-line"></div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="feeling-panel fp-4">
-        <div class="fp-left" id="fp-content-3">
-          <div class="fp-count">04 / 06</div>
-          <div class="fp-label">Team &amp; Operations</div>
-          <h2 class="fp-headline">"The team is not performing and operations feel out of control."</h2>
-          <p class="fp-body">Team problems are almost always systems problems. When people do not have clear roles, real accountability, and a structure to operate within — things default to chaos. We fix the system, not just the people.</p>
-          <a href="https://www.boltzmenn.com/diagnose/" class="fp-cta">Fix My Team <span class="arr">→</span></a>
-        </div>
-        <div class="fp-right" style="background:url('https://i.ibb.co/wFX1jmRj/LEM0452.jpg') center/cover no-repeat;">
-          <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(16,13,8,.95) 0%,rgba(16,13,8,.35) 100%);"></div>
-          <div class="org-wrap" style="position:absolute;bottom:80px;right:60px;">
-            <div class="org-node"></div><div class="org-node"></div>
-            <div class="org-node"></div><div class="org-node"></div>
-            <div class="org-node"></div><div class="org-node"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="feeling-panel fp-5">
-        <div class="fp-left" id="fp-content-4">
-          <div class="fp-count">05 / 06</div>
-          <div class="fp-label">Revenue &amp; Sales</div>
-          <h2 class="fp-headline">"Sales are inconsistent and revenue is hard to predict."</h2>
-          <p class="fp-body">Inconsistent revenue is a systems gap, not a luck gap. When a business cannot predict its sales, it cannot plan its growth. We build the structure that makes the pipeline move — consistently.</p>
-          <a href="https://www.boltzmenn.com/diagnose/" class="fp-cta">Fix My Sales Engine <span class="arr">→</span></a>
-        </div>
-        <div class="fp-right" style="background:url('https://i.ibb.co/gMGDfNFF/LEM4584.jpg') center/cover no-repeat;">
-          <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(11,11,11,.95) 0%,rgba(11,11,11,.35) 100%);"></div>
-          <div class="pipeline" style="position:absolute;bottom:80px;right:60px;">
-            <div class="pipe-row">
-              <div class="pipe-card"><div class="pc-dot"></div><div class="pc-bar"></div><div class="pc-bar short"></div></div>
-              <div class="pipe-card"><div class="pc-dot"></div><div class="pc-bar"></div></div>
-              <div class="pipe-card"><div class="pc-dot"></div><div class="pc-bar"></div></div>
+      <div class="image-wrap-home-a">
+        <img src="https://i.ibb.co/d0sdHKB4/3N7D9995.jpg" loading="lazy" alt="Boltzmenn strategy session" class="image-cover horizontal">
+        <div class="home-a-hero-case">
+          <a href="/case-studies/" class="card-case-small w-inline-block">
+            <div class="content-case-small">
+              <div class="text-small text-body-bold">"That one strategy session changed how we run the company."</div>
+              <div class="case-small-bottom-tile">
+                <div class="label-master"><div class="label-small">Emmanuel Okoh, PrimeTouch</div></div>
+              </div>
             </div>
-            <div class="pipe-row">
-              <div class="pipe-card"><div class="pc-dot"></div><div class="pc-bar short"></div></div>
-              <div class="pipe-card"><div class="pc-dot"></div><div class="pc-bar"></div><div class="pc-bar"></div></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     2. TRUST BAR — logo section repurposed. Full marquee logos trimmed
+     to a single readable set (was tripled for a seamless loop — kept
+     to one pass here to keep this file legible; re-add copies in
+     Webflow if the seamless scroll effect is wanted back).
+===================================================================== -->
+<section class="section home-a-logo-section">
+  <div class="w-layout-blockcontainer main-container w-container">
+    <div class="w-row">
+      <div class="w-col w-col-6"></div>
+      <div class="home-a-logos-column w-col w-col-6">
+        <div class="content-home-a-logo">
+          <div class="text-h5">50+ founder-led businesses supported. ₦500M+ in revenue impact delivered. No motivational speeches — just what's actually broken, and what fixes it.</div>
+          <div class="home-a-logo-wrap">
+            <div class="label-master"><div class="label-small">Businesses we've worked with</div></div>
+            <div class="bm-marquee-wrap">
+              <div class="bm-marquee-track">
+                <span class="bm-logo-text">PrimeTouch</span>
+                <span class="bm-logo-text">KET Shopping</span>
+                <span class="bm-logo-text">Willy's Shawarma</span>
+                <span class="bm-logo-text">Qate's Kitchen</span>
+                <span class="bm-logo-text">Syntyche Academy</span>
+                <span class="bm-logo-text">Dauntless Widows</span>
+                <span class="bm-logo-text">PrimeTouch</span>
+                <span class="bm-logo-text">KET Shopping</span>
+                <span class="bm-logo-text">Willy's Shawarma</span>
+                <span class="bm-logo-text">Qate's Kitchen</span>
+                <span class="bm-logo-text">Syntyche Academy</span>
+                <span class="bm-logo-text">Dauntless Widows</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      <div class="feeling-panel fp-6">
-        <div class="fp-left" id="fp-content-5">
-          <div class="fp-count">06 / 06</div>
-          <div class="fp-label">Something Is Off</div>
-          <h2 class="fp-headline">"Something is not working, but I cannot identify what."</h2>
-          <p class="fp-body">That is exactly what The Scan is for — a structured, honest look at the business that finds what is difficult to see from the inside. No assumptions. Just what is actually there.</p>
-          <a href="https://www.boltzmenn.com/diagnose/" class="fp-cta">Diagnose My Business <span class="arr">→</span></a>
-        </div>
-        <div class="fp-right" style="background:url('https://i.ibb.co/xKM09G6C/DSC4738.jpg') center/cover no-repeat;filter:grayscale(40%);">
-          <div style="position:absolute;inset:0;background:linear-gradient(to right,var(--teal-dd) 0%,rgba(5,79,77,.4) 100%);"></div>
-        </div>
-      </div>
-
     </div>
   </div>
-</div>
+</section>
 
-<!-- ══════ FRAMEWORKS ══════ -->
-<section id="frameworks">
-  <div class="fw-con">
-    <div class="fw-layout">
-      <div class="rl">
-        <div class="fw-eyebrow">Our IP</div>
-        <h2 class="fw-title">Tools built around the realities of African businesses.</h2>
-        <p class="fw-sub">Every engagement draws on structured tools and frameworks developed from working directly with African founder-led businesses.</p>
-        <div class="fw-pills">
-          <span class="fwp"><span class="fp-d"></span>S.E.E. Them™</span>
-          <span class="fwp"><span class="fp-d"></span>9-Touch Rule™</span>
-          <span class="fwp"><span class="fp-d"></span>₦500K/Month Scorecard</span>
-          <span class="fwp"><span class="fp-d"></span>Six Feelings Framework</span>
-          <span class="fwp"><span class="fp-d"></span>BoltzRoom Sessions</span>
+<!-- =====================================================================
+     3. SIX FEELINGS (condensed) — foundations-section slider repurposed.
+     Original had 3 slides about the template itself; now 3 real founder
+     states. CTA links repointed from BYQ Studio to #process.
+===================================================================== -->
+<section class="section foundations-section">
+  <div class="w-layout-blockcontainer main-container w-container">
+    <div class="headline-foundations">
+      <h2 class="no-margins">Tell us where you <em>are</em></h2>
+    </div>
+    <div data-delay="2500" data-animation="slide" class="slider w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" role="region" aria-label="carousel">
+      <div class="mask-foundations w-slider-mask">
+        <div class="slide-foundations w-slide" aria-label="1 of 3" role="group">
+          <div class="card-foundations">
+            <div class="foundations-inner-card">
+              <div class="text-wrap-foundations">
+                <div class="text-large heading-strong">"Nothing is moving. Revenue's in, effort's out, and the needle barely shifts."</div>
+              </div>
+              <a href="/diagnose/" class="cta-main w-variant-c69fc54f-c8c7-ba16-cab1-d159723763a9 w-inline-block">
+                <div class="button-text-mask"><div class="button-text w-variant-c69fc54f-c8c7-ba16-cab1-d159723763a9"><div class="text-medium">See How We Fix This</div></div></div>
+                <div class="button-icon-wrap right"><div class="icon-button w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 16 16" fill="none"><path d="M3.33337 8.00016H12.6667M12.6667 8.00016L8.00004 3.3335M12.6667 8.00016L8.00004 12.6668" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div>
+                <div class="button-bg w-variant-c69fc54f-c8c7-ba16-cab1-d159723763a9"></div>
+              </a>
+            </div>
+            <div class="overlay-foundation-card"></div>
+          </div>
+        </div>
+        <div class="slide-foundations w-slide" aria-label="2 of 3" role="group">
+          <div class="card-foundations second">
+            <div class="foundations-inner-card">
+              <div class="text-wrap-foundations">
+                <div class="text-large heading-strong">"Revenue comes in but I never really know where it goes."</div>
+              </div>
+              <a href="/diagnose/" class="cta-main w-variant-c69fc54f-c8c7-ba16-cab1-d159723763a9 w-inline-block">
+                <div class="button-text-mask"><div class="button-text w-variant-c69fc54f-c8c7-ba16-cab1-d159723763a9"><div class="text-medium">Clean Up My Numbers</div></div></div>
+                <div class="button-icon-wrap right"><div class="icon-button w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 16 16" fill="none"><path d="M3.33337 8.00016H12.6667M12.6667 8.00016L8.00004 3.3335M12.6667 8.00016L8.00004 12.6668" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div>
+                <div class="button-bg w-variant-c69fc54f-c8c7-ba16-cab1-d159723763a9"></div>
+              </a>
+            </div>
+            <div class="overlay-foundation-card"></div>
+          </div>
+        </div>
+        <div class="slide-foundations w-slide" aria-label="3 of 3" role="group">
+          <div class="card-foundations third">
+            <div class="foundations-inner-card">
+              <div class="text-wrap-foundations">
+                <div class="text-large heading-strong">"Something is wrong but I cannot identify what."</div>
+              </div>
+              <a href="/diagnose/" class="cta-main w-variant-c69fc54f-c8c7-ba16-cab1-d159723763a9 w-inline-block">
+                <div class="button-text-mask"><div class="button-text w-variant-c69fc54f-c8c7-ba16-cab1-d159723763a9"><div class="text-medium">Diagnose My Business</div></div></div>
+                <div class="button-icon-wrap right"><div class="icon-button w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 16 16" fill="none"><path d="M3.33337 8.00016H12.6667M12.6667 8.00016L8.00004 3.3335M12.6667 8.00016L8.00004 12.6668" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div>
+                <div class="button-bg w-variant-c69fc54f-c8c7-ba16-cab1-d159723763a9"></div>
+              </a>
+            </div>
+            <div class="overlay-foundation-card"></div>
+          </div>
         </div>
       </div>
-      <div class="fw-stack rr">
-        <div class="fwcard"><h4>S.E.E. Them™ — Smile. Engage. Elevate.</h4><p>A frontline CX framework that makes every customer feel genuinely seen. Simple to train on. Powerful enough to change retention permanently.</p></div>
-        <div class="fwcard"><h4>The 9-Touch Rule™</h4><p>A complete customer journey framework covering every touchpoint — every place businesses silently leak trust and revenue, from first impression to post-sale.</p></div>
-        <div class="fwcard"><h4>₦500K/Month Business Scorecard</h4><p>A diagnostic lead tool creating mirror moments — helping founders confront the real health of their business before asking what comes next.</p></div>
-        <div class="fwcard"><h4>Six Feelings Framework</h4><p>We structure messaging around six founder emotional states — because founders don't search for "revenue optimisation." They search for a way out of what they're feeling.</p></div>
+      <div class="slider-button-top-right prev w-slider-arrow-left" role="button" tabindex="0" aria-label="previous slide">
+        <div class="button-slider w-variant-5e19abdb-495e-028d-9e33-83620ea84249"><div class="button-circle-slot"><div class="icon-slider-button w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div></div>
+      </div>
+      <div class="slider-button-top-right w-slider-arrow-right" role="button" tabindex="0" aria-label="next slide">
+        <div class="button-slider w-variant-5e19abdb-495e-028d-9e33-83620ea84249"><div class="button-circle-slot"><div class="icon-slider-button w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div></div>
+      </div>
+      <div class="hidden w-slider-nav w-round w-num">
+        <div class="w-slider-dot w-active" aria-label="Show slide 1 of 3" role="button" tabindex="0">1</div>
+        <div class="w-slider-dot" aria-label="Show slide 2 of 3" role="button" tabindex="-1">2</div>
+        <div class="w-slider-dot" aria-label="Show slide 3 of 3" role="button" tabindex="-1">3</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══════ BOLTZROOM ══════ -->
-<section id="boltzroom" style="background:var(--nb);padding:0;position:relative;overflow:hidden;min-height:80vh;display:flex;align-items:stretch;">
-  <!-- Left — image column -->
-  <div style="flex:1;position:relative;min-height:560px;">
-    <img src="https://i.ibb.co/fzvGnBH1/3N7D9868.jpg"
-         alt="BoltzRoom session"
-         style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;">
-    <div style="position:absolute;inset:0;background:linear-gradient(to right,transparent 60%,var(--nb) 100%),linear-gradient(to bottom,transparent 70%,rgba(0,0,0,.4) 100%);"></div>
-    <!-- Second image stacked bottom-right of left column -->
-    <div style="position:absolute;bottom:32px;right:-40px;width:220px;height:160px;border:2px solid rgba(255,255,255,.08);overflow:hidden;z-index:2;">
-      <img src="https://i.ibb.co/V0Z88McM/LEM0405.jpg"
-           alt="BoltzRoom facilitator"
-           style="width:100%;height:100%;object-fit:cover;object-position:center top;">
-    </div>
-  </div>
-  <!-- Right — content column -->
-  <div style="flex:1;padding:80px 56px 80px 72px;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2;">
-    <div class="rv" style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
-      <span style="width:24px;height:1px;background:var(--teal-e);display:inline-block;"></span>
-      <span style="font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--teal-e);">Community</span>
-    </div>
-    <h2 class="rv" style="font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(32px,3.8vw,54px);line-height:1.08;color:#F0EDE8;margin-bottom:20px;">The BoltzRoom.</h2>
-    <p class="rv" style="font-size:15px;font-weight:300;line-height:1.85;color:rgba(240,237,232,.52);max-width:400px;margin-bottom:16px;">A live gathering for founder-led businesses — real conversations, practical frameworks, and honest thinking about what it takes to build in Africa.</p>
-    <p class="rv" style="font-size:15px;font-weight:300;line-height:1.85;color:rgba(240,237,232,.38);max-width:400px;margin-bottom:36px;">No motivational speeches. No generic content. Just useful, grounded insight from people who have done the work.</p>
-    <div class="rv" style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-bottom:48px;">
-      <a href="https://www.boltzmenn.com/services" class="btn-p" style="display:inline-flex;align-items:center;gap:8px;">Join The Next Edition →</a>
-      <span style="font-size:12px;font-weight:500;color:rgba(240,237,232,.3);letter-spacing:.04em;">Free to attend · Registration required</span>
-    </div>
-    <!-- Stats strip -->
-    <div class="rv" style="display:flex;gap:0;border-top:1px solid rgba(240,237,232,.08);padding-top:32px;">
-      <div style="padding-right:32px;margin-right:32px;border-right:1px solid rgba(240,237,232,.08);">
-        <div style="font-family:'DM Serif Display',serif;font-size:32px;color:#F0EDE8;line-height:1;margin-bottom:4px;">6<em style="color:var(--teal-e);font-style:normal;">+</em></div>
-        <div style="font-size:10px;color:rgba(240,237,232,.35);letter-spacing:.04em;">Editions held</div>
+<!-- =====================================================================
+     NEW: WHAT WE FIX — built from Home C's real home-c-features-section
+     component (6-tile grid), relabeled to the six areas Boltzmenn
+     actually works on. This section was missing before -- the site
+     implied trust without showing what's covered.
+===================================================================== -->
+<section class="section" id="whatwefix" style="padding:88px 0;background:#fff;">
+  <div class="w-layout-blockcontainer main-container w-container">
+    <div class="bm-eyebrow">What We Fix</div>
+    <h2 class="bm-section-h">Six areas. One diagnostic.</h2>
+    <div class="w-layout-grid features-grid" style="margin-top:32px;">
+      <div class="feature-tile-main">
+        <div class="icon-wrap-feature"><div class="icon-large" style="font-size:20px;">₦</div></div>
+        <div class="text-wrap-feature-main"><div class="text-body-bold">Revenue &amp; Sales</div><div class="text-small body-medium">Inconsistent revenue, weak pipelines, sales that stop when the founder stops selling.</div></div>
       </div>
-      <div style="padding-right:32px;margin-right:32px;border-right:1px solid rgba(240,237,232,.08);">
-        <div style="font-family:'DM Serif Display',serif;font-size:32px;color:#F0EDE8;line-height:1;margin-bottom:4px;">200<em style="color:var(--teal-e);font-style:normal;">+</em></div>
-        <div style="font-size:10px;color:rgba(240,237,232,.35);letter-spacing:.04em;">Founders attended</div>
+      <div class="feature-tile-main">
+        <div class="icon-wrap-feature"><div class="icon-large" style="font-size:20px;">⚙</div></div>
+        <div class="text-wrap-feature-main"><div class="text-body-bold">Operations &amp; Team</div><div class="text-small body-medium">Businesses running on the founder's memory instead of systems.</div></div>
       </div>
-      <div>
-        <div style="font-family:'DM Serif Display',serif;font-size:32px;color:#F0EDE8;line-height:1;margin-bottom:4px;font-style:italic;">Lagos</div>
-        <div style="font-size:10px;color:rgba(240,237,232,.35);letter-spacing:.04em;">Nigeria</div>
+      <div class="feature-tile-main">
+        <div class="icon-wrap-feature"><div class="icon-large" style="font-size:20px;">📊</div></div>
+        <div class="text-wrap-feature-main"><div class="text-body-bold">Financial Clarity</div><div class="text-small body-medium">Revenue coming in, no real understanding of where it goes.</div></div>
+      </div>
+      <div class="feature-tile-main">
+        <div class="icon-wrap-feature"><div class="icon-large" style="font-size:20px;">♥</div></div>
+        <div class="text-wrap-feature-main"><div class="text-body-bold">Customer Experience</div><div class="text-small body-medium">Customers leaving quietly, trust lost before it's built.</div></div>
+      </div>
+      <div class="feature-tile-main">
+        <div class="icon-wrap-feature"><div class="icon-large" style="font-size:20px;">↗</div></div>
+        <div class="text-wrap-feature-main"><div class="text-body-bold">Funding Readiness</div><div class="text-small body-medium">Needing capital but not structurally ready to receive it.</div></div>
+      </div>
+      <div class="feature-tile-main">
+        <div class="icon-wrap-feature"><div class="icon-large" style="font-size:20px;">◎</div></div>
+        <div class="text-wrap-feature-main"><div class="text-body-bold">Founder Dependency</div><div class="text-small body-medium">A business that only works because the founder holds it together.</div></div>
       </div>
     </div>
   </div>
 </section>
-
-<!-- ══════ PROOF ══════ -->
-<section id="proof">
-  <div class="proof-con">
-    <div class="proof-eyebrow rv">Results</div>
-    <h2 class="proof-title rv">Businesses that made the move. Here is what they found.</h2>
-    <div class="trow stg">
-      <div class="tc lt">
-        <div class="tst"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
-        <p class="tq">"That one strategy session with Boltzmenn changed how we run the entire company. Money well spent."</p>
-        <div class="tp">
-          <img class="tav" src="https://cdn.prod.website-files.com/68d7c06dc68ea0c551b91d3d/68d988271bee4131dca08195_Contact%20Avatar-1.webp" alt="">
-          <div><div class="tn">Emmanuel Okoh</div><div class="tr">Founder, PrimeTouch Facility Management</div></div>
+<!-- =====================================================================
+     5. PROCESS + THE SCAN — the widget-phase list already had 4 steps
+     that matched Understand/Strengthen/Build/Support almost exactly.
+     Moved out of the absolute-positioned image overlay (that's why it
+     wasn't showing on mobile -- the overlay's parent collapses height
+     on small screens, hiding everything absolutely positioned inside
+     it) into normal document flow, so it's always visible.
+===================================================================== -->
+<section class="section home-a-column-a-section" id="process">
+  <div class="w-layout-blockcontainer main-container w-container">
+    <div class="w-layout-grid column-halves">
+      <div class="content-column">
+        <div class="headline-column">
+          <div class="label-master"><div class="label-small">How We Work</div></div>
+          <div class="heading-column">
+            <h2 class="text-h3 no-margins">Better businesses are built <em>deliberately</em></h2>
+            <div>Every engagement starts the same way — with a real look at what's actually going on. The Scan is a full diagnostic covering revenue, systems, team, and finances. ₦75,000 – ₦150,000, one-time. You keep the report either way — no obligation to go further.</div>
+          </div>
+          <a href="#next" class="cta-main w-inline-block">
+            <div class="button-text-mask"><div class="button-text">See What Comes Next</div></div>
+            <div class="button-bg"></div>
+          </a>
+        </div>
+        <div class="widget-phase" style="margin-top:32px;max-width:none;">
+          <div class="widget-phase-top-tile">
+            <div class="body-strong text-body-bold">Project phase</div>
+          </div>
+          <div class="widget-phase-bottom-tile">
+            <div class="widget-phase-list-item filled"><div class="heading-strong">Understand</div></div>
+            <div class="widget-phase-list-item"><div class="heading-strong">Strengthen</div></div>
+            <div class="widget-phase-list-item"><div class="heading-strong">Build</div></div>
+            <div class="widget-phase-list-item"><div class="heading-strong">Support</div></div>
+          </div>
         </div>
       </div>
-      <div class="tc dk">
-        <div class="tst"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
-        <p class="tq">"Boltzmenn showed us how to fix the pitch deck. We don't lose people halfway through anymore. That's a big deal."</p>
-        <div class="tp">
-          <img class="tav" src="https://cdn.prod.website-files.com/68d7c06dc68ea0c551b91d3d/68d98827cd0f6f327904f566_Contact%20Avatar-2.webp" alt="">
-          <div><div class="tn">Marcus Leigh</div><div class="tr">KET Shopping</div></div>
+      <div class="image-wrap-column">
+        <img src="https://i.ibb.co/d0sdHKB4/3N7D9995.jpg" loading="lazy" alt="" class="image-cover horizontal">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     6. WHAT'S NEXT — callout-section repurposed for The Scan-to-next
+     handoff line, keeping the single callout card but reframing the copy
+     to point into the 4 downstream services (listed below it, reusing the
+     existing feature-tile pattern from column-a since there's no native
+     4-card grid in Home A).
+===================================================================== -->
+<!-- =====================================================================
+     6a. AFTER THE SCAN — slim handoff callout, no longer carrying the
+     card grid inside it (that's what made it look cramped).
+===================================================================== -->
+<section class="section callout-section">
+  <div class="w-layout-blockcontainer main-container w-container">
+    <div class="block-callout">
+      <div class="content-callout">
+        <div class="headline-callout">
+          <div class="label-master"><div class="label-small">After The Scan</div></div>
+          <h2 class="no-margins">What's next depends on <em>what we find</em></h2>
+        </div>
+        <div class="callout-bottom-tile">
+          <div>Not a menu you choose from cold — the path depends on what The Scan finds.</div>
+        </div>
+      </div>
+      <div class="image-wrap-callout">
+        <img src="https://cdn.prod.website-files.com/68d7c06dc68ea0c551b91d3d/68dac60db366b3e3c0283a76_Team%20Image-4.webp" loading="lazy" alt="" class="image-cover">
+      </div>
+    </div>
+  </div>
+  <div class="overlay-callout"></div>
+</section>
+
+<!-- =====================================================================
+     6b. WHAT'S NEXT — now its own standalone section, given room to
+     breathe instead of being stacked inside the callout box.
+===================================================================== -->
+<section class="section" id="next" style="padding:88px 0;background:var(--_🎨-color--tokens---background--base,#F5F5F5);">
+  <div class="w-layout-blockcontainer main-container w-container">
+    <div class="bm-eyebrow">The Four Paths</div>
+    <h2 class="bm-section-h">LIFT, Scale, Financial Clarity, or Circle</h2>
+    <div class="w-layout-grid features-grid" style="margin-top:32px;">
+      <a href="/lift/" class="feature-tile-main" style="text-decoration:none;color:inherit;">
+        <div class="bm-next-tag">Flagship</div>
+        <div class="text-wrap-feature-main"><div class="text-body-bold">LIFT</div><div class="text-small body-medium">For businesses under pressure — losing consistency, too dependent on the founder. Stabilise, strengthen, rebuild.</div><div class="bm-next-price">₦450,000 – ₦850,000</div></div>
+      </a>
+      <a href="/scale/" class="feature-tile-main" style="text-decoration:none;color:inherit;">
+        <div class="text-wrap-feature-main"><div class="text-body-bold">Scale</div><div class="text-small body-medium">Structure for growth that doesn't need the founder holding it up day to day.</div><div class="bm-next-price">₦650,000 – ₦1,200,000</div></div>
+      </a>
+      <a href="/financial-clarity/" class="feature-tile-main" style="text-decoration:none;color:inherit;">
+        <div class="text-wrap-feature-main"><div class="text-body-bold">Financial Clarity</div><div class="text-small body-medium">Know what your numbers are actually saying, and what decisions need to happen next.</div><div class="bm-next-price">From ₦65,000/mo</div></div>
+      </a>
+      <a href="/circle/" class="feature-tile-main" style="text-decoration:none;color:inherit;">
+        <div class="text-wrap-feature-main"><div class="text-body-bold">Circle</div><div class="text-small body-medium">Boltzmenn in the room, long-term — ongoing strategic support and accountability.</div><div class="bm-next-price">Scope-based</div></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     7. FRAMEWORKS + CREDIBILITY — column-b repurposed. The testimonial
+     card ("Evermind helped us...") became the credibility quote.
+===================================================================== -->
+<section class="section home-a-column-b-section" id="ip">
+  <div class="w-layout-blockcontainer main-container w-container">
+    <div class="w-layout-grid column-halves">
+      <div class="image-wrap-column">
+        <img src="https://cdn.prod.website-files.com/68d7c06dc68ea0c551b91d3d/68dbbb0d2e87fcf8fb74e192_Relaxed%20Woman%20at%20Desk-poster-00001.jpg" loading="lazy" alt="" class="image-cover">
+      </div>
+      <div class="content-column">
+        <div class="headline-column">
+          <div class="label-master"><div class="label-small">Our IP</div></div>
+          <div class="heading-column">
+            <h2 class="text-h3 no-margins">Tools built for the <em>realities</em> of African business</h2>
+            <div>S.E.E. Them™ — Smile, Engage, Elevate — a frontline CX framework your team can actually use. The 9-Touch Rule™ maps every point businesses silently leak trust and revenue. The ₦500K/Month Scorecard is a mirror moment, not a pitch.</div>
+          </div>
+        </div>
+        <div class="contact-testimonial base-full">
+          <div class="contact-testimonial-top-tile">
+            <div>Led by operators, not theorists. Anthony Rosario Waya has run diagnostics across 50+ African businesses — these frameworks were built in the room, fixing what was actually broken.</div>
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar"><img loading="lazy" src="https://cdn.prod.website-files.com/68d7c06dc68ea0c551b91d3d/68dac60d15809a7adaca5671_Team%20Image-6.webp" alt="" class="image-cover"></div>
+            <div class="text-body-bold body-strong">Anthony Rosario Waya, Co-founder</div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="proof-pull rv">
-      <p class="pq">"Working with Boltzmenn changed the way we run the business. The clarity that came from that process was worth more than the cost of it."</p>
-      <div class="pm"><div class="pmn">Delia Rowe</div><div class="pmt">Founder, PrimeTouch Facility Management™</div></div>
-    </div>
-    <div class="pstats stg">
-      <div class="psc"><div class="psn" data-t="50" data-s="+">0+</div><div class="psl">Businesses supported across Africa</div></div>
-      <div class="psc"><div class="psn" data-t="71" data-s="%">0%</div><div class="psl">Average profit improvement delivered</div></div>
-      <div class="psc"><div class="psn" data-t="500" data-s="M+">0M+</div><div class="psl">In revenue impact for clients (₦)</div></div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     8. BOLTZROOM — reusing the second cta-a card slot (see final CTA
+     section below) since Home A has no dedicated community section.
+     A short standalone block added here using the same callout-section
+     pattern already used once above, to keep BoltzRoom visible on its
+     own rather than losing it inside the CTA cards.
+===================================================================== -->
+<section class="section callout-section" id="boltzroom" style="background:#111;color:#fff;">
+  <div class="w-layout-blockcontainer main-container w-container">
+    <div class="block-callout">
+      <div class="content-callout">
+        <div class="headline-callout">
+          <div class="label-master"><div class="label-small" style="color:#1eb085;">Community</div></div>
+          <h2 class="no-margins" style="color:#fff;">The <em>BoltzRoom</em></h2>
+        </div>
+        <div class="callout-bottom-tile">
+          <div style="color:rgba(255,255,255,.6);">Real founders. Real conversations. No motivational speeches, no generic content — just useful, grounded insight from people who've done the work. 6+ editions held. 200+ founders attended. Lagos, Nigeria.</div>
+          <a href="mailto:info@boltzmenn.com?subject=BoltzRoom" class="cta-main w-inline-block">
+            <div class="button-text-mask"><div class="button-text"><div class="text-medium">Join The Next Edition</div></div></div>
+            <div class="button-bg"></div>
+          </a>
+        </div>
+      </div>
+      <div class="image-wrap-callout">
+        <img src="https://i.ibb.co/fzvGnBH1/3N7D9868.jpg" loading="lazy" alt="BoltzRoom session" class="image-cover">
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ══════ CTA ══════ -->
-<section id="cta">
-  <div class="cta-con">
-    <div class="cta-eyebrow rv">Take The First Step</div>
-    <h2 class="cta-title rv">The right structure changes how a business grows.</h2>
-    <p class="cta-sub rv">Whether the business is under pressure, preparing to scale, or trying to operate with more clarity — the first step is understanding what the business actually needs.</p>
-    <div class="cta-btns rv">
-      <a href="https://www.boltzmenn.com/diagnose/" class="btn-p">Start With The Scan →</a>
-      <a href="https://www.boltzmenn.com/book-a-call" class="btn-o">Speak With Boltzmenn</a>
+<!-- =====================================================================
+     4. PROOF — home-a-testimonial-section repurposed, moved here in
+     document order per our locked plan (proof sits after recognition,
+     before the process/offer). Card copy replaced.
+===================================================================== -->
+<section class="section home-a-testimonial-section" id="proof">
+  <div class="w-layout-blockcontainer main-container w-container">
+    <div class="headline-testimonials-home-a">
+      <div class="label-master w-variant-3dcbab84-0b89-15c0-0305-ed72757207a9"><div class="label-small">Results</div></div>
+      <h2 class="no-margins">Businesses that made the move</h2>
+      <a href="mailto:info@boltzmenn.com" class="cta-main w-variant-c69fc54f-c8c7-ba16-cab1-d159723763a9 w-inline-block">
+        <div class="button-text-mask"><div class="button-text w-variant-c69fc54f-c8c7-ba16-cab1-d159723763a9"><div>Get in touch</div></div></div>
+        <div class="button-bg w-variant-c69fc54f-c8c7-ba16-cab1-d159723763a9"></div>
+      </a>
     </div>
-    <div class="sc-strip rv">
-      <div class="sc-txt">
-        <h4>Take the Business Performance Scorecard</h4>
-        <p>A short self-assessment that shows where your business stands and what the clearest next step looks like.</p>
+    <div class="w-layout-grid testimonial-thirds">
+      <div class="image-wrap-testimonial-left"><img src="https://cdn.prod.website-files.com/68d7c06dc68ea0c551b91d3d/68d93d5e71c1e30894b5aab5_Article%20Image-5.webp" loading="lazy" alt="" class="image-cover"></div>
+      <div class="card-testimonial-home">
+        <div class="text-h5 heading-strong">"That one strategy session with Boltzmenn changed how we run the entire company. Money well spent."</div>
+        <div class="testimonial-bottom-tile">
+          <div class="text-wrap-testimonial">
+            <div class="text-body-bold">Emmanuel Okoh</div>
+            <div class="body-medium">Founder, PrimeTouch Facility Management</div>
+          </div>
+        </div>
+        <div class="wrap-author-testimonial">
+          <div class="image-wrap-testimonial-small"><img src="https://cdn.prod.website-files.com/68d7c06dc68ea0c551b91d3d/68dac60d15809a7adaca5671_Team%20Image-6.webp" loading="lazy" alt="" class="image-cover"></div>
+        </div>
       </div>
-      <a href="mailto:info@boltzmenn.com?subject=Scorecard%20Request" class="sc-btn">Get My Scorecard →</a>
+      <div class="card-testimonial-home">
+        <div class="text-h5 heading-strong">"Boltzmenn showed us how to tighten our pitch deck. We don't lose people halfway through anymore."</div>
+        <div class="wrap-author-testimonial">
+          <div class="image-wrap-testimonial-small"><img src="https://cdn.prod.website-files.com/68d7c06dc68ea0c551b91d3d/68dac60dc6dd7964d063b394_Team%20Image-5.webp" loading="lazy" alt="" class="image-cover"></div>
+        </div>
+        <div class="testimonial-bottom-tile">
+          <div class="text-wrap-testimonial">
+            <div class="text-body-bold">Marcus Leigh</div>
+            <div class="body-medium">KET Shopping</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:2px;margin-top:2px;">
+      <div style="flex:1;background:#F5F5F5;padding:26px;text-align:center;"><div class="text-h2">50+</div><div class="text-small body-medium">Businesses supported</div></div>
+      <div style="flex:1;background:#F5F5F5;padding:26px;text-align:center;"><div class="text-h2">₦500M+</div><div class="text-small body-medium">Revenue impact</div></div>
+      <div style="flex:1;background:#F5F5F5;padding:26px;text-align:center;"><div class="text-h2">71%</div><div class="text-small body-medium">Avg. profit lift</div></div>
     </div>
   </div>
 </section>
 
-<!-- ══════ FOOTER ══════ -->
-<footer>
-  <div class="ft-con">
-    <div class="ft-top">
-      <div class="fb">
-        <img src="https://i.ibb.co/vxs0DQ6k/boltz2.png" alt="Boltzmenn" style="height:25px;">
-        <p>Helping founder-led businesses across Africa build stronger systems and operate better.</p>
+<!-- =====================================================================
+     9a. FAQ — tabs structure kept, content replaced with real objections
+===================================================================== -->
+<section class="section faq-section" id="faq">
+  <div class="w-layout-blockcontainer main-container w-container">
+    <div class="headline-faq">
+      <div class="label-master"><div class="label-small">FAQ</div></div>
+      <h2 class="no-margins">A few honest answers</h2>
+      <div class="body-strong">Before you start</div>
+    </div>
+    <div data-current="Tab 1" data-easing="ease" data-duration-in="300" data-duration-out="100" class="tabs-faq w-tabs">
+      <div class="tabs-menu-faq w-tab-menu" role="tablist">
+        <a data-w-tab="Tab 1" class="tab-link-faq w-inline-block w-tab-link w--current" role="tab" aria-selected="true"><div>General</div></a>
+        <a data-w-tab="Tab 2" class="tab-link-faq w-inline-block w-tab-link" tabindex="-1" role="tab" aria-selected="false"><div>Pricing</div></a>
+        <a data-w-tab="Tab 3" class="tab-link-faq w-inline-block w-tab-link" tabindex="-1" role="tab" aria-selected="false"><div>The Scan</div></a>
       </div>
-      <div class="fcol"><h5>Services</h5><ul>
-        <li><a href="#scan">The Scan</a></li>
-        <li><a href="#lift">LIFT</a></li>
-        <li><a href="#scale">Scale</a></li>
-        <li><a href="#fin">Financial Clarity</a></li>
-        <li><a href="#circle">Circle</a></li>
-      </ul></div>
-      <div class="fcol"><h5>Company</h5><ul>
-        <li><a href="https://www.boltzmenn.com/about">About Us</a></li>
-        <li><a href="https://www.boltzmenn.com/case-studies">Case Studies</a></li>
-        <li><a href="https://www.boltzmenn.com/services">BoltzRoom</a></li>
-        <li><a href="https://www.boltzmenn.com/case-studies">Impact Report</a></li>
-        <li><a href="https://www.boltzmenn.com/book-a-call">Book a Call</a></li>
-      </ul></div>
-      <div class="fcol"><h5>Contact</h5><ul>
-        <li><a href="mailto:info@boltzmenn.com">info@boltzmenn.com</a></li>
-        <li><a href="mailto:blessed.osunde@boltzmenn.com">Clients &amp; Partnerships</a></li>
-        <li><a href="https://www.boltzmenn.com">www.boltzmenn.com</a></li>
-        <li><a href="https://rosarioanthony.com">rosarioanthony.com</a></li>
-      </ul></div>
+      <div class="tabs-content-faq w-tab-content">
+        <div data-w-tab="Tab 1" class="tab-pane-faq w-tab-pane w--tab-active" role="tabpanel" style="display:block;">
+          <div class="faq-block">
+            <div class="expandable-single">
+              <div class="expandable-top"><div class="text-body-bold">How is this different from hiring a regular consultant?</div><div class="faq-animated-box"><div class="faq-horizontal"></div><div class="faq-vertical"></div></div></div>
+              <div class="expandable-bottom"><p class="faq-paragraph">Most consultants sell a framework. We diagnose your specific business first, then build only what it actually needs.</p></div>
+            </div>
+            <div class="expandable-single">
+              <div class="expandable-top"><div class="text-body-bold">Is my financial data safe with you?</div><div class="faq-animated-box"><div class="faq-horizontal"></div><div class="faq-vertical"></div></div></div>
+              <div class="expandable-bottom"><p class="faq-paragraph">Yes. Engagements are governed by written agreements, and your information is used only for the work we're doing together.</p></div>
+            </div>
+            <div class="expandable-single">
+              <div class="expandable-top"><div class="text-body-bold">Can I get just one thing, not the whole journey?</div><div class="faq-animated-box"><div class="faq-horizontal"></div><div class="faq-vertical"></div></div></div>
+              <div class="expandable-bottom"><p class="faq-paragraph">Common request. The Scan tells us what's actually needed — sometimes that's one focused engagement, not the full path.</p></div>
+            </div>
+          </div>
+        </div>
+        <div data-w-tab="Tab 2" class="tab-pane-faq w-tab-pane" role="tabpanel">
+          <div class="faq-block">
+            <div class="expandable-single">
+              <div class="expandable-top"><div class="text-body-bold">How much does The Scan cost?</div><div class="faq-animated-box"><div class="faq-horizontal"></div><div class="faq-vertical"></div></div></div>
+              <div class="expandable-bottom"><p class="faq-paragraph">₦75,000 – ₦150,000, one-time. No hidden fees, no obligation to book anything further.</p></div>
+            </div>
+            <div class="expandable-single">
+              <div class="expandable-top"><div class="text-body-bold">What does LIFT or Scale cost?</div><div class="faq-animated-box"><div class="faq-horizontal"></div><div class="faq-vertical"></div></div></div>
+              <div class="expandable-bottom"><p class="faq-paragraph">LIFT is ₦450,000 – ₦850,000. Scale is ₦650,000 – ₦1,200,000. Both are project-based, scoped after The Scan.</p></div>
+            </div>
+          </div>
+        </div>
+        <div data-w-tab="Tab 3" class="tab-pane-faq w-tab-pane" role="tabpanel">
+          <div class="faq-block">
+            <div class="expandable-single">
+              <div class="expandable-top"><div class="text-body-bold">What does The Scan actually cover?</div><div class="faq-animated-box"><div class="faq-horizontal"></div><div class="faq-vertical"></div></div></div>
+              <div class="expandable-bottom"><p class="faq-paragraph">Revenue, operations, systems, team structure, customer experience, and financial health — a full picture before any recommendation.</p></div>
+            </div>
+            <div class="expandable-single">
+              <div class="expandable-top"><div class="text-body-bold">What if The Scan finds nothing seriously wrong?</div><div class="faq-animated-box"><div class="faq-horizontal"></div><div class="faq-vertical"></div></div></div>
+              <div class="expandable-bottom"><p class="faq-paragraph">You keep the report either way. There's no obligation to buy anything further.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="ft-bot">
-      <span class="fcp">© 2026 Boltzmenn. Lagos, Nigeria. All rights reserved.</span>
-      <span class="fct"><a href="mailto:info@boltzmenn.com">info@boltzmenn.com</a> · <a href="mailto:blessed.osunde@boltzmenn.com">Clients &amp; Partnerships</a></span>
-    </div>
-    <p class="fd">Boltzmenn provides business advisory, operational support, and strategic guidance to small and medium-sized enterprises. We do not provide legal advice, investment advice, or regulated financial services. Any financial projections, funding guidance, or business outcomes discussed are estimates based on available information and do not guarantee results. Clients are advised to seek independent professional advice where required. Engagements are governed by written agreements and Nigerian law.</p>
   </div>
-</footer>
+</section>
 
-<script>
-'use strict';
-const isTouch = window.matchMedia('(hover:none)').matches;
-const isMobile = () => window.innerWidth <= 900;
-
-/* ── LOADER ── */
-(function(){
-  const logo=document.getElementById('ldLogo');
-  const track=document.getElementById('ldTrack');
-  const bar=document.getElementById('ldBar');
-  const num=document.getElementById('ldN');
-  const loader=document.getElementById('loader');
-  setTimeout(()=>{ logo.classList.add('in'); track.classList.add('in'); num.classList.add('in'); },60);
-  let p=0;
-  const start=Date.now();
-  const MIN_DISPLAY=600;
-  function tick(){
-    p+=Math.random()*22+12;
-    if(p>=100) p=100;
-    bar.style.width=p+'%';
-    num.textContent=Math.round(p)+'%';
-    if(p<100){ setTimeout(tick,40); }
-    else {
-      const elapsed=Date.now()-start;
-      const wait=Math.max(0,MIN_DISPLAY-elapsed);
-      setTimeout(exit,wait);
-    }
-  }
-  function exit(){
-    loader.classList.add('out');
-    setTimeout(()=>{ loader.style.display='none'; },500);
-    entrance();
-    setTimeout(initFeelings,300);
-  }
-  tick();
-})();
-
-/* ── HERO ENTRANCE ── */
-function entrance(){
-  function Q(id,cls,ms){ setTimeout(()=>{ const el=document.getElementById(id); if(el) el.classList.add(cls); },ms); }
-  Q('hEye','vis',80);
-  Q('hSub','vis',780);
-  Q('hCtas','vis',940);
-  Q('hStats','vis',1080);
-  Q('hList','vis',400);
-  Q('hScroll','vis',1200);
-  setTimeout(buildHeadline,160);
-  setTimeout(initCycler,560);
-  const n=document.getElementById('nav');
-  if(n) n.classList.add('on-light');
-}
-
-/* ── HEADLINE REVEAL ── */
-function buildHeadline(){
-  const el=document.getElementById('hHead');
-  if(!el) return;
-  const lines=[
-    [{t:'For'},{t:'businesses'}],
-    [{t:'that'},{t:'need'},{t:'more'}],
-    [{t:'than'},{t:'advice.',it:true}]
-  ];
-  let delay=0;
-  lines.forEach(words=>{
-    const row=document.createElement('span');
-    row.style.display='block';
-    words.forEach(w=>{
-      const wrap=document.createElement('span'); wrap.className='hw-wrap';
-      const inner=document.createElement('span'); inner.className='hw'+(w.it?' it':'');
-      inner.textContent=w.t;
-      wrap.appendChild(inner);
-      row.appendChild(wrap);
-      row.appendChild(document.createTextNode('\u00A0'));
-      const d=delay;
-      setTimeout(()=> inner.classList.add('vis'),d);
-      delay+=90;
-    });
-    el.appendChild(row);
-  });
-}
-
-/* ── CYCLING LIST ── */
-function initCycler(){
-  const items=Array.from(document.querySelectorAll('.hl-item'));
-  const TOTAL=items.length;
-  const DUR=3500;
-  let current=0,timer=null,paused=false;
-  function go(idx){
-    items.forEach((item,i)=>{
-      item.classList.remove('active');
-      const prog=document.getElementById('p'+i);
-      if(prog){ prog.style.transition='none'; prog.style.width='0%'; }
-    });
-    current=idx;
-    items[current].classList.add('active');
-    const prog=document.getElementById('p'+current);
-    if(prog){ void prog.offsetHeight; prog.style.transition='width '+DUR+'ms linear'; prog.style.width='100%'; }
-  }
-  function next(){ go((current+1)%TOTAL); }
-  function startTimer(){ clearInterval(timer); timer=setInterval(next,DUR); }
-  function stopTimer(){
-    clearInterval(timer);
-    const prog=document.getElementById('p'+current);
-    if(prog){ prog.style.transition='none'; prog.style.width='0%'; }
-  }
-  items.forEach((item,i)=>{
-    item.addEventListener('click',()=>{ stopTimer(); go(i); startTimer(); });
-    item.addEventListener('mouseenter',()=>{ if(!paused){paused=true;stopTimer();} });
-    item.addEventListener('mouseleave',()=>{ if(paused){paused=false;go(current);startTimer();} });
-  });
-  const listEl=document.getElementById('hList');
-  if(listEl){
-    let tsy=0;
-    listEl.addEventListener('touchstart',e=>{ tsy=e.touches[0].clientY; },{passive:true});
-    listEl.addEventListener('touchend',e=>{
-      const d=tsy-e.changedTouches[0].clientY;
-      if(Math.abs(d)>30){ stopTimer(); go(d>0?(current+1)%TOTAL:(current-1+TOTAL)%TOTAL); startTimer(); }
-    },{passive:true});
-  }
-  go(0); startTimer();
-}
-
-/* ── BG PARALLAX ── */
-const bgEl=document.getElementById('bgEl');
-if(bgEl&&!isTouch){
-  let tx=0,ty=0,cx=0,cy=0,raf=null;
-  document.addEventListener('mousemove',e=>{
-    tx=(e.clientX/window.innerWidth-.5)*.025;
-    ty=(e.clientY/window.innerHeight-.5)*.018;
-    if(!raf) raf=requestAnimationFrame(function loop(){
-      cx+=(tx-cx)*.055; cy+=(ty-cy)*.055;
-      bgEl.style.transform=`scale(1.06) translate(${cx*100}%,${cy*100}%)`;
-      raf=(Math.abs(tx-cx)>.0001||Math.abs(ty-cy)>.0001)?requestAnimationFrame(loop):null;
-    });
-  });
-}
-
-/* ── HERO SCROLL EXIT ── */
-(function(){
-  const left=document.querySelector('.hero-left');
-  const cards=document.getElementById('hList');
-  function tick(){
-    const sy=window.scrollY;
-    const heroH=(document.getElementById('hero')||{}).offsetHeight||window.innerHeight;
-    const p=Math.min(1,sy/(heroH*.5));
-    if(left){ left.style.opacity=Math.max(0,1-p*1.6).toString(); left.style.transform='translateY('+(-p*24)+'px)'; }
-    if(cards&&!isMobile()){ cards.style.opacity=Math.max(0,1-p*2).toString(); }
-  }
-  window.addEventListener('scroll',tick,{passive:true}); tick();
-})();
-
-/* ── CURSOR ── */
-if(!isTouch){
-  const cur=document.getElementById('cur');
-  const curR=document.getElementById('cur-r');
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove',e=>{ mx=e.clientX;my=e.clientY; cur.style.transform=`translate(${mx-4}px,${my-4}px)`; });
-  (function loop(){ rx+=(mx-rx-15)*.1; ry+=(my-ry-15)*.1; curR.style.transform=`translate(${rx}px,${ry}px)`; requestAnimationFrame(loop); })();
-  document.querySelectorAll('a,button,[data-mag],.fwcard,.tc,.psc,.sc-strip,.lb,.feel-dot,.fwp,.hl-item,.wwf-card,.mf-cta').forEach(el=>{
-    el.addEventListener('mouseenter',()=>cur.classList.add('large'));
-    el.addEventListener('mouseleave',()=>cur.classList.remove('large'));
-  });
-}
-
-/* ── NAV SCROLL ── */
-const navEl=document.getElementById('nav');
-const nLogo=document.getElementById('nLogo');
-const wLogo='https://i.ibb.co/vxs0DQ6k/boltz2.png';
-const gLogo='https://i.ibb.co/tPL8wmqp/boltzmenn-A.png';
-window.addEventListener('scroll',()=>{
-  const solid=window.scrollY>60;
-  navEl.classList.toggle('solid',solid);
-  nLogo.src=solid?gLogo:wLogo;
-},{passive:true});
-
-/* ── SIX FEELINGS PINNED SCROLL ── */
-function initFeelings(){
-  const feelWrap=document.getElementById('feelings-wrap');
-  const feelTrack=document.getElementById('feelTrack');
-  if(!feelWrap||!feelTrack) return;
-  const PANELS=6; let cur=-1;
-  const contents=[];
-  for(let i=0;i<PANELS;i++){ const el=document.getElementById('fp-content-'+i); if(el) contents.push(el); }
-  function showPanel(idx){
-    contents.forEach((el,i)=>{
-      if(i===idx){
-        el.style.opacity='0'; el.style.transform='translateY(28px)'; el.style.transition='none';
-        void el.offsetHeight;
-        el.style.transition='opacity .65s cubic-bezier(.22,1,.36,1),transform .65s cubic-bezier(.22,1,.36,1)';
-        el.style.opacity='1'; el.style.transform='translateY(0)';
-      } else {
-        el.style.opacity='0'; el.style.transform='translateY(28px)'; el.style.transition='opacity .3s ease,transform .3s ease';
-      }
-    });
-  }
-  function goFeel(idx){
-    if(idx===cur) return; cur=idx;
-    feelTrack.style.transform=`translateX(-${idx*100}vw)`;
-    document.querySelectorAll('.feel-dot').forEach((d,di)=>d.classList.toggle('act',di===idx));
-    showPanel(idx);
-  }
-  document.querySelectorAll('.feel-dot').forEach(dot=>{
-    dot.addEventListener('click',()=>{
-      const idx=parseInt(dot.dataset.i,10);
-      const total=feelWrap.offsetHeight-window.innerHeight;
-      window.scrollTo({top:feelWrap.offsetTop+(idx/PANELS)*total,behavior:'smooth'});
-    });
-  });
-  function onScroll(){
-    const rect=feelWrap.getBoundingClientRect();
-    const scrolled=-rect.top; const total=feelWrap.offsetHeight-window.innerHeight;
-    const progress=Math.max(0,Math.min(1,scrolled/total));
-    const idx=Math.min(PANELS-1,Math.floor(progress*PANELS));
-    goFeel(idx);
-  }
-  window.addEventListener('scroll',onScroll,{passive:true});
-  goFeel(0);
-}
-
-/* ── SCROLL REVEAL ── */
-(function(){
-  const els=document.querySelectorAll('.rv,.rl,.rr,.stg');
-  const obs=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{ e.target.classList[e.isIntersecting?'add':'remove']('in'); });
-  },{threshold:.08,rootMargin:'0px 0px -40px 0px'});
-  els.forEach(el=>obs.observe(el));
-})();
-
-/* ── STAT COUNTERS ── */
-(function(){
-  let done=false;
-  const obs=new IntersectionObserver(entries=>{
-    if(done) return;
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        done=true;
-        document.querySelectorAll('.psn[data-t]').forEach(el=>{
-          const target=+el.dataset.t; const suffix=el.dataset.s||''; let c=0; const step=target/55;
-          const iv=setInterval(()=>{ c+=step; if(c>=target){c=target;clearInterval(iv);} el.textContent=Math.round(c)+suffix; },22);
-        });
-      }
-    });
-  },{threshold:.4});
-  const el=document.querySelector('.psc');
-  if(el) obs.observe(el);
-})();
-
-/* ── 3D TILT ── */
-if(!isTouch){
-  document.querySelectorAll('.scan-visual,.lift-visual,.scale-visual,.fin-card,.circle-visual').forEach(card=>{
-    card.addEventListener('mousemove',e=>{
-      const r=card.getBoundingClientRect();
-      const x=(e.clientX-r.left)/r.width-.5; const y=(e.clientY-r.top)/r.height-.5;
-      card.style.transform=`rotateX(${-y*5}deg) rotateY(${x*5}deg)`; card.style.transition='none';
-    });
-    card.addEventListener('mouseleave',()=>{
-      card.style.transform=''; card.style.transition='transform .5s cubic-bezier(.22,1,.36,1)';
-    });
-  });
-}
-
-/* ── RESIZE ── */
-let _wasM=isMobile();
-window.addEventListener('resize',()=>{
-  const nowM=isMobile();
-  if(_wasM!==nowM){ _wasM=nowM; initFeelings(); }
-},{passive:true});
-</script>
-</body>
-</html>
+<!-- =====================================================================
+     9b. FINAL CTA — cta-a-section repurposed. Template's "get template"
+     sales widget (sales-cta-master) removed entirely — vendor promo,
+     not part of the actual site.
+===================================================================== -->
+<section class="section cta-a-section">
+  <div class="w-layout-blockcontainer main-container w-container">
+    <div class="headline-cta-a">
+      <h2 class="no-margins">The right structure changes <em>how a business grows</em></h2>
+    </div>
+    <div class="w-layout-grid cta-a-halves">
+      <div class="card-cta-a">
+        <div class="cta-a-card-top-tile">
+          <div class="icon-cta-a w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 40 40" fill="none"><path d="M13.3333 3.33325V9.99992M26.6667 3.33325V9.99992M5 16.6666H35M8.33333 6.66659H31.6667C33.5076 6.66659 35 8.15897 35 9.99992V33.3333C35 35.1742 33.5076 36.6666 31.6667 36.6666H8.33333C6.49238 36.6666 5 35.1742 5 33.3333V9.99992C5 8.15897 6.49238 6.66659 8.33333 6.66659Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+          <h3 class="text-h4 no-margins">Start with The Scan</h3>
+        </div>
+        <div class="cta-a-card-bottom-tile">
+          <div class="body-strong">A structured, honest look at what's actually going on — before we recommend anything.</div>
+          <a href="/diagnose/" class="cta-main w-inline-block">
+            <div class="button-text-mask"><div class="button-text"><div>Run a diagnosis</div></div></div>
+            <div class="button-icon-wrap right"><div class="icon-button w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 16 16" fill="none"><path d="M3.33337 8.00016H12.6667M12.6667 8.00016L8.00004 3.3335M12.6667 8.00016L8.00004 12.6668" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div>
+            <div class="button-bg"></div>
+          </a>
+        </div>
+      </div>
+      <div class="card-cta-a second">
+        <div class="cta-a-card-top-tile">
+          <div class="icon-cta-a w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 40 40" fill="none"><path d="M11.6661 20.0001H19.9994" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+          <h3 class="text-h4 no-margins">Talk to us on WhatsApp</h3>
+        </div>
+        <div class="cta-a-card-bottom-tile">
+          <div class="body-strong">Not ready to book yet? Send a message — no form, no obligation.</div>
+          <a href="https://wa.me/2340000000000" class="cta-main w-inline-block">
+            <div class="button-text-mask"><div class="button-text"><div>Chat on WhatsApp</div></div></div>
+            <div class="button-bg"></div>
+          </a>
+        </div>
+        <div class="overlay-blur"></div>
+      </div>
+    </div>
+  </div>
+</section>
