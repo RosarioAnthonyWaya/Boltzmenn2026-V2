@@ -18,6 +18,13 @@
 .bm-marquee-wrap{overflow:hidden;padding:16px 0;}
 .bm-marquee-track{display:flex;width:max-content;will-change:transform;}
 
+/* Real bug fix: .marquee-services (from the loans.html hero source) has
+   no width:max-content in boltzmenn-brand.css, unlike .bm-marquee-track.
+   Without it, relying purely on flex default sizing left room for the
+   track to not report its true content width correctly in all browsers.
+   Matching the same explicit pattern removes that ambiguity. */
+.marquee-services{width:max-content;will-change:transform;}
+
 /* Section shells reused across What We Fix, What's Next, Frameworks,
    and any future page built the same way. */
 .bm-section-in{max-width:1140px;margin:0 auto;padding:0 40px;}
