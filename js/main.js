@@ -9,21 +9,24 @@ var lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 0.7, gestureOrientation: "ve
 function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
 requestAnimationFrame(raf);
 
-// Marquee -- plain requestAnimationFrame loop. The real template drives
-// its marquee via JS too (confirmed: no CSS @keyframes for it exist in
-// boltzmenn-brand.css), just via GSAP there instead of a plain loop.
+// Marquee -- plain requestAnimationFrame loop, drives every marquee
+// track on the site (not just the homepage trust bar). The real
+// template's marquees are all JS-driven too (confirmed: no CSS
+// @keyframes exist for any of them in boltzmenn-brand.css), just via
+// GSAP there instead of a plain loop.
 (function(){
-  var track = document.querySelector('.bm-marquee-track');
-  if(!track) return;
-  var x = 0;
-  function step(){
-    x -= 0.6;
-    var resetPoint = -(track.scrollWidth / 2);
-    if(x <= resetPoint) x = 0;
-    track.style.transform = 'translateX(' + x + 'px)';
+  var tracks = document.querySelectorAll('.bm-marquee-track, .marquee-services');
+  tracks.forEach(function(track){
+    var x = 0;
+    function step(){
+      x -= 0.6;
+      var resetPoint = -(track.scrollWidth / 2);
+      if(x <= resetPoint) x = 0;
+      track.style.transform = 'translateX(' + x + 'px)';
+      requestAnimationFrame(step);
+    }
     requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
+  });
 })();
 
 // FAQ tabs (General / Pricing / The Scan) -- sets display via inline
