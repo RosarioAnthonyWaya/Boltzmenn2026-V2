@@ -7,7 +7,11 @@ og_image: /assets/images/og-the-scan.jpg
 ---
 
 <!-- =====================================================================
-     HERO — real hero-services-section structure
+     HERO — real hero-services-section + the real sliding-image marquee
+     from the loans.html source page (.master-marquee/.marquee-services/
+     .image-wrap-service-marquee). JS-driven (see main.js), matching how
+     the real template drives all its marquees -- no CSS @keyframes exist
+     for this component either.
 ===================================================================== -->
 <section class="section hero-services-section">
   <div class="w-layout-blockcontainer main-container w-container">
@@ -20,56 +24,58 @@ og_image: /assets/images/og-the-scan.jpg
       </a>
     </div>
   </div>
-</section>
-
-<!-- =====================================================================
-     WHAT THE SCAN COVERS — real services-positioning-section /
-     card-positioning structure (the same one "Offer Design Audit" etc.
-     use on the real Services page).
-===================================================================== -->
-<section class="section services-positioning-section">
-  <div class="w-layout-blockcontainer main-container w-container">
-    <div class="headline-services-positioning">
-      <h2 class="text-h3 no-margins">Five dimensions, one session — not a menu you pick from</h2>
-    </div>
-    <div class="master-positioning-cards">
-      <div class="card-positioning">
-        <div class="card-positioning-top-tile">
-          <h3 class="text-h4 heading-strong no-margins">Revenue &amp; <em>Sales</em></h3>
-          <div class="text-small body-strong">Where revenue is actually coming from, where it's leaking, and what's driving growth versus what just feels like it is.</div>
-        </div>
+  <div class="master-marquee">
+    <div class="marquee-services">
+      <div class="single-marquee-services">
+        <div class="image-wrap-service-marquee large"><img src="https://i.ibb.co/d0sdHKB4/3N7D9995.jpg" loading="lazy" alt="" class="image-cover"></div>
+        <div class="image-wrap-service-marquee"><img src="https://cdn.prod.website-files.com/68d7c06dc68ea0c551b91d3d/68dac60db366b3e3c0283a76_Team%20Image-4.webp" loading="lazy" alt="" class="image-cover"></div>
+        <div class="image-wrap-service-marquee"><img src="https://cdn.prod.website-files.com/68d7c06dc68ea0c551b91d3d/68dac60dc6dd7964d063b394_Team%20Image-5.webp" loading="lazy" alt="" class="image-cover"></div>
       </div>
-      <div class="card-positioning">
-        <div class="card-positioning-top-tile">
-          <h3 class="text-h4 heading-strong no-margins">Operations &amp; <em>Team</em></h3>
-          <div class="text-small body-strong">How work actually moves through the business, and whether it could run for a week without the founder.</div>
-        </div>
-      </div>
-      <div class="card-positioning">
-        <div class="card-positioning-top-tile">
-          <h3 class="text-h4 heading-strong no-margins">Financial <em>Health</em></h3>
-          <div class="text-small body-strong">Whether the numbers you're making decisions on actually reflect what's happening in the business.</div>
-        </div>
-      </div>
-      <div class="card-positioning">
-        <div class="card-positioning-top-tile">
-          <h3 class="text-h4 heading-strong no-margins">Customer <em>Experience</em></h3>
-          <div class="text-small body-strong">Where trust is being built or quietly lost, at every point a customer touches the business.</div>
-        </div>
-      </div>
-      <div class="card-positioning">
-        <div class="card-positioning-top-tile">
-          <h3 class="text-h4 heading-strong no-margins">Founder <em>Dependency</em></h3>
-          <div class="text-small body-strong">How much of the business exists only in the founder's head — and what happens if that doesn't change.</div>
-        </div>
+      <div class="single-marquee-services">
+        <div class="image-wrap-service-marquee large"><img src="https://i.ibb.co/d0sdHKB4/3N7D9995.jpg" loading="lazy" alt="" class="image-cover"></div>
+        <div class="image-wrap-service-marquee"><img src="https://cdn.prod.website-files.com/68d7c06dc68ea0c551b91d3d/68dac60db366b3e3c0283a76_Team%20Image-4.webp" loading="lazy" alt="" class="image-cover"></div>
+        <div class="image-wrap-service-marquee"><img src="https://cdn.prod.website-files.com/68d7c06dc68ea0c551b91d3d/68dac60dc6dd7964d063b394_Team%20Image-5.webp" loading="lazy" alt="" class="image-cover"></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- =====================================================================
-     HOW IT WORKS — real services-column-section / column-halves structure
-     (same pattern already used on the homepage Process section and About).
+     WHAT THE SCAN COVERS — using features-grid/feature-tile-main, the
+     real responsive grid pattern already proven on What We Fix and
+     What's Next. Switched away from services-positioning-section's
+     card-positioning component: that one is display:flex/flex-flow:column
+     with card width:100%, built for 2-3 large stacked panels, not 5-6
+     short items -- using it here was exactly what caused the
+     "stretched out" look flagged on this page.
+===================================================================== -->
+<section class="section" style="padding:88px 0;background:#fff;">
+  <div class="w-layout-blockcontainer main-container w-container">
+    <div class="bm-eyebrow">What We Actually Look At</div>
+    <h2 class="bm-section-h">Five dimensions, one session</h2>
+    <div class="w-layout-grid features-grid" style="margin-top:32px;">
+      <div class="feature-tile-main">
+        <div class="text-wrap-feature-main"><div class="text-body-bold">Revenue &amp; Sales</div><div class="text-small body-medium">Where revenue is actually coming from, where it's leaking, and what's driving growth versus what just feels like it is.</div></div>
+      </div>
+      <div class="feature-tile-main">
+        <div class="text-wrap-feature-main"><div class="text-body-bold">Operations &amp; Team</div><div class="text-small body-medium">How work actually moves through the business, and whether it could run for a week without the founder.</div></div>
+      </div>
+      <div class="feature-tile-main">
+        <div class="text-wrap-feature-main"><div class="text-body-bold">Financial Health</div><div class="text-small body-medium">Whether the numbers you're making decisions on actually reflect what's happening in the business.</div></div>
+      </div>
+      <div class="feature-tile-main">
+        <div class="text-wrap-feature-main"><div class="text-body-bold">Customer Experience</div><div class="text-small body-medium">Where trust is being built or quietly lost, at every point a customer touches the business.</div></div>
+      </div>
+      <div class="feature-tile-main">
+        <div class="text-wrap-feature-main"><div class="text-body-bold">Founder Dependency</div><div class="text-small body-medium">How much of the business exists only in the founder's head — and what happens if that doesn't change.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     HOW IT WORKS — real services-column-section / column-halves,
+     already has a real image (image-wrap-column).
 ===================================================================== -->
 <section class="section services-column-section">
   <div class="w-layout-blockcontainer main-container w-container">
@@ -88,15 +94,19 @@ og_image: /assets/images/og-the-scan.jpg
         </div>
       </div>
       <div class="image-wrap-column">
-        <img src="https://i.ibb.co/d0sdHKB4/3N7D9995.jpg" loading="lazy" alt="" class="image-cover horizontal">
+        <img src="https://cdn.prod.website-files.com/68d7c06dc68ea0c551b91d3d/68dac60d868754c4f9822297_Team%20Image-7.webp" loading="lazy" alt="" class="image-cover horizontal">
       </div>
     </div>
   </div>
 </section>
 
 <!-- =====================================================================
-     PROOF — real testimonial-thirds structure from home-a-testimonial-section
-     (already used on the homepage), not invented markup.
+     PROOF — real testimonial-thirds structure from home-a-testimonial-
+     section, already used on the homepage and already has a real image
+     (image-wrap-testimonial-left). Not the rating-section from the real
+     Services page -- that one is built around Clutch/Google review
+     platform badges, which would mean displaying a rating we don't
+     actually have on those platforms.
 ===================================================================== -->
 <section class="section home-a-testimonial-section">
   <div class="w-layout-blockcontainer main-container w-container">
@@ -109,7 +119,7 @@ og_image: /assets/images/og-the-scan.jpg
       </a>
     </div>
     <div class="w-layout-grid testimonial-thirds">
-      <div class="image-wrap-testimonial-left"><img src="https://i.ibb.co/d0sdHKB4/3N7D9995.jpg" loading="lazy" alt="" class="image-cover"></div>
+      <div class="image-wrap-testimonial-left"><img src="https://cdn.prod.website-files.com/68d7c06dc68ea0c551b91d3d/68dac60d15809a7adaca5671_Team%20Image-6.webp" loading="lazy" alt="" class="image-cover"></div>
       <div class="card-testimonial-home">
         <div class="text-h5 heading-strong">"That one strategy session with Boltzmenn changed how we run the entire company. Money well spent."</div>
         <div class="testimonial-bottom-tile">
@@ -132,7 +142,8 @@ og_image: /assets/images/og-the-scan.jpg
 </section>
 
 <!-- =====================================================================
-     FAQ — real expandable-single/faq-block accordion pattern.
+     FAQ — real expandable-single/faq-block accordion pattern. Width bug
+     (was stretching to full container on wide screens) fixed in main.css.
 ===================================================================== -->
 <section class="section faq-section">
   <div class="w-layout-blockcontainer main-container w-container">
