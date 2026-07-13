@@ -33,4 +33,11 @@
    .expandable-bottom/.tabs-faq classes from boltzmenn-brand.css.
    Toggle behavior lives in main.js (sets height/opacity via inline
    style directly on click, not a class -- same reasoning as the nav
-   toggle: fewer places for a cascade conflict to silently break it). */
+   toggle: fewer places for a cascade conflict to silently break it).
+
+   Real bug fix, not a style choice: .faq-block is display:flex with
+   flex-flow:column and no max-width anywhere in its chain up to
+   .main-container (1800px). Every question was stretching to the full
+   container width on wide screens. Constraining it to a normal reading
+   width here. */
+.faq-block{max-width:760px;}
