@@ -74,6 +74,23 @@
   } catch(e) { console.error('FAQ accordion init failed:', e); }
 })();
 
+// Contact-expandable accordion (used on service pages like LIFT for
+// "what's included" lists) -- same inline-style approach as the FAQ
+// accordion above, not Webflow's data-w-id/GSAP triggers.
+(function(){
+  try{
+    document.querySelectorAll('.bm-expandable-toggle').forEach(function(top){
+      top.addEventListener('click', function(){
+        var bottom = top.nextElementSibling;
+        var isOpen = bottom.style.height === 'auto';
+        bottom.style.height = isOpen ? '0px' : 'auto';
+        bottom.style.opacity = isOpen ? '0' : '1';
+        bottom.style.overflow = 'hidden';
+      });
+    });
+  } catch(e) { console.error('Expandable accordion init failed:', e); }
+})();
+
 // Smooth scroll -- guarded last. If Lenis fails to load or throws, it
 // only costs the smooth-scroll effect, not the marquee or FAQ above.
 (function(){
