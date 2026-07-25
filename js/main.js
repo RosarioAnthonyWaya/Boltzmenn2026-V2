@@ -18,21 +18,35 @@
 // template's marquees are all JS-driven too (confirmed: no CSS
 // @keyframes exist for any of them in boltzmenn-brand.css), just via
 // GSAP there instead of a plain loop.
+//
+// Speed scales to content: .bm-marquee-track holds small text pills
+// (homepage trust bar) where 0.6px/frame reads fine. .marquee-services
+// holds large 564px-wide images -- at that same speed it technically
+// animates but takes 15+ seconds to move past a single image, which
+// looks static on anything but a long, patient look. That mismatch was
+// the real cause of "the images aren't sliding" on The Scan page --
+// not a broken animation, just an imperceptibly slow one.
 (function(){
   try{
-    var tracks = document.querySelectorAll('.bm-marquee-track, .marquee-services');
-    tracks.forEach(function(track){
-      var x = 0;
-      function step(){
-        x -= 0.6;
-        var resetPoint = -(track.scrollWidth / 2);
-        if(x <= resetPoint) x = 0;
-        track.style.transform = 'translateX(' + x + 'px)';
-        requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
+    document.querySelectorAll('.bm-marquee-track').forEach(function(track){
+      runMarquee(track, 0.6);
+    });
+    document.querySelectorAll('.marquee-services').forEach(function(track){
+      runMarquee(track, 1.8);
     });
   } catch(e) { console.error('Marquee init failed:', e); }
+
+  function runMarquee(track, speed){
+    var x = 0;
+    function step(){
+      x -= speed;
+      var resetPoint = -(track.scrollWidth / 2);
+      if(x <= resetPoint) x = 0;
+      track.style.transform = 'translateX(' + x + 'px)';
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
 })();
 
 // FAQ tabs (General / Pricing / The Scan) -- sets display via inline
@@ -89,6 +103,45 @@
       });
     });
   } catch(e) { console.error('Expandable accordion init failed:', e); }
+})();
+
+// Sticky bottom banner -- shows after both a delay AND a scroll depth
+// are met (whichever finishes last), values read from data-delay/
+// data-scroll attributes set by _includes/sticky-banner.html from
+// _data/promotions.yml. Dismissal persists via localStorage so it
+// doesn't reappear on every page for a visitor who already closed it.
+(function(){
+  try{
+    var banner = document.getElementById('bmStickyBanner');
+    if(!banner) return;
+    if(localStorage.getItem('bmBannerDismissed') === 'true') return;
+
+    var delaySec = parseFloat(banner.dataset.delay) || 8;
+    var scrollPct = parseFloat(banner.dataset.scroll) || 25;
+    var delayDone = false, scrollDone = false;
+
+    function tryShow(){
+      if(delayDone && scrollDone) banner.classList.add('show');
+    }
+    setTimeout(function(){ delayDone = true; tryShow(); }, delaySec * 1000);
+
+    window.addEventListener('scroll', function onScroll(){
+      var scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+      if(scrolled >= scrollPct){
+        scrollDone = true;
+        tryShow();
+        window.removeEventListener('scroll', onScroll);
+      }
+    });
+
+    var closeBtn = document.getElementById('bmStickyBannerClose');
+    if(closeBtn){
+      closeBtn.addEventListener('click', function(){
+        banner.classList.remove('show');
+        localStorage.setItem('bmBannerDismissed', 'true');
+      });
+    }
+  } catch(e) { console.error('Sticky banner init failed:', e); }
 })();
 
 // Smooth scroll -- guarded last. If Lenis fails to load or throws, it
